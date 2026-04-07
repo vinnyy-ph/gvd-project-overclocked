@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dm4uwb6idnn2g"]
 
 [ext_resource type="Script" uid="uid://buo8xql6f5tbg" path="res://success_screen.gd" id="1_6brds"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_xc7ra"]
 
 [node name="SuccessScreen" type="Control" unique_id=1819362700]
 layout_mode = 3
@@ -19,6 +20,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.07683582, 0.07683582, 0.07683582, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1046677972]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=929381440]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_xc7ra")
+centered = false
 
 [node name="Panel" type="Panel" parent="." unique_id=282960187]
 layout_mode = 0

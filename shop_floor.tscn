@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cfshqsr48kw0i"]
 
 [ext_resource type="Script" uid="uid://b37vrvukko5tn" path="res://shop_floor.gd" id="1_2gf8h"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_de7e8"]
 
 [node name="ShopFloor" type="Control" unique_id=1981320479]
 layout_mode = 3
@@ -19,6 +20,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1764706, 0.20392157, 0.27058825, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1125161586]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=439718941]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_de7e8")
+centered = false
 
 [node name="PCArea" type="Control" parent="." unique_id=2082298320]
 anchors_preset = 0

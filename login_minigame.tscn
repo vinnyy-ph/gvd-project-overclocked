@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://7mlphn3lfm6j"]
 
 [ext_resource type="Script" uid="uid://chocwde4r3ge" path="res://login_minigame.gd" id="1_6iigf"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_doqr6"]
 
 [node name="LoginMinigame" type="Control" unique_id=353809189]
 layout_mode = 3
@@ -8,6 +9,16 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_6iigf")
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=689836180]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=651494597]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_doqr6")
+centered = false
 
 [node name="InstructionLabel" type="Label" parent="." unique_id=1014831948]
 layout_mode = 0
