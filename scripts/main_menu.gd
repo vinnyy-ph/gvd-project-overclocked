@@ -12,11 +12,13 @@ func _process(delta: float) -> void:
 
 
 func _on_new_game_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/new_game.tscn")
+	GameManager.new_game()
+	get_tree().change_scene_to_file("res://shop_floor.tscn")
 
 
 func _on_continue_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/continue.tscn")
+	if GameManager.load_game():
+		get_tree().change_scene_to_file("res://shop_floor.tscn")
 
 
 func _on_hi_score_button_pressed() -> void:

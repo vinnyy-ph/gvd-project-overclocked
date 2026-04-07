@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://dm4uwb6idnn2g"]
+
+[ext_resource type="Script" uid="uid://buo8xql6f5tbg" path="res://success_screen.gd" id="1_6brds"]
+
+[node name="SuccessScreen" type="Control" unique_id=1819362700]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6brds")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1760155994]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07683582, 0.07683582, 0.07683582, 1)
+
+[node name="Panel" type="Panel" parent="." unique_id=282960187]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 170.0
+offset_right = 890.0
+offset_bottom = 490.0
+
+[node name="TitleLabel" type="Label" parent="Panel" unique_id=1178674519]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 30.0
+offset_right = 277.0
+offset_bottom = 53.0
+text = "ISSUE RESOLVED!"
+
+[node name="MoneyLabel" type="Label" parent="Panel" unique_id=491092187]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 110.0
+offset_right = 277.0
+offset_bottom = 133.0
+text = "Money Earned: +₱15"
+
+[node name="SatisfactionLabel" type="Label" parent="Panel" unique_id=2107636550]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 160.0
+offset_right = 300.0
+offset_bottom = 183.0
+text = "Satisfaction Change: +5"
+
+[node name="ContinueButton" type="Button" parent="Panel" unique_id=850562607]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 230.0
+offset_right = 340.0
+offset_bottom = 280.0
+text = "Continue"
+
+[connection signal="pressed" from="Panel/ContinueButton" to="." method="_on_continue_button_pressed"]
