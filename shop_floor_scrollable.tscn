@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://reuakk7km4ur"]
+
+[ext_resource type="Script" uid="uid://bkk6ks7wascwm" path="res://shop_floor_scrollable.gd" id="1_q7epe"]
+[ext_resource type="Texture2D" uid="uid://tij7wfqcyx3d" path="res://assets/images/shop_floor_extended.png" id="2_eyiyn"]
+[ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="3_eyiyn"]
+
+[node name="ShopFloorScrollable" type="Node2D" unique_id=104881244]
+script = ExtResource("1_q7epe")
+
+[node name="World" type="Node2D" parent="." unique_id=495853787]
+
+[node name="Background" type="Sprite2D" parent="World" unique_id=2126133528]
+position = Vector2(1576, 724)
+texture = ExtResource("2_eyiyn")
+
+[node name="Button" type="Button" parent="World/Background" unique_id=1559353774]
+visible = false
+offset_left = -726.0
+offset_top = -512.0
+offset_right = -625.0
+offset_bottom = -285.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button2" type="Button" parent="World/Background" unique_id=1167117532]
+visible = false
+offset_left = -1106.0
+offset_top = -310.0
+offset_right = -1005.0
+offset_bottom = -83.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button3" type="Button" parent="World/Background" unique_id=66640178]
+visible = false
+offset_left = -330.0
+offset_top = -704.0
+offset_right = -229.0
+offset_bottom = -477.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button4" type="Button" parent="World/Background" unique_id=266520497]
+visible = false
+offset_left = 62.0
+offset_top = -874.0
+offset_right = 163.0
+offset_bottom = -647.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button5" type="Button" parent="World/Background" unique_id=803769110]
+visible = false
+offset_left = -176.0
+offset_top = 156.0
+offset_right = -75.0
+offset_bottom = 383.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button6" type="Button" parent="World/Background" unique_id=1240297333]
+visible = false
+offset_left = 188.0
+offset_top = -8.0
+offset_right = 289.0
+offset_bottom = 219.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button7" type="Button" parent="World/Background" unique_id=1706057628]
+visible = false
+offset_left = 552.0
+offset_top = -194.0
+offset_right = 653.0
+offset_bottom = 33.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Button8" type="Button" parent="World/Background" unique_id=1645449897]
+visible = false
+offset_left = 954.0
+offset_top = -392.0
+offset_right = 1055.0
+offset_bottom = -165.0
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
+position = Vector2(640, 724)
+zoom = Vector2(0.6, 0.6)
+limit_left = 0
+limit_top = 0
+limit_right = 3152
+limit_bottom = 1448
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1805051003]
+
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=1197349872]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TopBar" type="ColorRect" parent="CanvasLayer/HUD" unique_id=58088674]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DayLabel" type="Label" parent="CanvasLayer/HUD" unique_id=50256704]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="MoneyLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2032604772]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="SatisfactionLabel" type="Label" parent="CanvasLayer/HUD" unique_id=375201401]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1512595669]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

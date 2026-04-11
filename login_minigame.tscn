@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://chocwde4r3ge" path="res://login_minigame.gd" id="1_6iigf"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_doqr6"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="3_wuptk"]
 
 [node name="LoginMinigame" type="Control" unique_id=353809189]
 layout_mode = 3
@@ -30,10 +31,17 @@ text = "Type the login code correctly"
 
 [node name="CodeLabel" type="Label" parent="." unique_id=1319946054]
 layout_mode = 0
-offset_left = 633.0
-offset_top = 217.0
-offset_right = 719.0
-offset_bottom = 240.0
+offset_left = 562.0
+offset_top = 192.0
+offset_right = 769.0
+offset_bottom = 236.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("3_wuptk")
+theme_override_font_sizes/font_size = 48
 text = "A7X9-KQ2P"
 
 [node name="AnswerInput" type="LineEdit" parent="." unique_id=187734158]

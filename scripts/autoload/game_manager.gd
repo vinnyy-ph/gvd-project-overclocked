@@ -6,6 +6,7 @@ var satisfaction:int = 100
 var save_path:String = "user://savegame.json"
 var last_money_change:int = 0
 var last_satisfaction_change:int = 0
+var in_tutorial:bool = false
 
 func new_game():
 	day = 1
