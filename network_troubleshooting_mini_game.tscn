@@ -1,0 +1,258 @@
+[gd_scene format=3 uid="uid://rl1muygapfhp"]
+
+[ext_resource type="Script" uid="uid://dot2ht3gt0h8k" path="res://network_troubleshooting_mini_game.gd" id="1_55mgb"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_u26uq"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_cosoy"]
+[ext_resource type="Script" uid="uid://bvp5xjfr5jwtf" path="res://line_layer.gd" id="3_tnv7d"]
+
+[node name="NetworkTroubleshootingMiniGame" type="Control" unique_id=1061065799]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_55mgb")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1011977853]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09411765, 0.13333334, 0.20784314, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1916378106]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=301336685]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_cosoy")
+centered = false
+
+[node name="TitleLabel" type="Label" parent="." unique_id=736578639]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 440.0
+offset_bottom = 60.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 38
+text = "Network Troubleshooting"
+
+[node name="InstructionLabel" type="Label" parent="." unique_id=206154507]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 870.0
+offset_bottom = 86.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 28
+text = "Activate the correct network links to restore connection from Router to PC-2."
+
+[node name="TimerLabel" type="Label" parent="." unique_id=693503019]
+layout_mode = 0
+offset_left = 980.0
+offset_top = 20.0
+offset_right = 1180.0
+offset_bottom = 60.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 28
+text = "Time: 20"
+
+[node name="StatusLabel" type="Label" parent="." unique_id=282778508]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 540.0
+offset_bottom = 140.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 28
+text = "Target: Connect Router to PC-2"
+
+[node name="DiagramArea" type="Control" parent="." unique_id=789351157]
+anchors_preset = 0
+offset_left = 80.0
+offset_top = 170.0
+offset_right = 1200.0
+offset_bottom = 410.0
+
+[node name="LineLayer" type="Node2D" parent="DiagramArea" unique_id=720722765]
+script = ExtResource("3_tnv7d")
+
+[node name="RouterBox" type="Panel" parent="DiagramArea" unique_id=1320893770]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 90.0
+offset_right = 180.0
+offset_bottom = 160.0
+
+[node name="RouterLabel" type="Label" parent="DiagramArea/RouterBox" unique_id=1599425319]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "ROUTER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SwitchABox" type="Panel" parent="DiagramArea" unique_id=578012350]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 30.0
+offset_right = 440.0
+offset_bottom = 100.0
+
+[node name="SwitchALabel" type="Label" parent="DiagramArea/SwitchABox" unique_id=1489962510]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = " SWITCH A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SwitchBBox" type="Panel" parent="DiagramArea" unique_id=1751535689]
+layout_mode = 0
+offset_left = 580.0
+offset_top = 140.0
+offset_right = 720.0
+offset_bottom = 210.0
+
+[node name="SwitchBLabel" type="Label" parent="DiagramArea/SwitchBBox" unique_id=1949530186]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "SWITCH B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PC1Box" type="Panel" parent="DiagramArea" unique_id=402322205]
+layout_mode = 0
+offset_left = 900.0
+offset_top = 30.0
+offset_right = 1040.0
+offset_bottom = 100.0
+
+[node name="PC1Label" type="Label" parent="DiagramArea/PC1Box" unique_id=1053843557]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "PC-1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PC2Box" type="Panel" parent="DiagramArea" unique_id=133938079]
+layout_mode = 0
+offset_left = 900.0
+offset_top = 150.0
+offset_right = 1040.0
+offset_bottom = 220.0
+
+[node name="PC2Label" type="Label" parent="DiagramArea/PC2Box" unique_id=2023469284]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "PC-2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LinkButtonsArea" type="Control" parent="DiagramArea" unique_id=498507834]
+anchors_preset = 0
+offset_left = 77.0
+offset_top = 363.0
+offset_right = 1037.0
+offset_bottom = 543.0
+
+[node name="LinkRA" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=1675100781]
+layout_mode = 0
+offset_right = 280.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "Router → Switch A"
+
+[node name="LinkAB" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=1115772474]
+layout_mode = 0
+offset_left = 320.0
+offset_right = 600.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "Switch A → Switch B"
+
+[node name="LinkBP2" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=5952423]
+layout_mode = 0
+offset_left = 640.0
+offset_right = 920.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "Switch B → PC-2"
+
+[node name="LinkRP1" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=1584884414]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 80.0
+offset_right = 440.0
+offset_bottom = 130.0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "Router → PC-1"
+
+[node name="LinkAP1" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=549746580]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 80.0
+offset_right = 780.0
+offset_bottom = 130.0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 24
+text = "Switch A → PC-1"
+
+[node name="GameTimer" type="Timer" parent="." unique_id=600832120]
+autostart = true
+
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]

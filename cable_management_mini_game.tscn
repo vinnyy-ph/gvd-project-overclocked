@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://0c445f21pxsh"]
+
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_dcbi1"]
+[ext_resource type="Script" uid="uid://bcs85tduxhie8" path="res://cable_management_mini_game.gd" id="1_opao4"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_r8nrh"]
+[ext_resource type="Script" uid="uid://c44nsi1njnofy" path="res://cable_lines.gd" id="3_boajl"]
+
+[node name="CableManagementMiniGame" type="Control" unique_id=1524385671]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_opao4")
+
+[node name="Background" type="ColorRect" parent="." unique_id=312989309]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.13333334, 0.2, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=159104268]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=1084732642]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_r8nrh")
+centered = false
+
+[node name="TitleLabel" type="Label" parent="." unique_id=944883633]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 440.0
+offset_bottom = 60.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 38
+text = "Cable Management"
+
+[node name="InstructionLabel" type="Label" parent="." unique_id=1467397473]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 870.0
+offset_bottom = 86.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "Drag each cable to the matching colored port before time runs out."
+
+[node name="TimerLabel" type="Label" parent="." unique_id=2045429694]
+layout_mode = 0
+offset_left = 980.0
+offset_top = 20.0
+offset_right = 1180.0
+offset_bottom = 60.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "Time: 20"
+
+[node name="StatusLabel" type="Label" parent="." unique_id=517840665]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 540.0
+offset_bottom = 140.0
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "``"
+
+[node name="CableArea" type="Control" parent="." unique_id=1354973341]
+anchors_preset = 0
+offset_left = 80.0
+offset_top = 160.0
+offset_right = 1200.0
+offset_bottom = 640.0
+
+[node name="LeftPanel" type="ColorRect" parent="CableArea" unique_id=1091114344]
+layout_mode = 0
+offset_right = 220.0
+offset_bottom = 480.0
+color = Color(0.14117648, 0.19215687, 0.2901961, 1)
+
+[node name="RightPanel" type="ColorRect" parent="CableArea" unique_id=1603913718]
+layout_mode = 0
+offset_left = 900.0
+offset_right = 1120.0
+offset_bottom = 480.0
+color = Color(0.14117648, 0.19215687, 0.2901961, 1)
+
+[node name="CableLines" type="Node2D" parent="CableArea" unique_id=56064564]
+script = ExtResource("3_boajl")
+
+[node name="CableRed" type="ColorRect" parent="CableArea" unique_id=94555133]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 80.0
+offset_right = 180.0
+offset_bottom = 120.0
+color = Color(0.90588236, 0.29803923, 0.23529412, 1)
+
+[node name="CableBlue" type="ColorRect" parent="CableArea" unique_id=1470956245]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 200.0
+offset_right = 180.0
+offset_bottom = 240.0
+color = Color(0.20392157, 0.59607846, 0.85882354, 1)
+
+[node name="CableGreen" type="ColorRect" parent="CableArea" unique_id=908606856]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 320.0
+offset_right = 180.0
+offset_bottom = 360.0
+color = Color(0.18039216, 0.8, 0.44313726, 1)
+
+[node name="PortRed" type="ColorRect" parent="CableArea" unique_id=960259261]
+layout_mode = 0
+offset_left = 956.0
+offset_top = 80.0
+offset_right = 1076.0
+offset_bottom = 120.0
+color = Color(0.57254905, 0.16862746, 0.12941177, 1)
+
+[node name="PortBlue" type="ColorRect" parent="CableArea" unique_id=1843897304]
+layout_mode = 0
+offset_left = 956.0
+offset_top = 200.0
+offset_right = 1076.0
+offset_bottom = 240.0
+color = Color(0.12941177, 0.38039216, 0.54901963, 1)
+
+[node name="PortGreen" type="ColorRect" parent="CableArea" unique_id=2100326177]
+layout_mode = 0
+offset_left = 956.0
+offset_top = 320.0
+offset_right = 1076.0
+offset_bottom = 360.0
+color = Color(0.11764706, 0.5176471, 0.28627452, 1)
+
+[node name="GameTimer" type="Timer" parent="." unique_id=407939392]
+autostart = true
+
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]

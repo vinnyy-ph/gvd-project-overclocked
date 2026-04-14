@@ -7,6 +7,8 @@ var save_path:String = "user://savegame.json"
 var last_money_change:int = 0
 var last_satisfaction_change:int = 0
 var in_tutorial:bool = false
+var time_left: int = 60
+var active_issues: Array = [false, false, false, false, false, false, false, false]
 
 func new_game():
 	day = 1

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://buo8xql6f5tbg" path="res://success_screen.gd" id="1_6brds"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_xc7ra"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="3_4ch53"]
 
 [node name="SuccessScreen" type="Control" unique_id=1819362700]
 layout_mode = 3
@@ -19,55 +20,97 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.07683582, 0.07683582, 0.07683582, 1)
+color = Color(0.07058824, 0.07058824, 0.07058824, 1)
 
-[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1046677972]
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=971768001]
 repeat_size = Vector2(1843, 0)
 autoscroll = Vector2(50, 0)
 repeat_times = 4
 
-[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=929381440]
+[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=1469413405]
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("2_xc7ra")
 centered = false
 
-[node name="Panel" type="Panel" parent="." unique_id=282960187]
+[node name="TitleLabel" type="Label" parent="." unique_id=2049248990]
 layout_mode = 0
-offset_left = 390.0
-offset_top = 170.0
-offset_right = 890.0
-offset_bottom = 490.0
-
-[node name="TitleLabel" type="Label" parent="Panel" unique_id=1178674519]
-layout_mode = 0
-offset_left = 145.0
+offset_left = 40.0
 offset_top = 30.0
-offset_right = 277.0
+offset_right = 159.0
 offset_bottom = 53.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
+text = "Issue Summary"
+
+[node name="SubtitleLabel" type="Label" parent="." unique_id=927238585]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 70.0
+offset_right = 444.0
+offset_bottom = 93.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
+text = "Review the result before returning to the shop floor."
+
+[node name="ResultPanel" type="Panel" parent="." unique_id=282960187]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 180.0
+offset_right = 920.0
+offset_bottom = 480.0
+
+[node name="ResultLabel" type="Label" parent="ResultPanel" unique_id=1178674519]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 35.0
+offset_right = 410.0
+offset_bottom = 75.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
 text = "ISSUE RESOLVED!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="MoneyLabel" type="Label" parent="Panel" unique_id=491092187]
+[node name="MoneyLabel" type="Label" parent="ResultPanel" unique_id=491092187]
 layout_mode = 0
 offset_left = 120.0
-offset_top = 110.0
-offset_right = 277.0
-offset_bottom = 133.0
+offset_top = 105.0
+offset_right = 440.0
+offset_bottom = 145.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
 text = "Money Earned: +₱15"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="SatisfactionLabel" type="Label" parent="Panel" unique_id=2107636550]
+[node name="SatisfactionLabel" type="Label" parent="ResultPanel" unique_id=2107636550]
 layout_mode = 0
 offset_left = 120.0
-offset_top = 160.0
-offset_right = 300.0
-offset_bottom = 183.0
+offset_top = 155.0
+offset_right = 440.0
+offset_bottom = 195.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
 text = "Satisfaction Change: +5"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ContinueButton" type="Button" parent="Panel" unique_id=850562607]
+[node name="ContinueButton" type="Button" parent="ResultPanel" unique_id=850562607]
 layout_mode = 0
-offset_left = 160.0
-offset_top = 230.0
-offset_right = 340.0
-offset_bottom = 280.0
+offset_left = 180.0
+offset_top = 225.0
+offset_right = 380.0
+offset_bottom = 275.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
 text = "Continue"
 
-[connection signal="pressed" from="Panel/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="ResultPanel/ContinueButton" to="." method="_on_continue_button_pressed"]

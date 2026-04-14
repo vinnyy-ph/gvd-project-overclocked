@@ -1,0 +1,178 @@
+[gd_scene format=3 uid="uid://1ojkm1cacd0h"]
+
+[ext_resource type="Script" uid="uid://bucrwdx637vjf" path="res://bsod_fix_mini_game.gd" id="1_a773p"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_qwrp1"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_3gk22"]
+
+[node name="BSODFixMiniGame" type="Control" unique_id=1910507624]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a773p")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1107272190]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07450981, 0.13725491, 0.23921569, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1410481477]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=2103848554]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_3gk22")
+centered = false
+
+[node name="TitleLabel" type="Label" parent="." unique_id=1908003837]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 440.0
+offset_bottom = 60.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 38
+text = "BSOD Fix"
+
+[node name="InstructionLabel" type="Label" parent="." unique_id=759002126]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 870.0
+offset_bottom = 86.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 28
+text = "Choose the correct troubleshooting step to recover the PC."
+
+[node name="TimerLabel" type="Label" parent="." unique_id=2137387802]
+layout_mode = 0
+offset_left = 980.0
+offset_top = 20.0
+offset_right = 1180.0
+offset_bottom = 60.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 28
+text = "Time: 20"
+
+[node name="StepLabel" type="Label" parent="." unique_id=1460904046]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 540.0
+offset_bottom = 140.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 28
+text = " Step 1 of 3"
+
+[node name="BSODPanel" type="Panel" parent="." unique_id=1617632150]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 160.0
+offset_right = 1160.0
+offset_bottom = 380.0
+
+[node name="BSODText" type="Label" parent="BSODPanel" unique_id=624708225]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 29.0
+offset_right = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 32
+text = ":( Your PC ran into a problem and needs to restart.
+
+Stop Code: DRIVER_IRQL_NOT_LESS_OR_EQUAL
+
+Recommended action:
+Follow the correct troubleshooting steps to restore the system."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ChoicesArea" type="Control" parent="." unique_id=291703720]
+anchors_preset = 0
+offset_left = 180.0
+offset_top = 430.0
+offset_right = 1100.0
+offset_bottom = 610.0
+
+[node name="ChoiceButton1" type="Button" parent="ChoicesArea" unique_id=1376193339]
+layout_mode = 0
+offset_right = 420.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 24
+text = "Restart the PC"
+
+[node name="ChoiceButton2" type="Button" parent="ChoicesArea" unique_id=867630130]
+layout_mode = 0
+offset_left = 470.0
+offset_right = 890.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 24
+text = "Run diagnostics"
+
+[node name="ChoiceButton3" type="Button" parent="ChoicesArea" unique_id=1512655949]
+layout_mode = 0
+offset_top = 90.0
+offset_right = 420.0
+offset_bottom = 150.0
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 24
+text = "Remove faulty driver"
+
+[node name="ChoiceButton4" type="Button" parent="ChoicesArea" unique_id=216499740]
+layout_mode = 0
+offset_left = 470.0
+offset_top = 90.0
+offset_right = 890.0
+offset_bottom = 150.0
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 24
+text = "Install random software update"
+
+[node name="StatusLabel" type="Label" parent="." unique_id=1807950557]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 640.0
+offset_right = 640.0
+offset_bottom = 680.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 28
+text = "Pick the best next action."
+
+[node name="GameTimer" type="Timer" parent="." unique_id=791224533]
+autostart = true
+
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
