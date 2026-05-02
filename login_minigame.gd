@@ -1,15 +1,15 @@
 extends Control
 
-@onready var timer_label = $TimerLabel
-@onready var progress_label = $ProgressLabel
-@onready var status_label = $StatusLabel
+@onready var timer_label = $TopPanel/TimerLabel
+@onready var progress_label = $TopPanel/ProgressLabel
+@onready var status_label = $ScrollContainer/MainPanel/StatusLabel
 
-@onready var request_label = $MainPanel/RequestLabel
-@onready var input_box = $MainPanel/InputBox
-@onready var submit_button = $MainPanel/SubmitButton
-@onready var hint_button_1 = $MainPanel/HintButton1
-@onready var hint_button_2 = $MainPanel/HintButton2
-@onready var hint_button_3 = $MainPanel/HintButton3
+@onready var request_label = $ScrollContainer/MainPanel/RequestLabel
+@onready var input_box = $ScrollContainer/MainPanel/InputBox
+@onready var submit_button = $ScrollContainer/MainPanel/SubmitButton
+@onready var hint_button_1 = $ScrollContainer/MainPanel/HintButton1
+@onready var hint_button_2 = $ScrollContainer/MainPanel/HintButton2
+@onready var hint_button_3 = $ScrollContainer/MainPanel/HintButton3
 
 var time_left: int = 20
 var solved_count: int = 0
@@ -23,9 +23,19 @@ func _ready():
 	hint_button_2.pressed.connect(clear_input)
 	hint_button_3.pressed.connect(wrong_action)
 
+	# Show code in status label whenever input box is focused (keyboard opens)
+	input_box.focus_entered.connect(_on_input_focused)
+	input_box.focus_exited.connect(_on_input_unfocused)
+
 	generate_new_code()
 	update_timer()
 	update_progress()
+
+func _on_input_focused():
+	status_label.text = "Code: " + current_code
+
+func _on_input_unfocused():
+	status_label.text = "Enter the code shown above."
 
 func random_letter() -> String:
 	var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -42,6 +52,9 @@ func generate_new_code():
 	request_label.text = "Requested Code: " + current_code
 	input_box.text = ""
 	status_label.text = "Enter the code shown above."
+	# If already typing when new code generates, keep showing it
+	if input_box.has_focus():
+		status_label.text = "Code: " + current_code
 
 func update_timer():
 	timer_label.text = "Time: " + str(time_left)
@@ -62,6 +75,9 @@ func check_code():
 		generate_new_code()
 	else:
 		status_label.text = "Incorrect code."
+		# Re-show code hint if keyboard is still open
+		if input_box.has_focus():
+			status_label.text = "Wrong! Code: " + current_code
 
 func show_code_again():
 	status_label.text = "Code reminder: " + current_code
@@ -69,6 +85,8 @@ func show_code_again():
 func clear_input():
 	input_box.text = ""
 	status_label.text = "Input cleared."
+	if input_box.has_focus():
+		status_label.text = "Input cleared. Code: " + current_code
 
 func wrong_action():
 	status_label.text = "That won't help the customer."

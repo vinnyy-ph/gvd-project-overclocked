@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://7mlphn3lfm6j"]
 
 [ext_resource type="Script" uid="uid://chocwde4r3ge" path="res://login_minigame.gd" id="1_6iigf"]
-[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_doqr6"]
 [ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_r05l6"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="3_wuptk"]
+[ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="5_phxhg"]
+[ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="6_bhbp8"]
 
 [node name="LoginMinigame" type="Control" unique_id=353809189]
 layout_mode = 3
@@ -23,68 +24,53 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.078431375, 0.13333334, 0.21960784, 1)
 
-[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1238684455]
-repeat_size = Vector2(1843, 0)
-autoscroll = Vector2(50, 0)
-repeat_times = 4
-
-[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=817521370]
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("2_doqr6")
-centered = false
-
 [node name="Sprite2D" type="Sprite2D" parent="Background" unique_id=1886742645]
 position = Vector2(640, 360)
 texture = ExtResource("3_r05l6")
 
-[node name="TitleLabel" type="Label" parent="." unique_id=1449903685]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 20.0
-offset_right = 440.0
-offset_bottom = 60.0
+[node name="TopPanel" type="TextureRect" parent="." unique_id=197321570]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.117000006
+offset_bottom = 14.7599945
+grow_horizontal = 2
+expand_mode = 1
+stretch_mode = 2
+
+[node name="TitleLabel" type="Label" parent="TopPanel" unique_id=570159517]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -22.0
+offset_right = 165.0
+offset_bottom = 22.0
+grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("3_wuptk")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 47
 text = "Visitor Login Support"
+horizontal_alignment = 3
+vertical_alignment = 3
 
-[node name="InstructionLabel2" type="Label" parent="." unique_id=1529427221]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 60.0
-offset_right = 870.0
-offset_bottom = 86.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("3_wuptk")
-theme_override_font_sizes/font_size = 28
-text = "Help the customer by entering the correct temporary login code."
-
-[node name="TimerLabel" type="Label" parent="." unique_id=258449890]
-layout_mode = 0
-offset_left = 980.0
-offset_top = 20.0
-offset_right = 1180.0
-offset_bottom = 60.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("3_wuptk")
-theme_override_font_sizes/font_size = 28
-text = "Time: 20"
-
-[node name="ProgressLabel" type="Label" parent="." unique_id=2007624325]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 100.0
-offset_right = 540.0
-offset_bottom = 140.0
+[node name="ProgressLabel" type="Label" parent="TopPanel" unique_id=517849589]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -234.0
+offset_top = -1.0
+offset_right = -93.0
+offset_bottom = 25.0
+grow_horizontal = 0
+grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
@@ -92,94 +78,172 @@ theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 28
 text = "Solved: 0 / 3"
+horizontal_alignment = 3
+vertical_alignment = 3
 
-[node name="StatusLabel" type="Label" parent="." unique_id=1649595023]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 560.0
-offset_right = 540.0
-offset_bottom = 600.0
+[node name="Sprite2D" type="Sprite2D" parent="TopPanel" unique_id=1593277857]
+position = Vector2(1071, 32)
+scale = Vector2(0.48181814, 0.4818182)
+texture = ExtResource("5_phxhg")
+
+[node name="TimerLabel" type="Label" parent="TopPanel" unique_id=1363241389]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -183.0
+offset_top = -31.0
+offset_right = -93.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 28
-text = "Enter the code shown above."
+text = "Time: 20"
+horizontal_alignment = 3
+vertical_alignment = 3
 
-[node name="MainPanel" type="Panel" parent="." unique_id=1288401592]
+[node name="GameTimer" type="Timer" parent="." unique_id=1635606407]
+autostart = true
+
+[node name="InstructionsPanel" type="TextureRect" parent="." unique_id=1974366171]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.289
+anchor_top = 0.754
+anchor_right = 0.739
+anchor_bottom = 0.87600005
+offset_left = 0.07998657
+offset_top = 62.119995
+offset_right = -0.37164307
+offset_bottom = 62.27997
+texture = ExtResource("6_bhbp8")
+expand_mode = 1
+
+[node name="InstructionsLabel" type="Label" parent="InstructionsPanel" unique_id=1462124156]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -207.5
+offset_top = -30.5
+offset_right = 207.5
+offset_bottom = 30.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_wuptk")
+theme_override_font_sizes/font_size = 31
+text = "Help the customer by entering the
+correct temporary login code."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=924082739]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 377.0
+offset_top = 199.0
+offset_right = -347.0
+offset_bottom = -140.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="MainPanel" type="Panel" parent="ScrollContainer" unique_id=305192835]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="StatusLabel" type="Label" parent="ScrollContainer/MainPanel" unique_id=869843405]
 layout_mode = 0
-offset_left = 379.0
-offset_top = 143.0
-offset_right = 1207.5714
-offset_bottom = 705.406
-scale = Vector2(0.665, 0.665)
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 556.0
+offset_bottom = 43.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("3_wuptk")
+theme_override_font_sizes/font_size = 28
+text = "Enter the code shown below."
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="RequestLabel" type="Label" parent="MainPanel" unique_id=6158243]
+[node name="RequestLabel" type="Label" parent="ScrollContainer/MainPanel" unique_id=1245756036]
 layout_mode = 0
 offset_left = 19.548855
-offset_top = 22.556396
-offset_right = 807.51874
-offset_bottom = 114.556404
+offset_top = 41.0
+offset_right = 555.0
+offset_bottom = 133.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 23
 theme_override_fonts/font = ExtResource("3_wuptk")
-theme_override_font_sizes/font_size = 68
+theme_override_font_sizes/font_size = 46
 text = "Requested Code: 4821"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="InputBox" type="LineEdit" parent="MainPanel" unique_id=1296925642]
+[node name="InputBox" type="LineEdit" parent="ScrollContainer/MainPanel" unique_id=1477085339]
 layout_mode = 0
 offset_left = 37.59401
-offset_top = 189.47368
-offset_right = 795.4887
-offset_bottom = 239.47368
+offset_top = 133.99998
+offset_right = 533.0
+offset_bottom = 183.99998
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 32
 text = "Enter login code"
 alignment = 1
 
-[node name="SubmitButton" type="Button" parent="MainPanel" unique_id=680647350]
+[node name="SubmitButton" type="Button" parent="ScrollContainer/MainPanel" unique_id=1042619270]
 layout_mode = 0
-offset_left = 330.0
-offset_top = 323.3083
-offset_right = 510.0
-offset_bottom = 373.3083
+offset_left = 193.0
+offset_top = 235.0
+offset_right = 373.0
+offset_bottom = 285.0
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = "Submit"
 
-[node name="HintButton1" type="Button" parent="MainPanel" unique_id=41505243]
+[node name="HintButton1" type="Button" parent="ScrollContainer/MainPanel" unique_id=490096862]
 layout_mode = 0
-offset_left = 80.0
-offset_top = 479.69922
-offset_right = 260.0
-offset_bottom = 524.6992
+offset_left = 6.0
+offset_top = 325.0
+offset_right = 186.0
+offset_bottom = 370.0
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = " Show Again"
 
-[node name="HintButton2" type="Button" parent="MainPanel" unique_id=82997792]
+[node name="HintButton2" type="Button" parent="ScrollContainer/MainPanel" unique_id=1145616796]
 layout_mode = 0
-offset_left = 330.0
-offset_top = 479.69922
-offset_right = 510.0
-offset_bottom = 524.6992
+offset_left = 194.0
+offset_top = 325.0
+offset_right = 374.0
+offset_bottom = 370.0
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = "Clear Input"
 
-[node name="HintButton3" type="Button" parent="MainPanel" unique_id=225755916]
+[node name="HintButton3" type="Button" parent="ScrollContainer/MainPanel" unique_id=1480963747]
 layout_mode = 0
-offset_left = 580.0
-offset_top = 479.69922
-offset_right = 760.0
-offset_bottom = 524.6992
+offset_left = 377.0
+offset_top = 325.0
+offset_right = 557.0
+offset_bottom = 370.0
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = "Next Customer"
-
-[node name="GameTimer" type="Timer" parent="." unique_id=1635606407]
-autostart = true

@@ -5,8 +5,6 @@ extends Node2D
 @onready var money_label = $CanvasLayer/HUD/MoneyLabel
 @onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBarContainer/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
-@onready var pause_button = $CanvasLayer/HUD/PauseButton
-@onready var dim_overlay = $CanvasLayer/HUD/DimOverlay
 
 @onready var issue_buttons = [
 	$World/Background/IssueButton1,
@@ -22,7 +20,6 @@ extends Node2D
 var scroll_speed: float = 900.0
 var dragging: bool = false
 var last_drag_position: Vector2 = Vector2.ZERO
-var is_paused: bool = false
 
 # --- ANIMATION VARIABLES ---
 var base_positions: Array = []
@@ -33,7 +30,6 @@ func _ready():
 	camera.position = Vector2(1532, 704)
 	clamp_camera()
 
-	# --- SATISFACTION BAR SETUP ---
 	satisfaction_bar.min_value = 0
 	satisfaction_bar.max_value = 100
 	satisfaction_bar.value = GameManager.satisfaction
@@ -47,21 +43,17 @@ func _ready():
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
 
-	pause_button.pressed.connect(_on_pause_pressed)
-	$CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer/ContinueButtonPause.pressed.connect(_on_resume_pressed)
-	$CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer/QuitButtonPause.pressed.connect(_on_quit_pressed)
-
 	update_hud()
 
 # --- SATISFACTION BAR COLOR ---
 
 func _get_bar_color(value: int) -> Color:
 	if value > 60:
-		return Color(0.2, 0.85, 0.3)   # green
+		return Color(0.2, 0.85, 0.3)
 	elif value > 30:
-		return Color(1.0, 0.75, 0.0)   # yellow
+		return Color(1.0, 0.75, 0.0)
 	else:
-		return Color(0.9, 0.15, 0.15)  # red
+		return Color(0.9, 0.15, 0.15)
 
 func _apply_bar_style():
 	var fill_style = StyleBoxFlat.new()
@@ -81,22 +73,6 @@ func _apply_bar_style():
 	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
 
 	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
-
-# --- PAUSE LOGIC ---
-
-func _on_pause_pressed():
-	is_paused = true
-	get_tree().paused = true
-	dim_overlay.visible = true
-
-func _on_resume_pressed():
-	is_paused = false
-	get_tree().paused = false
-	dim_overlay.visible = false
-
-func _on_quit_pressed():
-	get_tree().paused = false
-	get_tree().change_scene_to_file("res://main_menu.tscn")
 
 # --- ANIMATION LOGIC ---
 
@@ -145,16 +121,7 @@ func _on_issue_clicked(pc_index: int):
 	GameManager.active_issues[pc_index] = false
 	GameManager.save_game()
 
-	var issues = [
-		"res://login_minigame.tscn",
-		"res://malware_minigame.tscn",
-		"res://cable_management_mini_game.tscn",
-		"res://network_troubleshooting_mini_game.tscn",
-		"res://bsod_fix_mini_game.tscn",
-		"res://motherboard_assembly_mini_game.tscn"
-	]
-
-	get_tree().change_scene_to_file(issues[randi() % issues.size()])
+	get_tree().change_scene_to_file(GameManager.get_next_minigame())
 
 func end_day():
 	GameManager.day += 1
@@ -170,19 +137,12 @@ func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
 	money_label.text = "Money: ₱" + str(GameManager.money)
 	time_label.text = "Time: " + str(GameManager.time_left)
-
-	# Update bar value and color
 	satisfaction_bar.value = GameManager.satisfaction
 	_apply_bar_style()
 
 # --- CAMERA LOGIC ---
 
 func _input(event):
-	if event.is_action_pressed("ui_cancel"):
-		if is_paused:
-			_on_resume_pressed()
-		else:
-			_on_pause_pressed()
 	handle_drag_and_zoom(event)
 
 func handle_keyboard_scroll(delta):

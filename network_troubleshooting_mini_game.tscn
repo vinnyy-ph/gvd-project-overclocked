@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dot2ht3gt0h8k" path="res://network_troubleshooting_mini_game.gd" id="1_55mgb"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_u26uq"]
-[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_cosoy"]
 [ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_adyy5"]
-[ext_resource type="Script" uid="uid://bvp5xjfr5jwtf" path="res://line_layer.gd" id="3_tnv7d"]
+[ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="4_o04hb"]
+[ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="5_adyy5"]
+[ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_ui0ib"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cosoy"]
 
 [node name="NetworkTroubleshootingMiniGame" type="Control" unique_id=1061065799]
 layout_mode = 3
@@ -15,26 +18,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_55mgb")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1011977853]
+[node name="Background" type="ColorRect" parent="." unique_id=1482823094]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.09411765, 0.13333334, 0.20784314, 1)
+color = Color(0.07450981, 0.13725491, 0.23921569, 1)
 
-[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1916378106]
-repeat_size = Vector2(1843, 0)
-autoscroll = Vector2(50, 0)
-repeat_times = 4
-
-[node name="Sprite2D" type="Sprite2D" parent="Background/Parallax2D" unique_id=301336685]
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("2_cosoy")
-centered = false
-
-[node name="bg art" type="TextureRect" parent="Background" unique_id=1809717190]
+[node name="bg art" type="TextureRect" parent="Background" unique_id=1658324030]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,55 +35,51 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_adyy5")
+expand_mode = 1
 
-[node name="TitleLabel" type="Label" parent="." unique_id=736578639]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 20.0
-offset_right = 440.0
-offset_bottom = 60.0
+[node name="TopPanel" type="TextureRect" parent="Background" unique_id=1702692256]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.117000006
+offset_bottom = 14.7599945
+grow_horizontal = 2
+expand_mode = 1
+stretch_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Background/TopPanel" unique_id=249686628]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -22.0
+offset_right = 165.0
+offset_bottom = 22.0
+grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 47
 text = "Network Troubleshooting"
+horizontal_alignment = 3
+vertical_alignment = 3
 
-[node name="InstructionLabel" type="Label" parent="." unique_id=206154507]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 60.0
-offset_right = 870.0
-offset_bottom = 86.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 28
-text = "Activate the correct network links to restore connection from Router to PC-2."
-
-[node name="TimerLabel" type="Label" parent="." unique_id=693503019]
-layout_mode = 0
-offset_left = 980.0
-offset_top = 20.0
-offset_right = 1180.0
-offset_bottom = 60.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 28
-text = "Time: 20"
-
-[node name="StatusLabel" type="Label" parent="." unique_id=282778508]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 100.0
-offset_right = 540.0
-offset_bottom = 140.0
+[node name="StatusLabel" type="Label" parent="Background/TopPanel" unique_id=955849647]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -234.0
+offset_top = -1.0
+offset_right = -93.0
+offset_bottom = 25.0
+grow_horizontal = 0
+grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
@@ -98,172 +87,247 @@ theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("1_u26uq")
 theme_override_font_sizes/font_size = 28
 text = "Target: Connect Router to PC-2"
+horizontal_alignment = 3
+vertical_alignment = 3
 
-[node name="DiagramArea" type="Control" parent="." unique_id=789351157]
-anchors_preset = 0
-offset_left = 380.99997
-offset_top = 147.0
-offset_right = 1501.0
-offset_bottom = 387.0
-scale = Vector2(0.8, 0.8)
+[node name="Sprite2D" type="Sprite2D" parent="Background/TopPanel" unique_id=1042875757]
+position = Vector2(1071, 32)
+scale = Vector2(0.48181814, 0.4818182)
+texture = ExtResource("4_o04hb")
 
-[node name="LineLayer" type="Node2D" parent="DiagramArea" unique_id=720722765]
-script = ExtResource("3_tnv7d")
-
-[node name="RouterBox" type="Panel" parent="DiagramArea" unique_id=1320893770]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 90.0
-offset_right = 180.0
-offset_bottom = 160.0
-
-[node name="RouterLabel" type="Label" parent="DiagramArea/RouterBox" unique_id=1599425319]
+[node name="TimerLabel" type="Label" parent="Background/TopPanel" unique_id=1264921714]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_left = -183.0
+offset_top = -31.0
+offset_right = -93.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 28
+text = "Time: 20"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="InstructionsPanel" type="TextureRect" parent="Background" unique_id=1020699131]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.289
+anchor_top = 0.754
+anchor_right = 0.739
+anchor_bottom = 0.87600005
+offset_left = 0.07998657
+offset_top = 62.119995
+offset_right = -0.37164307
+offset_bottom = 62.27997
+texture = ExtResource("5_ui0ib")
+expand_mode = 1
+
+[node name="InstructionsLabel" type="Label" parent="Background/InstructionsPanel" unique_id=880871494]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -207.5
+offset_top = -30.5
+offset_right = 207.5
+offset_bottom = 30.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "ROUTER"
+theme_override_font_sizes/font_size = 31
+text = "Activate the correct network links to
+restore connection from Router to PC-2."
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="SwitchABox" type="Panel" parent="DiagramArea" unique_id=578012350]
-layout_mode = 0
-offset_left = 300.0
-offset_top = 30.0
-offset_right = 440.0
-offset_bottom = 100.0
-
-[node name="SwitchALabel" type="Label" parent="DiagramArea/SwitchABox" unique_id=1489962510]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = " SWITCH A"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SwitchBBox" type="Panel" parent="DiagramArea" unique_id=1751535689]
-layout_mode = 0
-offset_left = 580.0
-offset_top = 140.0
-offset_right = 720.0
-offset_bottom = 210.0
-
-[node name="SwitchBLabel" type="Label" parent="DiagramArea/SwitchBBox" unique_id=1949530186]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "SWITCH B"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PC1Box" type="Panel" parent="DiagramArea" unique_id=402322205]
-layout_mode = 0
-offset_left = 900.0
-offset_top = 30.0
-offset_right = 1040.0
-offset_bottom = 100.0
-
-[node name="PC1Label" type="Label" parent="DiagramArea/PC1Box" unique_id=1053843557]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "PC-1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PC2Box" type="Panel" parent="DiagramArea" unique_id=133938079]
-layout_mode = 0
-offset_left = 900.0
-offset_top = 150.0
-offset_right = 1040.0
-offset_bottom = 220.0
-
-[node name="PC2Label" type="Label" parent="DiagramArea/PC2Box" unique_id=2023469284]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "PC-2"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LinkButtonsArea" type="Control" parent="DiagramArea" unique_id=498507834]
-anchors_preset = 0
-offset_left = 77.0
-offset_top = 363.0
-offset_right = 1037.0
-offset_bottom = 543.0
-
-[node name="LinkRA" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=1675100781]
-layout_mode = 0
-offset_right = 280.0
-offset_bottom = 50.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "Router → Switch A"
-
-[node name="LinkAB" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=1115772474]
-layout_mode = 0
-offset_left = 320.0
-offset_right = 600.0
-offset_bottom = 50.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "Switch A → Switch B"
-
-[node name="LinkBP2" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=5952423]
-layout_mode = 0
-offset_left = 640.0
-offset_right = 920.0
-offset_bottom = 50.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "Switch B → PC-2"
-
-[node name="LinkRP1" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=1584884414]
-layout_mode = 0
-offset_left = 160.0
-offset_top = 80.0
-offset_right = 440.0
-offset_bottom = 130.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "Router → PC-1"
-
-[node name="LinkAP1" type="Button" parent="DiagramArea/LinkButtonsArea" unique_id=549746580]
-layout_mode = 0
-offset_left = 500.0
-offset_top = 80.0
-offset_right = 780.0
-offset_bottom = 130.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 24
-text = "Switch A → PC-1"
 
 [node name="GameTimer" type="Timer" parent="." unique_id=600832120]
 autostart = true
+
+[node name="MonitorScreenArea" type="Control" parent="." unique_id=1424615073]
+anchors_preset = 0
+offset_left = 378.0
+offset_top = 199.0
+offset_right = 931.0
+offset_bottom = 576.0
+
+[node name="NetworkCables" type="Node2D" parent="MonitorScreenArea" unique_id=4034464]
+
+[node name="Line_PC_SW" type="Line2D" parent="MonitorScreenArea/NetworkCables" unique_id=1578802139]
+points = PackedVector2Array(58, 92, 210, 31)
+width = 4.0
+default_color = Color(0.11231593, 0.6467453, 3.85046e-07, 1)
+
+[node name="Line_SW_RT" type="Line2D" parent="MonitorScreenArea/NetworkCables" unique_id=443105244]
+points = PackedVector2Array(210, 33, 336, 53)
+width = 4.0
+default_color = Color(0.85, 0, 0, 1)
+
+[node name="Line_RT_FW" type="Line2D" parent="MonitorScreenArea/NetworkCables" unique_id=795416088]
+points = PackedVector2Array(335, 53, 471, 55)
+width = 4.0
+default_color = Color(0.85, 0, 0, 1)
+
+[node name="Line_FW_SV" type="Line2D" parent="MonitorScreenArea/NetworkCables" unique_id=916988109]
+points = PackedVector2Array(472, 61, 188, 177)
+width = 4.0
+default_color = Color(0.85, 0, 0, 1)
+
+[node name="Line_SV_DB" type="Line2D" parent="MonitorScreenArea/NetworkCables" unique_id=1054726533]
+points = PackedVector2Array(191, 182, 413, 174)
+width = 4.0
+default_color = Color(0.85, 0, 0, 1)
+
+[node name="NetworkDevices" type="Control" parent="MonitorScreenArea" unique_id=85212327]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CustomerPC" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1993208230]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 26.0
+offset_right = 76.0
+offset_bottom = 141.38708
+texture_normal = ExtResource("5_adyy5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/CustomerPC" unique_id=1688164831]
+layout_mode = 0
+offset_left = -28.0
+offset_top = 112.0
+offset_right = 83.0
+offset_bottom = 135.0
+text = "CUSTOMER PC"
+
+[node name="SwitchL2" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1089624500]
+layout_mode = 0
+offset_left = 182.0
+offset_top = -17.0
+offset_right = 228.0
+offset_bottom = 91.32257
+texture_normal = ExtResource("5_adyy5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/SwitchL2" unique_id=156455303]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 110.0
+offset_right = 68.0
+offset_bottom = 133.0
+text = "SWITCH L2"
+
+[node name="Router" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=721004568]
+layout_mode = 0
+offset_left = 306.0
+offset_top = 12.0
+offset_right = 351.0
+offset_bottom = 117.96774
+texture_normal = ExtResource("5_adyy5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/Router" unique_id=1273174672]
+layout_mode = 0
+offset_top = 112.0
+offset_right = 58.0
+offset_bottom = 135.0
+text = "ROUTER"
+
+[node name="Firewall" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=440188138]
+layout_mode = 0
+offset_left = 445.0
+offset_top = 2.0
+offset_right = 490.0
+offset_bottom = 107.96774
+texture_normal = ExtResource("5_adyy5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/Firewall" unique_id=1185300027]
+layout_mode = 0
+offset_top = 112.0
+offset_right = 58.0
+offset_bottom = 135.0
+text = "FIREWALL"
+
+[node name="MainServer" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=689417462]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 126.0
+offset_right = 205.0
+offset_bottom = 231.96774
+texture_normal = ExtResource("5_adyy5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/MainServer" unique_id=1468703218]
+layout_mode = 0
+offset_top = 112.0
+offset_right = 58.0
+offset_bottom = 135.0
+text = "SERVER"
+
+[node name="DatabaseServer" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1071363641]
+layout_mode = 0
+offset_left = 383.0
+offset_top = 116.0
+offset_right = 428.0
+offset_bottom = 221.96774
+texture_normal = ExtResource("5_adyy5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/DatabaseServer" unique_id=1030657819]
+layout_mode = 0
+offset_top = 112.0
+offset_right = 58.0
+offset_bottom = 135.0
+text = "DATABASE"
+
+[node name="TerminalStatus" type="PanelContainer" parent="MonitorScreenArea" unique_id=600096575]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 265.0
+offset_right = 546.0
+offset_bottom = 365.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cosoy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MonitorScreenArea/TerminalStatus" unique_id=1627755977]
+layout_mode = 2
+
+[node name="TerminalHeader" type="Label" parent="MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=1286414391]
+layout_mode = 2
+text = "Status Text:"
+
+[node name="LinkStatusLabel" type="Label" parent="MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=1587591927]
+layout_mode = 2
+text = "> Link Status (PC to Switch): Down"
+
+[node name="ActionLabel" type="Label" parent="MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=848244055]
+layout_mode = 2
+text = "> Action Required: Connect Cable"
+
+[node name="RunDiagnosticBtn" type="Button" parent="MonitorScreenArea" unique_id=1435226331]
+layout_mode = 0
+offset_left = 335.0
+offset_top = 330.0
+offset_right = 543.0
+offset_bottom = 361.0
+text = "RUN SYSTEM DIAGNOSTIC"
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]

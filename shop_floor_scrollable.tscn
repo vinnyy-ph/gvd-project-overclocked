@@ -10,6 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://cbbh7tg41kga2" path="res://assets/images/default_pc_back.png" id="6_g535p"]
 [ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="8_sru07"]
 [ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="9_u2yt3"]
+[ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_am8fm"]
+[ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="12_ghd6s"]
+[ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_3lx45"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghd6s"]
 
 [node name="ShopFloorScrollable" type="Node2D" unique_id=104881244]
 script = ExtResource("1_q7epe")
@@ -272,15 +277,6 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 30
 
-[node name="PauseButton" type="Button" parent="CanvasLayer/HUD" unique_id=196070945]
-process_mode = 3
-layout_mode = 0
-offset_left = 1210.0
-offset_top = 10.0
-offset_right = 1270.0
-offset_bottom = 50.0
-text = "||"
-
 [node name="DimOverlay" type="ColorRect" parent="CanvasLayer/HUD" unique_id=1635064106]
 visible = false
 layout_mode = 1
@@ -292,6 +288,21 @@ offset_bottom = 680.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.38431373)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/DimOverlay" unique_id=1888847035]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -221.0
+offset_right = 190.0
+offset_bottom = 154.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_ghd6s")
 
 [node name="PausePanel" type="PanelContainer" parent="CanvasLayer/HUD/DimOverlay" unique_id=106819600]
 process_mode = 3
@@ -307,6 +318,7 @@ offset_right = 169.5
 offset_bottom = 74.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ghd6s")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/DimOverlay/PausePanel" unique_id=2056414442]
 layout_mode = 2
@@ -314,6 +326,8 @@ theme_override_constants/separation = 20
 
 [node name="PauseLabel" type="Label" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=2139130539]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 103
 text = "PAUSED"
 horizontal_alignment = 1
 
@@ -321,13 +335,15 @@ horizontal_alignment = 1
 process_mode = 3
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-text = "Continue"
+icon = ExtResource("12_am8fm")
+flat = true
 
 [node name="QuitButtonPause" type="Button" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=300283106]
 process_mode = 3
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-text = "Exit to Main Menu"
+icon = ExtResource("13_3lx45")
+flat = true
 
 [node name="DayTimer" type="Timer" parent="." unique_id=1041295534]
 autostart = true

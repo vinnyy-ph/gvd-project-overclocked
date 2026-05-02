@@ -13,20 +13,20 @@ config_version=5
 config/name="Overclocked"
 config/description="Overclocked"
 config/version="1"
-run/main_scene="uid://reuakk7km4ur"
+run/main_scene="uid://rl1muygapfhp"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="uid://g14n5w5c4nq5"
 
 [autoload]
 
 GameManager="*uid://tbo7awses1ay"
+PauseMenu="*uid://wmphjhkjc3ss"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 
 [input_devices]
 
