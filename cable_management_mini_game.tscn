@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bcs85tduxhie8" path="res://cable_management_mini_game.gd" id="1_opao4"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_r8nrh"]
 [ext_resource type="Script" uid="uid://c44nsi1njnofy" path="res://cable_lines.gd" id="3_boajl"]
+[ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_ptr8y"]
 
 [node name="CableManagementMiniGame" type="Control" unique_id=1524385671]
 layout_mode = 3
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_vertical = 4
 script = ExtResource("1_opao4")
 
 [node name="Background" type="ColorRect" parent="." unique_id=312989309]
@@ -32,6 +34,15 @@ repeat_times = 4
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("2_r8nrh")
 centered = false
+
+[node name="bg art" type="TextureRect" parent="Background" unique_id=689237581]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ptr8y")
 
 [node name="TitleLabel" type="Label" parent="." unique_id=944883633]
 layout_mode = 0
@@ -87,22 +98,25 @@ text = "``"
 
 [node name="CableArea" type="Control" parent="." unique_id=1354973341]
 anchors_preset = 0
-offset_left = 80.0
-offset_top = 160.0
-offset_right = 1200.0
-offset_bottom = 640.0
+offset_left = 364.0
+offset_top = 128.0
+offset_right = 946.0
+offset_bottom = 531.0
 
 [node name="LeftPanel" type="ColorRect" parent="CableArea" unique_id=1091114344]
 layout_mode = 0
-offset_right = 220.0
-offset_bottom = 480.0
+offset_left = 13.0
+offset_top = 12.0
+offset_right = 222.0
+offset_bottom = 390.0
 color = Color(0.14117648, 0.19215687, 0.2901961, 1)
 
 [node name="RightPanel" type="ColorRect" parent="CableArea" unique_id=1603913718]
 layout_mode = 0
-offset_left = 900.0
-offset_right = 1120.0
-offset_bottom = 480.0
+offset_left = 349.0
+offset_top = 12.0
+offset_right = 569.0
+offset_bottom = 394.0
 color = Color(0.14117648, 0.19215687, 0.2901961, 1)
 
 [node name="CableLines" type="Node2D" parent="CableArea" unique_id=56064564]
@@ -134,25 +148,25 @@ color = Color(0.18039216, 0.8, 0.44313726, 1)
 
 [node name="PortRed" type="ColorRect" parent="CableArea" unique_id=960259261]
 layout_mode = 0
-offset_left = 956.0
+offset_left = 414.0
 offset_top = 80.0
-offset_right = 1076.0
+offset_right = 534.0
 offset_bottom = 120.0
 color = Color(0.57254905, 0.16862746, 0.12941177, 1)
 
 [node name="PortBlue" type="ColorRect" parent="CableArea" unique_id=1843897304]
 layout_mode = 0
-offset_left = 956.0
+offset_left = 414.0
 offset_top = 200.0
-offset_right = 1076.0
+offset_right = 534.0
 offset_bottom = 240.0
 color = Color(0.12941177, 0.38039216, 0.54901963, 1)
 
 [node name="PortGreen" type="ColorRect" parent="CableArea" unique_id=2100326177]
 layout_mode = 0
-offset_left = 956.0
+offset_left = 414.0
 offset_top = 320.0
-offset_right = 1076.0
+offset_right = 534.0
 offset_bottom = 360.0
 color = Color(0.11764706, 0.5176471, 0.28627452, 1)
 

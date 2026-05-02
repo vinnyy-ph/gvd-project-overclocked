@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://omftc38cj1rk"]
+
+[ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="1_hxfrk"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="2_oqfos"]
+
+[node name="Control" type="Control" unique_id=140855811]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Background" type="ColorRect" parent="." unique_id=11906414]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07450981, 0.13725491, 0.23921569, 1)
+
+[node name="bg art" type="TextureRect" parent="Background" unique_id=2121925834]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_hxfrk")
+stretch_mode = 2
+
+[node name="InstructionLabel" type="Label" parent="." unique_id=182623112]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.951
+anchor_right = 0.5
+anchor_bottom = 0.951
+offset_left = -634.5
+offset_top = -44.0
+offset_right = 634.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 11
+theme_override_fonts/font = ExtResource("2_oqfos")
+theme_override_font_sizes/font_size = 48
+text = "Choose the correct troubleshooting step to recover the PC."
+
+[node name="Panel" type="Panel" parent="." unique_id=142614481]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.29200003
+anchor_top = 0.125
+anchor_right = 0.734
+anchor_bottom = 0.774
+offset_left = 8.839966
+offset_top = 74.0
+offset_right = -23.320068
+offset_bottom = -49.919983
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel" unique_id=121116242]
+layout_mode = 0
+offset_right = 1095.0
+offset_bottom = 231.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_oqfos")
+theme_override_font_sizes/font_size = 38
+text = ":( Your PC ran into a problem and needs to restart.
+
+Stop Code: DRIVER_IRQL_NOT_LESS_OR_EQUAL
+
+Recommended action:
+Follow the correct troubleshooting steps to restore the system."

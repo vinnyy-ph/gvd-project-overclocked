@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://chocwde4r3ge" path="res://login_minigame.gd" id="1_6iigf"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_doqr6"]
+[ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_r05l6"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="3_wuptk"]
 
 [node name="LoginMinigame" type="Control" unique_id=353809189]
@@ -31,6 +32,10 @@ repeat_times = 4
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("2_doqr6")
 centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Background" unique_id=1886742645]
+position = Vector2(640, 360)
+texture = ExtResource("3_r05l6")
 
 [node name="TitleLabel" type="Label" parent="." unique_id=1449903685]
 layout_mode = 0
@@ -104,32 +109,33 @@ text = "Enter the code shown above."
 
 [node name="MainPanel" type="Panel" parent="." unique_id=1288401592]
 layout_mode = 0
-offset_left = 220.0
-offset_top = 180.0
-offset_right = 1060.0
-offset_bottom = 520.0
+offset_left = 379.0
+offset_top = 143.0
+offset_right = 1207.5714
+offset_bottom = 705.406
+scale = Vector2(0.665, 0.665)
 
 [node name="RequestLabel" type="Label" parent="MainPanel" unique_id=6158243]
 layout_mode = 0
-offset_left = 80.0
-offset_top = 40.0
-offset_right = 760.0
-offset_bottom = 90.0
+offset_left = 19.548855
+offset_top = 22.556396
+offset_right = 807.51874
+offset_bottom = 114.556404
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 23
 theme_override_fonts/font = ExtResource("3_wuptk")
-theme_override_font_sizes/font_size = 58
+theme_override_font_sizes/font_size = 68
 text = "Requested Code: 4821"
 horizontal_alignment = 1
 
 [node name="InputBox" type="LineEdit" parent="MainPanel" unique_id=1296925642]
 layout_mode = 0
-offset_left = 220.0
-offset_top = 120.0
-offset_right = 620.0
-offset_bottom = 170.0
+offset_left = 37.59401
+offset_top = 189.47368
+offset_right = 795.4887
+offset_bottom = 239.47368
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 32
 text = "Enter login code"
@@ -138,9 +144,9 @@ alignment = 1
 [node name="SubmitButton" type="Button" parent="MainPanel" unique_id=680647350]
 layout_mode = 0
 offset_left = 330.0
-offset_top = 200.0
+offset_top = 323.3083
 offset_right = 510.0
-offset_bottom = 250.0
+offset_bottom = 373.3083
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = "Submit"
@@ -148,9 +154,9 @@ text = "Submit"
 [node name="HintButton1" type="Button" parent="MainPanel" unique_id=41505243]
 layout_mode = 0
 offset_left = 80.0
-offset_top = 270.0
+offset_top = 479.69922
 offset_right = 260.0
-offset_bottom = 315.0
+offset_bottom = 524.6992
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = " Show Again"
@@ -158,9 +164,9 @@ text = " Show Again"
 [node name="HintButton2" type="Button" parent="MainPanel" unique_id=82997792]
 layout_mode = 0
 offset_left = 330.0
-offset_top = 270.0
+offset_top = 479.69922
 offset_right = 510.0
-offset_bottom = 315.0
+offset_bottom = 524.6992
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = "Clear Input"
@@ -168,9 +174,9 @@ text = "Clear Input"
 [node name="HintButton3" type="Button" parent="MainPanel" unique_id=225755916]
 layout_mode = 0
 offset_left = 580.0
-offset_top = 270.0
+offset_top = 479.69922
 offset_right = 760.0
-offset_bottom = 315.0
+offset_bottom = 524.6992
 theme_override_fonts/font = ExtResource("3_wuptk")
 theme_override_font_sizes/font_size = 24
 text = "Next Customer"

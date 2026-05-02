@@ -5,6 +5,8 @@ extends Node2D
 @onready var money_label = $CanvasLayer/HUD/MoneyLabel
 @onready var satisfaction_label = $CanvasLayer/HUD/SatisfactionLabel
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
+@onready var pause_button = $CanvasLayer/HUD/PauseButton
+@onready var dim_overlay = $CanvasLayer/HUD/DimOverlay
 
 @onready var issue_buttons = [
 	$World/Background/IssueButton1,
@@ -20,6 +22,7 @@ extends Node2D
 var scroll_speed: float = 900.0
 var dragging: bool = false
 var last_drag_position: Vector2 = Vector2.ZERO
+var is_paused: bool = false
 
 # --- ANIMATION VARIABLES ---
 var base_positions: Array = []
@@ -32,32 +35,42 @@ func _ready():
 	
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
-		
-		# 1. Save original positions for the floating animation
 		base_positions.append(btn.position)
-		
-		# 2. Set the pivot to the center so they scale from the middle, not the corner
 		btn.pivot_offset = btn.size / 2.0
-		
 		btn.visible = GameManager.active_issues[i]
-		
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
-			
+
+	pause_button.pressed.connect(_on_pause_pressed)
+	$CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer/ContinueButtonPause.pressed.connect(_on_resume_pressed)
+	$CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer/QuitButtonPause.pressed.connect(_on_quit_pressed)
+
 	update_hud()
+
+# --- PAUSE LOGIC ---
+
+func _on_pause_pressed():
+	is_paused = true
+	get_tree().paused = true
+	dim_overlay.visible = true
+
+func _on_resume_pressed():
+	is_paused = false
+	get_tree().paused = false
+	dim_overlay.visible = false
+
+func _on_quit_pressed():
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://main_menu.tscn")
 
 # --- ANIMATION LOGIC ---
 
 func _process(delta):
-	# Update the floating timer
 	float_time += delta
 	
-	# Make active buttons float up and down
 	for i in range(issue_buttons.size()):
 		if GameManager.active_issues[i]:
 			var btn = issue_buttons[i]
-			# sin() goes from -1 to 1. Multiply by 8 to move up/down 8 pixels.
-			# Add 'i' to the time so they don't all bob up and down at the exact same time!
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
 			
 	handle_keyboard_scroll(delta)
@@ -86,12 +99,9 @@ func _on_spawn_timer_timeout():
 		var btn = issue_buttons[random_index]
 		btn.visible = true
 		
-		# --- POP-UP ANIMATION ---
-		btn.scale = Vector2.ZERO # Start invisibly small
+		btn.scale = Vector2.ZERO
 		var tween = create_tween()
-		# Grow to 120% size quickly (adds a nice bounce)
 		tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		# Settle back down to 100% normal size
 		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
 
 func _on_issue_clicked(pc_index: int):
@@ -108,8 +118,6 @@ func _on_issue_clicked(pc_index: int):
 		"res://bsod_fix_mini_game.tscn",
 		"res://motherboard_assembly_mini_game.tscn"
 	]
-	
-	#var issues = ["res://cable_management_mini_game.tscn"]
 	
 	get_tree().change_scene_to_file(issues[randi() % issues.size()])
 
@@ -132,6 +140,11 @@ func update_hud():
 # --- CAMERA LOGIC ---
 
 func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		if is_paused:
+			_on_resume_pressed()
+		else:
+			_on_pause_pressed()
 	handle_drag_and_zoom(event)
 
 func handle_keyboard_scroll(delta):
@@ -156,6 +169,11 @@ func handle_drag_and_zoom(event):
 		elif event.button_index == MOUSE_BUTTON_LEFT:
 			dragging = event.pressed
 			if dragging: last_drag_position = event.position
+	elif event is InputEventMagnifyGesture:
+		var new_zoom = camera.zoom * event.factor
+		camera.zoom.x = clamp(new_zoom.x, 0.5, 1.5)
+		camera.zoom.y = clamp(new_zoom.y, 0.5, 1.5)
+		clamp_camera()
 	elif event is InputEventMouseMotion and dragging:
 		camera.position.x -= (event.position.x - last_drag_position.x) / camera.zoom.x
 		camera.position.y -= (event.position.y - last_drag_position.y) / camera.zoom.y

@@ -22,7 +22,7 @@ var choice_pool = [
 	"Restart the PC",
 	"Run diagnostics",
 	"Remove faulty driver",
-	"Install random software update",
+	"Install random\nsoftware update",
 	"Ignore the error",
 	"Unplug monitor",
 	"Delete system files"
@@ -105,5 +105,5 @@ func _on_game_timer_timeout():
 
 	update_timer()
 
-	if time_left == 0:
-		fail_game()
+	#if time_left == 0:
+		#fail_game()

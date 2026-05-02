@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_7limr"]
 [ext_resource type="Script" uid="uid://c8ysd636t1n7k" path="res://motherboard_assembly_mini_game.gd" id="1_dfubv"]
+[ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="2_akl6o"]
 
 [node name="MotherboardAssemblyMiniGame" type="Control" unique_id=834253147]
 layout_mode = 3
@@ -20,6 +21,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.13333334, 0.2, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background" unique_id=549909122]
+position = Vector2(640, 360)
+texture = ExtResource("2_akl6o")
 
 [node name="TitleLabel" type="Label" parent="." unique_id=1331639463]
 layout_mode = 0
