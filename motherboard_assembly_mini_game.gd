@@ -1,132 +1,147 @@
 extends Control
 
-@onready var timer_label = $TimerLabel
-@onready var status_label = $StatusLabel
+@onready var timer_label = $Background/TopPanel/TimerLabel
+@onready var status_label = $Background/TopPanel/StatusLabel
+@onready var game_timer = $GameTimer
 
-@onready var board_panel = $BoardArea/MotherboardPanel
+@onready var parts_container = $BuildArea/Parts
+@onready var slots_container = $BuildArea/Slots
 
-@onready var cpu_slot = $BoardArea/MotherboardPanel/CpuSlot
-@onready var ram_slot = $BoardArea/MotherboardPanel/RamSlot
-@onready var gpu_slot = $BoardArea/MotherboardPanel/GpuSlot
+var time_left: int = 20
+var placed_count: int = 0
+var total_parts: int = 3
+var game_active: bool = true
 
-@onready var cpu_part = $PartsArea/CpuPart
-@onready var ram_part = $PartsArea/RamPart
-@onready var gpu_part = $PartsArea/GpuPart
-
-var time_left: int = 25
-var dragging_node: ColorRect = null
+# Drag and drop variables
+var dragged_part: ColorRect = null
 var drag_offset: Vector2 = Vector2.ZERO
-
-var start_positions := {}
-var placed := {
-	"cpu": false,
-	"ram": false,
-	"gpu": false
-}
+var original_positions: Dictionary = {}
 
 func _ready():
-	start_positions["cpu"] = cpu_part.position
-	start_positions["ram"] = ram_part.position
-	start_positions["gpu"] = gpu_part.position
-
+	# Timer Setup
+	game_timer.wait_time = 1.0
+	game_timer.one_shot = false 
+	if not game_timer.timeout.is_connected(_on_game_timer_timeout):
+		game_timer.timeout.connect(_on_game_timer_timeout)
+	game_timer.start()
 	update_timer()
 	update_status()
+
+	# Initialize parts
+	for part in parts_container.get_children():
+		if part is ColorRect:
+			# Store starting position so we can snap back if dropped wrong
+			original_positions[part] = part.position
+			
+			# Ensure parts process mouse input
+			part.mouse_filter = Control.MOUSE_FILTER_PASS 
+			part.gui_input.connect(_on_part_gui_input.bind(part))
 
 func update_timer():
-	timer_label.text = "Time: " + str(time_left)
+	timer_label.text = "TIME: " + str(time_left)
 
 func update_status():
-	var total_placed = 0
-	for key in placed.keys():
-		if placed[key]:
-			total_placed += 1
-	status_label.text = "Placed: " + str(total_placed) + " / 3"
-
-func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				start_drag()
-			else:
-				end_drag()
-
-	elif event is InputEventMouseMotion:
-		if dragging_node != null:
-			var local_mouse = get_global_mouse_position()
-			dragging_node.global_position = local_mouse - drag_offset
-
-func start_drag():
-	var mouse_pos = get_global_mouse_position()
-
-	if not placed["cpu"] and is_point_inside_global_rect(mouse_pos, cpu_part):
-		dragging_node = cpu_part
-		drag_offset = mouse_pos - cpu_part.global_position
-	elif not placed["ram"] and is_point_inside_global_rect(mouse_pos, ram_part):
-		dragging_node = ram_part
-		drag_offset = mouse_pos - ram_part.global_position
-	elif not placed["gpu"] and is_point_inside_global_rect(mouse_pos, gpu_part):
-		dragging_node = gpu_part
-		drag_offset = mouse_pos - gpu_part.global_position
-
-func end_drag():
-	if dragging_node == null:
-		return
-
-	if dragging_node == cpu_part:
-		check_connection("cpu", cpu_part, cpu_slot)
-	elif dragging_node == ram_part:
-		check_connection("ram", ram_part, ram_slot)
-	elif dragging_node == gpu_part:
-		check_connection("gpu", gpu_part, gpu_slot)
-
-	dragging_node = null
-	update_status()
-	check_win()
-
-func check_connection(part_name: String, part: ColorRect, slot: ColorRect):
-	if global_rects_overlap(part, slot):
-		part.global_position = slot.global_position
-		placed[part_name] = true
-	else:
-		part.position = start_positions[part_name]
-
-func is_point_inside_global_rect(point: Vector2, node: Control) -> bool:
-	var rect = Rect2(node.global_position, node.size)
-	return rect.has_point(point)
-
-func global_rects_overlap(a: Control, b: Control) -> bool:
-	var rect_a = Rect2(a.global_position, a.size)
-	var rect_b = Rect2(b.global_position, b.size)
-	return rect_a.intersects(rect_b)
-
-func check_win():
-	if placed["cpu"] and placed["ram"] and placed["gpu"]:
-		GameManager.money += 15
-		GameManager.satisfaction += 5
-		if GameManager.satisfaction > 100:
-			GameManager.satisfaction = 100
-
-		GameManager.last_money_change = 15
-		GameManager.last_satisfaction_change = 5
-		GameManager.save_game()
-		get_tree().change_scene_to_file("res://success_screen.tscn")
-
-func fail_game():
-	GameManager.satisfaction -= 10
-	if GameManager.satisfaction < 0:
-		GameManager.satisfaction = 0
-
-	GameManager.last_money_change = 0
-	GameManager.last_satisfaction_change = -10
-	GameManager.save_game()
-	get_tree().change_scene_to_file("res://success_screen.tscn")
+	status_label.text = "PLACED: " + str(placed_count) + " / " + str(total_parts)
 
 func _on_game_timer_timeout():
+	if not game_active: return
+	
 	time_left -= 1
-	if time_left < 0:
+	if time_left <= 0:
 		time_left = 0
-
-	update_timer()
-
-	if time_left == 0:
+		update_timer()
 		fail_game()
+	else:
+		update_timer()
+
+# --- DRAG AND DROP LOGIC ---
+
+func _on_part_gui_input(event: InputEvent, part: ColorRect):
+	if not game_active: return
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			# Start dragging
+			dragged_part = part
+			# Calculate offset so the part doesn't snap to the top-left corner of the mouse
+			drag_offset = part.global_position - get_global_mouse_position()
+			# Bring the dragged part to the front
+			part.move_to_front()
+		else:
+			# Stop dragging
+			if dragged_part != null:
+				check_drop(dragged_part)
+				dragged_part = null
+
+func _process(_delta):
+	if dragged_part != null:
+		# Update position while dragging
+		dragged_part.global_position = get_global_mouse_position() + drag_offset
+
+func check_drop(part: ColorRect):
+	var dropped_correctly = false
+	
+	# We expect the slot name to end with "_Slot" and the part name to end with "_Part"
+	# E.g., "CPU_Part" matches "CPU_Slot"
+	var expected_slot_name = part.name.replace("_Part", "_Slot")
+	
+	for slot in slots_container.get_children():
+		if slot.name == expected_slot_name:
+			# Calculate distance between centers
+			var part_center = part.global_position + (part.size / 2.0)
+			var slot_center = slot.global_position + (slot.size / 2.0)
+			
+			# If the distance is small enough (e.g., within 40 pixels), consider it a match
+			if part_center.distance_to(slot_center) < 40:
+				# Snap to slot
+				part.global_position = slot.global_position
+				
+				# Disable further dragging
+				part.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				
+				dropped_correctly = true
+				placed_count += 1
+				update_status()
+				
+				# Give visual feedback (e.g., turn the slot green)
+				slot.color = Color(0.1, 0.8, 0.1, 0.5) 
+				
+				if placed_count >= total_parts:
+					win_game()
+				break
+
+	if not dropped_correctly:
+		# Snap back to original position
+		part.position = original_positions[part]
+
+
+# --- WIN / LOSS INTEGRATED WITH GAME MANAGER ---
+
+func win_game():
+	game_active = false
+	game_timer.stop()
+	
+	GameManager.last_money_change = 25
+	GameManager.last_satisfaction_change = 10
+	
+	GameManager.money += GameManager.last_money_change
+	GameManager.satisfaction += GameManager.last_satisfaction_change
+	if GameManager.satisfaction > 100: GameManager.satisfaction = 100
+	GameManager.save_game()
+	
+	await get_tree().create_timer(1.0).timeout
+	get_tree().change_scene_to_file("res://success_screen.tscn")
+
+func fail_game():
+	game_active = false
+	game_timer.stop()
+	
+	GameManager.last_money_change = 0
+	GameManager.last_satisfaction_change = -10
+	
+	GameManager.satisfaction += GameManager.last_satisfaction_change
+	if GameManager.satisfaction < 0: GameManager.satisfaction = 0
+	GameManager.save_game()
+	
+	await get_tree().create_timer(1.5).timeout
+	get_tree().change_scene_to_file("res://shop_floor_scrollable.tscn")

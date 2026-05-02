@@ -17,9 +17,9 @@ script = ExtResource("1_2nc7s")
 [node name="PauseButton" type="Button" parent="." unique_id=641646048]
 process_mode = 3
 offset_left = 1222.0
-offset_top = 12.0
+offset_top = 23.0
 offset_right = 1271.0
-offset_bottom = 60.0
+offset_bottom = 71.0
 icon = ExtResource("6_d3xb4")
 flat = true
 

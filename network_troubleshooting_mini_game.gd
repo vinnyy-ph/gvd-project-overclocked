@@ -5,45 +5,43 @@ extends Control
 @onready var link_status_label = $MonitorScreenArea/TerminalStatus/VBoxContainer/LinkStatusLabel
 @onready var action_label = $MonitorScreenArea/TerminalStatus/VBoxContainer/ActionLabel
 @onready var game_timer = $GameTimer
-@onready var btn_diagnostic = $MonitorScreenArea/RunDiagnosticBtn
+@onready var btn_diagnostic = $MonitorScreenArea/TerminalStatus/RunDiagnosticBtn
 
-# --- Cables (Line2D) ---
-@onready var line_pc_sw = $MonitorScreenArea/NetworkCables/Line_PC_SW
-@onready var line_sw_rt = $MonitorScreenArea/NetworkCables/Line_SW_RT
-@onready var line_rt_fw = $MonitorScreenArea/NetworkCables/Line_RT_FW
-@onready var line_fw_sv = $MonitorScreenArea/NetworkCables/Line_FW_SV
-@onready var line_sv_db = $MonitorScreenArea/NetworkCables/Line_SV_DB
+# --- Node Containers ---
+@onready var cables_container = $MonitorScreenArea/NetworkCables
+@onready var devices_container = $MonitorScreenArea/NetworkDevices
 
-# --- Devices (TextureButtons) ---
-@onready var btn_pc = $MonitorScreenArea/NetworkDevices/CustomerPC
-@onready var btn_switch = $MonitorScreenArea/NetworkDevices/SwitchL2
-@onready var btn_router = $MonitorScreenArea/NetworkDevices/Router
-@onready var btn_firewall = $MonitorScreenArea/NetworkDevices/Firewall
-@onready var btn_server = $MonitorScreenArea/NetworkDevices/MainServer
-@onready var btn_db = $MonitorScreenArea/NetworkDevices/DatabaseServer
+var time_left: int = 40
+var game_active: bool = false
 
-# --- GAME LOGIC VARIABLES ---
-var time_left: int = 30 # Increased time because the network is larger!
-var diagnostics_run: bool = false
-var active_selection: String = ""
-var device_clicks_left: int = 3 
+# --- PACKET TRACER VARIABLES ---
+var active_source_node: TextureButton = null
+var current_route_plan: Array = []
+var current_step_index: int = 0
 
-# Colors
-var color_unknown = Color(0.4, 0.4, 0.4)      # Gray
-var color_disconnected = Color(0.8, 0.1, 0.1) # Red
 var color_connected = Color(0.1, 0.8, 0.1)    # Green
+var color_error = Color(0.9, 0.1, 0.1)        # Red
+var color_selected = Color(0.2, 0.6, 1.0)     # Blue
 
-# --- FAULT SYSTEM ---
-enum FaultType {
-	CABLE_ROUTER_FIREWALL,
-	CABLE_SERVER_DB,
-	FIREWALL_BLOCK,
-	ROUTER_HANG
-}
-var current_fault: int
+# --- RANDOM SCENARIOS ---
+var scenarios = [
+	{
+		"desc": "> FAULT: Core Network Severed.\n> ROUTE REQ: CustomerPC -> SwitchL2 -> Router -> Firewall -> MainServer",
+		"plan": ["CustomerPC", "SwitchL2", "Router", "Firewall", "MainServer"]
+	},
+	{
+		"desc": "> FAULT: Database Unreachable.\n> ROUTE REQ: SwitchL2 -> Router -> MainServer -> DatabaseServer",
+		"plan": ["SwitchL2", "Router", "MainServer", "DatabaseServer"]
+	},
+	{
+		"desc": "> FAULT: Secure Direct Line Down.\n> ROUTE REQ: CustomerPC -> SwitchL2 -> Firewall -> DatabaseServer",
+		"plan": ["CustomerPC", "SwitchL2", "Firewall", "DatabaseServer"]
+	}
+]
+var current_scenario: Dictionary
 
 func _ready():
-	# 1. Timer Setup
+	# Timer Setup
 	game_timer.wait_time = 1.0
 	game_timer.one_shot = false 
 	if not game_timer.timeout.is_connected(_on_timer_timeout):
@@ -51,125 +49,112 @@ func _ready():
 	game_timer.start()
 	timer_label.text = "TIME: " + str(time_left)
 
-	# 2. Set all lines to gray initially
-	line_pc_sw.default_color = color_unknown
-	line_sw_rt.default_color = color_unknown
-	line_rt_fw.default_color = color_unknown
-	line_fw_sv.default_color = color_unknown
-	line_sv_db.default_color = color_unknown
-
-	# 3. Connect the Diagnostic Button
+	# Connect the Diagnostic Button
 	btn_diagnostic.pressed.connect(_on_diagnostic_pressed)
 
-	# 4. Connect all devices using advanced Godot 4 .bind()
-	# This sends the name of the device directly to the function when clicked!
-	btn_pc.pressed.connect(_on_device_pressed.bind("PC"))
-	btn_switch.pressed.connect(_on_device_pressed.bind("SWITCH"))
-	btn_router.pressed.connect(_on_device_pressed.bind("ROUTER"))
-	btn_firewall.pressed.connect(_on_device_pressed.bind("FIREWALL"))
-	btn_server.pressed.connect(_on_device_pressed.bind("SERVER"))
-	btn_db.pressed.connect(_on_device_pressed.bind("DATABASE"))
+	# Dynamically connect EVERY device button inside NetworkDevices
+	for child in devices_container.get_children():
+		if child is TextureButton:
+			child.pressed.connect(_on_device_pressed.bind(child))
 
-	# 5. Generate Random Scenario
+	# Pick a random scenario right when the game starts
 	randomize()
-	current_fault = randi() % 4
-	
-	link_status_label.text = "> SYSTEM STATUS: UNKNOWN"
-	action_label.text = "> Action Required: Run Ping Diagnostic."
+	current_scenario = scenarios[randi() % scenarios.size()]
+	current_route_plan = current_scenario["plan"]
+
+	link_status_label.text = "> FATAL ERROR: Topology Wiped."
+	action_label.text = "> Action Required: Run Diagnostic to fetch routing table."
 
 # --- DIAGNOSTIC PHASE ---
 func _on_diagnostic_pressed():
 	btn_diagnostic.visible = false
-	link_status_label.text = "> TRACEROUTE INITIATED..."
-	action_label.text = "> Please wait. Pinging nodes..."
+	link_status_label.text = "> FETCHING ROUTING TABLE..."
+	action_label.text = "> Please wait..."
 	
-	# Simulate network scan sweep (Async await)
-	await get_tree().create_timer(0.5).timeout
-	line_pc_sw.default_color = color_connected
-	line_sw_rt.default_color = color_connected
+	# Simulate the ping test delay
+	await get_tree().create_timer(1.0).timeout
 	
-	await get_tree().create_timer(0.5).timeout
+	# Display the random scenario instructions on the terminal
+	link_status_label.text = current_scenario["desc"]
+	action_label.text = "> Action Req: Select Source Device to begin cabling."
 	
-	# Reveal the specific fault
-	if current_fault == FaultType.CABLE_ROUTER_FIREWALL:
-		line_rt_fw.default_color = color_disconnected
-		line_fw_sv.default_color = color_unknown
-		line_sv_db.default_color = color_unknown
-		link_status_label.text = "> PING: Request timed out at Router."
-		action_label.text = "> DIAGNOSTIC: Cable severed between Router and Firewall."
-		
-	elif current_fault == FaultType.CABLE_SERVER_DB:
-		line_rt_fw.default_color = color_connected
-		line_fw_sv.default_color = color_connected
-		line_sv_db.default_color = color_disconnected
-		link_status_label.text = "> PING: Database unreachable from Main Server."
-		action_label.text = "> DIAGNOSTIC: Cable severed between Main Server and DB."
-		
-	elif current_fault == FaultType.FIREWALL_BLOCK:
-		line_rt_fw.default_color = color_connected
-		line_fw_sv.default_color = color_connected
-		line_sv_db.default_color = color_connected
-		link_status_label.text = "> PING: Packets dropped by Security Gateway."
-		action_label.text = "> DIAGNOSTIC: Firewall ports locked. Click Firewall x3 to flush rules."
-		
-	elif current_fault == FaultType.ROUTER_HANG:
-		line_rt_fw.default_color = color_connected
-		line_fw_sv.default_color = color_connected
-		line_sv_db.default_color = color_connected
-		link_status_label.text = "> PING: Router CPU at 100% (Kernel Panic)."
-		action_label.text = "> DIAGNOSTIC: Router frozen. Click Router x3 to hard reboot."
+	game_active = true
 
-	diagnostics_run = true # Unlocks the devices so the player can fix it
-
-
-# --- INTERACTION LOGIC ---
-func _on_device_pressed(device: String):
-	# Don't let them click anything until the diagnostic is finished!
-	if not diagnostics_run: return
+# --- MANUAL CABLING LOGIC ---
+func _on_device_pressed(clicked_node: TextureButton):
+	if not game_active: return
 	
-	match current_fault:
+	# STEP 1: Select a Source
+	if active_source_node == null:
+		var expected_source_name = current_route_plan[current_step_index]
 		
-		# FAULT 1: Broken Router -> Firewall Cable
-		FaultType.CABLE_ROUTER_FIREWALL:
-			if active_selection == "" and device == "ROUTER":
-				active_selection = "ROUTER"
-				link_status_label.text = "> Link Status: Router Selected"
-				action_label.text = "> Action Required: Click FIREWALL to route new cable."
-			elif active_selection == "ROUTER" and device == "FIREWALL":
-				line_rt_fw.default_color = color_connected
-				win_game()
-			else:
-				active_selection = "" # Reset on wrong click
-				
-		# FAULT 2: Broken Server -> Database Cable
-		FaultType.CABLE_SERVER_DB:
-			if active_selection == "" and device == "SERVER":
-				active_selection = "SERVER"
-				link_status_label.text = "> Link Status: Main Server Selected"
-				action_label.text = "> Action Required: Click DATABASE to route new cable."
-			elif active_selection == "SERVER" and device == "DATABASE":
-				line_sv_db.default_color = color_connected
-				win_game()
-			else:
-				active_selection = ""
-				
-		# FAULT 3: Firewall Block
-		FaultType.FIREWALL_BLOCK:
-			if device == "FIREWALL":
-				device_clicks_left -= 1
-				if device_clicks_left <= 0:
-					win_game()
-				else:
-					link_status_label.text = "> FLUSHING RULES... (" + str(3 - device_clicks_left) + "/3)"
+		if clicked_node.name == expected_source_name:
+			active_source_node = clicked_node
+			clicked_node.modulate = color_selected 
+			link_status_label.text = "> SOURCE: " + clicked_node.name + " selected."
+			action_label.text = "> Action Req: Select Destination Device."
+		else:
+			trigger_network_error("INVALID SOURCE: Expected " + expected_source_name)
 			
-		# FAULT 4: Router Hang
-		FaultType.ROUTER_HANG:
-			if device == "ROUTER":
-				device_clicks_left -= 1
-				if device_clicks_left <= 0:
-					win_game()
-				else:
-					link_status_label.text = "> REBOOTING ROUTER... (" + str(3 - device_clicks_left) + "/3)"
+	# STEP 2: Select a Destination (Target)
+	else:
+		# Cancel selection if they click the exact same device twice
+		if clicked_node == active_source_node:
+			active_source_node.modulate = Color.WHITE
+			active_source_node = null
+			link_status_label.text = "> Selection Cancelled."
+			action_label.text = "> Action Req: Select Source Device."
+			return
+			
+		var expected_dest_name = current_route_plan[current_step_index + 1]
+		
+		# Did they click the correct destination?
+		if clicked_node.name == expected_dest_name:
+			# SUCCESS! Draw the cable.
+			draw_cable(active_source_node, clicked_node, color_connected)
+			active_source_node.modulate = Color.WHITE 
+			active_source_node = null
+			
+			current_step_index += 1
+			
+			# Check if the whole route is finished
+			if current_step_index >= current_route_plan.size() - 1:
+				win_game()
+			else:
+				link_status_label.text = "> LINK UP: " + expected_dest_name + " connected."
+				action_label.text = "> Action Req: Route next hop."
+				
+		else:
+			# FAILED! They plugged into a trap device or the wrong sequence
+			active_source_node.modulate = Color.WHITE
+			active_source_node = null
+			trigger_network_error("ROUTING LOOP DETECTED! Bad connection to " + clicked_node.name)
+
+# --- DYNAMIC LINE DRAWING ---
+func draw_cable(node_a: TextureButton, node_b: TextureButton, color: Color):
+	var line = Line2D.new()
+	line.width = 4
+	line.default_color = color
+	var pos_a = node_a.position + (node_a.size / 2.0)
+	var pos_b = node_b.position + (node_b.size / 2.0)
+	
+	line.add_point(pos_a)
+	line.add_point(pos_b)
+	cables_container.add_child(line)
+
+# --- PENALTY SYSTEM ---
+func trigger_network_error(msg: String):
+	link_status_label.text = "> " + msg
+	action_label.text = "> PENALTY: -5 SECONDS"
+	
+	time_left -= 5
+	timer_label.text = "TIME: " + str(time_left)
+	timer_label.modulate = color_error
+	await get_tree().create_timer(0.5).timeout
+	timer_label.modulate = Color.WHITE
+	
+	if time_left <= 0:
+		game_over()
 
 # --- GAME LOOP & TIMER ---
 func _on_timer_timeout():
@@ -180,14 +165,14 @@ func _on_timer_timeout():
 
 # --- WIN / LOSS INTEGRATED WITH GAME MANAGER ---
 func win_game():
+	game_active = false
 	game_timer.stop()
-	diagnostics_run = false # Locks devices so they can't be clicked anymore
 	
-	link_status_label.text = "> Link Status: ALL SYSTEMS NOMINAL"
-	action_label.text = "> Action Required: None. Network Restored!"
+	link_status_label.text = "> Link Status: BGP ROUTES ESTABLISHED"
+	action_label.text = "> Action Req: None. Network Restored!"
 	
-	GameManager.last_money_change = 30
-	GameManager.last_satisfaction_change = 15
+	GameManager.last_money_change = 40 
+	GameManager.last_satisfaction_change = 20
 	
 	GameManager.satisfaction += GameManager.last_satisfaction_change
 	if GameManager.satisfaction > 100: GameManager.satisfaction = 100
@@ -198,8 +183,8 @@ func win_game():
 	get_tree().change_scene_to_file("res://success_screen.tscn")
 
 func game_over():
+	game_active = false
 	game_timer.stop()
-	diagnostics_run = false
 	
 	link_status_label.text = "> CRITICAL ERROR"
 	action_label.text = "> CONNECTION TIMEOUT"

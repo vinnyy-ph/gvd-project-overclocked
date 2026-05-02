@@ -1,3 +1,4 @@
+#game_manager.gd
 extends Node
 
 var day: int = 1
@@ -69,3 +70,37 @@ func load_game():
 		satisfaction = data.get("satisfaction", 100)
 		return true
 	return false
+
+func _ready():
+	# Listen for any new node entering the scene tree globally
+	get_tree().node_added.connect(_on_node_added)
+
+func _on_node_added(node: Node):
+	# Check if the newly added node is a button
+	if node is BaseButton:
+		setup_button_effect(node)
+
+# ==========================================
+# GLOBAL BUTTON EFFECTS
+# ==========================================
+
+func setup_button_effect(button: BaseButton):
+	# Using call_deferred ensures the button has its final size before setting the pivot
+	button.call_deferred("set_pivot_offset", button.size / 2.0)
+	
+	# Connect the signals. We check if they are already connected just in case
+	if not button.button_down.is_connected(_on_button_down):
+		button.button_down.connect(_on_button_down.bind(button))
+	if not button.button_up.is_connected(_on_button_up):
+		button.button_up.connect(_on_button_up.bind(button))
+
+func _on_button_down(button: BaseButton):
+	var tween = create_tween()
+	# Optional: Set pause mode to process so it animates even if the game is paused
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS) 
+	tween.tween_property(button, "scale", Vector2(0.9, 0.9), 0.05).set_trans(Tween.TRANS_SINE)
+
+func _on_button_up(button: BaseButton):
+	var tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.15).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)

@@ -226,6 +226,12 @@ value = 100.0
 
 [node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD/SatisfactionBarContainer" unique_id=1586168814]
 layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 13
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 46
 text = "Satisfaction"
 horizontal_alignment = 1
 vertical_alignment = 1
