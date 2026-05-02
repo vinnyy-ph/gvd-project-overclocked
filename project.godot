@@ -13,7 +13,7 @@ config_version=5
 config/name="Overclocked"
 config/description="Overclocked"
 config/version="1"
-run/main_scene="uid://omftc38cj1rk"
+run/main_scene="uid://reuakk7km4ur"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="uid://g14n5w5c4nq5"
 
@@ -23,8 +23,8 @@ GameManager="*uid://tbo7awses1ay"
 
 [display]
 
-window/size/viewport_width=1980
-window/size/viewport_height=1080
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

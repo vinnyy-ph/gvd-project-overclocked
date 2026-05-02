@@ -37,6 +37,7 @@ position = Vector2(1532, 704)
 scale = Vector2(0.7, 0.7)
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=1643221891]
+position = Vector2(-9.999999, 15.714285)
 texture = ExtResource("3_22yg1")
 
 [node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=806564770]
@@ -201,6 +202,29 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="SatisfactionBarContainer" type="MarginContainer" parent="CanvasLayer/HUD" unique_id=1502325387]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 324.0
+offset_top = 625.0
+offset_right = 919.0
+offset_bottom = 674.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD/SatisfactionBarContainer" unique_id=1555646873]
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+value = 100.0
+
+[node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD/SatisfactionBarContainer" unique_id=1586168814]
+layout_mode = 2
+text = "Satisfaction"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="TopBar" type="ColorRect" parent="CanvasLayer/HUD" unique_id=58088674]
 layout_mode = 1
 anchors_preset = 10
@@ -217,16 +241,6 @@ texture = ExtResource("8_sru07")
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HUD/TopBar/Sprite2D" unique_id=2068315622]
 position = Vector2(-321.0198, -5.247525)
 texture = ExtResource("9_u2yt3")
-
-[node name="SatisfactionLabel" type="Label" parent="CanvasLayer/HUD" unique_id=375201401]
-layout_mode = 0
-offset_left = 12.0
-offset_top = 121.0
-offset_right = 52.0
-offset_bottom = 149.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4_ll02x")
-theme_override_font_sizes/font_size = 30
 
 [node name="TimeLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1512595669]
 layout_mode = 0

@@ -3,7 +3,7 @@ extends Node2D
 @onready var camera = $MainCamera
 @onready var day_label = $CanvasLayer/HUD/DayLabel
 @onready var money_label = $CanvasLayer/HUD/MoneyLabel
-@onready var satisfaction_label = $CanvasLayer/HUD/SatisfactionLabel
+@onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBarContainer/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 @onready var pause_button = $CanvasLayer/HUD/PauseButton
 @onready var dim_overlay = $CanvasLayer/HUD/DimOverlay
@@ -32,7 +32,13 @@ func _ready():
 	randomize()
 	camera.position = Vector2(1532, 704)
 	clamp_camera()
-	
+
+	# --- SATISFACTION BAR SETUP ---
+	satisfaction_bar.min_value = 0
+	satisfaction_bar.max_value = 100
+	satisfaction_bar.value = GameManager.satisfaction
+	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
+
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)
@@ -46,6 +52,35 @@ func _ready():
 	$CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer/QuitButtonPause.pressed.connect(_on_quit_pressed)
 
 	update_hud()
+
+# --- SATISFACTION BAR COLOR ---
+
+func _get_bar_color(value: int) -> Color:
+	if value > 60:
+		return Color(0.2, 0.85, 0.3)   # green
+	elif value > 30:
+		return Color(1.0, 0.75, 0.0)   # yellow
+	else:
+		return Color(0.9, 0.15, 0.15)  # red
+
+func _apply_bar_style():
+	var fill_style = StyleBoxFlat.new()
+	fill_style.bg_color = _get_bar_color(GameManager.satisfaction)
+	fill_style.corner_radius_top_left = 4
+	fill_style.corner_radius_top_right = 4
+	fill_style.corner_radius_bottom_left = 4
+	fill_style.corner_radius_bottom_right = 4
+	satisfaction_bar.add_theme_stylebox_override("fill", fill_style)
+
+	var bg_style = StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.1, 0.1, 0.15, 0.85)
+	bg_style.corner_radius_top_left = 4
+	bg_style.corner_radius_top_right = 4
+	bg_style.corner_radius_bottom_left = 4
+	bg_style.corner_radius_bottom_right = 4
+	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
+
+	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
 # --- PAUSE LOGIC ---
 
@@ -67,12 +102,12 @@ func _on_quit_pressed():
 
 func _process(delta):
 	float_time += delta
-	
+
 	for i in range(issue_buttons.size()):
 		if GameManager.active_issues[i]:
 			var btn = issue_buttons[i]
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
-			
+
 	handle_keyboard_scroll(delta)
 
 # --- SIMULATION LOGIC ---
@@ -86,19 +121,19 @@ func _on_day_timer_timeout():
 
 func _on_spawn_timer_timeout():
 	if GameManager.time_left <= 0: return
-	
+
 	var inactive_indices = []
 	for i in range(GameManager.active_issues.size()):
 		if not GameManager.active_issues[i]:
 			inactive_indices.append(i)
-			
+
 	if inactive_indices.size() > 0:
 		var random_index = inactive_indices[randi() % inactive_indices.size()]
 		GameManager.active_issues[random_index] = true
-		
+
 		var btn = issue_buttons[random_index]
 		btn.visible = true
-		
+
 		btn.scale = Vector2.ZERO
 		var tween = create_tween()
 		tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -106,10 +141,10 @@ func _on_spawn_timer_timeout():
 
 func _on_issue_clicked(pc_index: int):
 	if not GameManager.active_issues[pc_index]: return
-		
-	GameManager.active_issues[pc_index] = false 
+
+	GameManager.active_issues[pc_index] = false
 	GameManager.save_game()
-	
+
 	var issues = [
 		"res://login_minigame.tscn",
 		"res://malware_minigame.tscn",
@@ -118,14 +153,14 @@ func _on_issue_clicked(pc_index: int):
 		"res://bsod_fix_mini_game.tscn",
 		"res://motherboard_assembly_mini_game.tscn"
 	]
-	
+
 	get_tree().change_scene_to_file(issues[randi() % issues.size()])
 
 func end_day():
 	GameManager.day += 1
-	GameManager.money -= 20 
+	GameManager.money -= 20
 	if GameManager.money < 0: GameManager.money = 0
-	GameManager.time_left = 60 
+	GameManager.time_left = 60
 	for i in range(GameManager.active_issues.size()):
 		GameManager.active_issues[i] = false
 	GameManager.save_game()
@@ -134,8 +169,11 @@ func end_day():
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
 	money_label.text = "Money: ₱" + str(GameManager.money)
-	satisfaction_label.text = "Satisfaction: " + str(GameManager.satisfaction) + "%"
 	time_label.text = "Time: " + str(GameManager.time_left)
+
+	# Update bar value and color
+	satisfaction_bar.value = GameManager.satisfaction
+	_apply_bar_style()
 
 # --- CAMERA LOGIC ---
 

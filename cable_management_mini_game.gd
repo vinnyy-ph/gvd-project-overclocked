@@ -1,10 +1,10 @@
 extends Control
 
-@onready var timer_label = $TimerLabel
-@onready var status_label = $StatusLabel
+@onready var timer_label = $Background/TopPanel/TimerLabel
+@onready var status_label = $Background/TopPanel/StatusLabel
 @onready var cable_area = $CableArea
-@onready var cable_lines = $CableArea/CableLines
 
+# Clean, direct paths based on our new setup
 @onready var cable_red = $CableArea/CableRed
 @onready var cable_blue = $CableArea/CableBlue
 @onready var cable_green = $CableArea/CableGreen
@@ -14,7 +14,7 @@ extends Control
 @onready var port_green = $CableArea/PortGreen
 
 var time_left: int = 20
-var dragging_node: ColorRect = null
+var dragging_node: TextureRect = null
 var drag_offset: Vector2 = Vector2.ZERO
 
 var start_positions := {}
@@ -25,6 +25,7 @@ var connected := {
 }
 
 func _ready():
+	# Save the original positions so they snap back if dropped wrongly
 	start_positions["red"] = cable_red.position
 	start_positions["blue"] = cable_blue.position
 	start_positions["green"] = cable_green.position
@@ -42,9 +43,6 @@ func update_status():
 			total_connected += 1
 	status_label.text = "Connected: " + str(total_connected) + " / 3"
 
-func _process(_delta):
-	cable_lines.queue_redraw()
-
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -57,11 +55,11 @@ func _input(event):
 		if dragging_node != null:
 			var local_mouse = cable_area.get_local_mouse_position()
 			dragging_node.position = local_mouse - drag_offset
-			cable_lines.queue_redraw()
 
 func start_drag():
 	var local_mouse = cable_area.get_local_mouse_position()
 
+	# Check if we clicked on a cable bounding box
 	if not connected["red"] and is_point_inside_rect(local_mouse, cable_red.position, cable_red.size):
 		dragging_node = cable_red
 		drag_offset = local_mouse - cable_red.position
@@ -86,30 +84,26 @@ func end_drag():
 	dragging_node = null
 	update_status()
 	check_win()
-	cable_lines.queue_redraw()
 
-func check_connection(color_name: String, cable: ColorRect, port: ColorRect):
-	if rects_overlap(cable, port):
-		cable.position = port.position
+func check_connection(color_name: String, cable: TextureRect, port: Control):
+	var tip_marker = cable.get_node("TipMarker")
+	
+	# Calculate where the metal tip actually is in the world
+	var tip_global_pos = cable.position + tip_marker.position
+	var port_rect = Rect2(port.position, port.size)
+
+	# If the exact metal tip is inside the invisible Port box
+	if port_rect.has_point(tip_global_pos):
+		# Snap the tip exactly to the center of the port
+		cable.position = port.position + (port.size / 2.0) - tip_marker.position
 		connected[color_name] = true
 	else:
+		# Snap back to start
 		cable.position = start_positions[color_name]
-
-func rects_overlap(a: ColorRect, b: ColorRect) -> bool:
-	var rect_a = Rect2(a.position, a.size)
-	var rect_b = Rect2(b.position, b.size)
-	return rect_a.intersects(rect_b)
 
 func is_point_inside_rect(point: Vector2, rect_pos: Vector2, rect_size: Vector2) -> bool:
 	return point.x >= rect_pos.x and point.x <= rect_pos.x + rect_size.x \
 		and point.y >= rect_pos.y and point.y <= rect_pos.y + rect_size.y
-
-func get_left_anchor(color_name: String) -> Vector2:
-	var pos = start_positions[color_name]
-	return pos + Vector2(-30, 20)
-
-func get_cable_tip(cable: ColorRect) -> Vector2:
-	return cable.position + Vector2(cable.size.x, cable.size.y / 2.0)
 
 func check_win():
 	if connected["red"] and connected["blue"] and connected["green"]:

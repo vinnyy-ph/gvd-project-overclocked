@@ -1,8 +1,8 @@
 extends Control
 
-@onready var timer_label = $TimerLabel
-@onready var step_label = $StepLabel
-@onready var status_label = $StatusLabel
+@onready var timer_label = $Background/TopPanel/TimerLabel
+@onready var step_label = $Background/TopPanel/StepLabel
+@onready var status_label = $Background/InstructionsPanel/InstructionsLabel
 
 @onready var choice_button_1 = $ChoicesArea/ChoiceButton1
 @onready var choice_button_2 = $ChoicesArea/ChoiceButton2
@@ -22,7 +22,7 @@ var choice_pool = [
 	"Restart the PC",
 	"Run diagnostics",
 	"Remove faulty driver",
-	"Install random\nsoftware update",
+	"Install random software update",
 	"Ignore the error",
 	"Unplug monitor",
 	"Delete system files"
@@ -45,7 +45,6 @@ func update_timer():
 
 func update_step_ui():
 	step_label.text = "Step " + str(current_step + 1) + " of " + str(correct_steps.size())
-	status_label.text = "Pick the best next action."
 
 func generate_choices():
 	var current_correct = correct_steps[current_step]
