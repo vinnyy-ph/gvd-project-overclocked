@@ -13,7 +13,7 @@ config_version=5
 config/name="Overclocked"
 config/description="Overclocked"
 config/version="1"
-run/main_scene="uid://owswwe0dhtyy"
+run/main_scene="uid://buljirkfng5sa"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="uid://g14n5w5c4nq5"
 
@@ -21,12 +21,17 @@ config/icon="uid://g14n5w5c4nq5"
 
 GameManager="*uid://tbo7awses1ay"
 PauseMenu="*uid://wmphjhkjc3ss"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg")
 
 [input_devices]
 

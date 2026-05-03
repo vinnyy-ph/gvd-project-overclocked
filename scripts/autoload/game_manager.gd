@@ -1,4 +1,3 @@
-#game_manager.gd
 extends Node
 
 var day: int = 1
@@ -10,10 +9,15 @@ var last_satisfaction_change: int = 0
 var in_tutorial: bool = false
 var time_left: int = 60
 var active_issues: Array = [false, false, false, false, false, false, false, false]
+var is_tutorial: bool = false
+var tutorial_minigame_done: bool = false
 
 # --- SHUFFLED DECK ---
 var minigame_deck: Array = []
 var last_minigame: String = ""
+
+# 1. Create a dedicated RNG for the manager
+var rng = RandomNumberGenerator.new() 
 
 const ALL_MINIGAMES: Array = [
 	"res://login_minigame.tscn",
@@ -27,12 +31,21 @@ const ALL_MINIGAMES: Array = [
 func get_next_minigame() -> String:
 	if minigame_deck.is_empty():
 		minigame_deck = ALL_MINIGAMES.duplicate()
-		minigame_deck.shuffle()
+		
+		# 3. Custom Fisher-Yates shuffle to guarantee entropy
+		for i in range(minigame_deck.size() - 1, 0, -1):
+			var j = rng.randi_range(0, i)
+			var temp = minigame_deck[i]
+			minigame_deck[i] = minigame_deck[j]
+			minigame_deck[j] = temp
+			
+		# Prevent the new deck from starting with the last minigame of the previous deck
 		if minigame_deck.back() == last_minigame and minigame_deck.size() > 1:
-			var swap_index = randi() % (minigame_deck.size() - 1)
+			var swap_index = rng.randi_range(0, minigame_deck.size() - 2)
 			var tmp = minigame_deck[swap_index]
 			minigame_deck[swap_index] = minigame_deck.back()
 			minigame_deck[minigame_deck.size() - 1] = tmp
+			
 	last_minigame = minigame_deck.back()
 	return minigame_deck.pop_back()
 
@@ -72,6 +85,9 @@ func load_game():
 	return false
 
 func _ready():
+	# 2. Seed the RNG immediately when the Autoload boots
+	rng.randomize() 
+	
 	# Listen for any new node entering the scene tree globally
 	get_tree().node_added.connect(_on_node_added)
 

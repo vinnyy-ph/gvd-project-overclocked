@@ -115,7 +115,13 @@ func check_win():
 		GameManager.last_money_change = 15
 		GameManager.last_satisfaction_change = 5
 		GameManager.save_game()
-		get_tree().change_scene_to_file("res://success_screen.tscn")
+		
+		# --- TUTORIAL ROUTING CHECK ---
+		if GameManager.is_tutorial:
+			GameManager.tutorial_minigame_done = true
+			get_tree().change_scene_to_file("res://shop_floor_scrollable_tutorial.tscn") # Make sure this matches your tutorial scene name
+		else:
+			get_tree().change_scene_to_file("res://success_screen.tscn")
 
 func _on_game_timer_timeout():
 	time_left -= 1
@@ -132,4 +138,10 @@ func _on_game_timer_timeout():
 		GameManager.last_money_change = 0
 		GameManager.last_satisfaction_change = -10
 		GameManager.save_game()
-		get_tree().change_scene_to_file("res://success_screen.tscn")
+		
+		# --- TUTORIAL ROUTING CHECK ---
+		if GameManager.is_tutorial:
+			GameManager.tutorial_minigame_done = true
+			get_tree().change_scene_to_file("res://tutorial_scene.tscn")
+		else:
+			get_tree().change_scene_to_file("res://success_screen.tscn")

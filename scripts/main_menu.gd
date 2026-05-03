@@ -22,4 +22,4 @@ func _on_hi_score_button_pressed() -> void:
 func _on_tutorial_button_pressed():
 	GameManager.in_tutorial = true
 	GameManager.new_game()
-	get_tree().change_scene_to_file("res://shop_floor.tscn")
+	get_tree().change_scene_to_file("res://shop_floor_scrollable_tutorial.tscn")

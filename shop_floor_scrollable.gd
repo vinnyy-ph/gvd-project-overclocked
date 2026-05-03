@@ -26,6 +26,7 @@ var base_positions: Array = []
 var float_time: float = 0.0
 
 func _ready():
+	PauseMenu.pause_button.visible = true
 	randomize()
 	camera.position = Vector2(1532, 704)
 	clamp_camera()
@@ -135,7 +136,7 @@ func end_day():
 
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
-	money_label.text = "Money: ₱" + str(GameManager.money)
+	money_label.text = "Money: P" + str(GameManager.money)
 	time_label.text = "Time: " + str(GameManager.time_left)
 	satisfaction_bar.value = GameManager.satisfaction
 	_apply_bar_style()
