@@ -1,0 +1,204 @@
+[gd_scene format=3 uid="uid://ctc5yqqvm13cy"]
+
+[ext_resource type="Script" path="res://ui/success_screen/success_screen.gd" id="1_6brds"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_xc7ra"]
+[ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_2pj4a"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="3_4ch53"]
+[ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="5_pubd2"]
+[ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="6_mv3jl"]
+[ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="7_pubd2"]
+
+[node name="SuccessScreen" type="Control" unique_id=1819362700]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6brds")
+
+[node name="Background" type="ColorRect" parent="." unique_id=125063819]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07450981, 0.13725491, 0.23921569, 1)
+
+[node name="bg art" type="TextureRect" parent="Background" unique_id=1414058686]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_2pj4a")
+expand_mode = 1
+
+[node name="TopPanel" type="TextureRect" parent="Background" unique_id=1726314637]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.117000006
+offset_bottom = 14.7599945
+grow_horizontal = 2
+expand_mode = 1
+stretch_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Background/TopPanel" unique_id=677278451]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -22.0
+offset_right = 165.0
+offset_bottom = 22.0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 47
+text = "Issue Summary"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/TopPanel" unique_id=1476874087]
+position = Vector2(1050.004, 48.5)
+scale = Vector2(0.712, 0.712)
+texture = ExtResource("5_pubd2")
+
+[node name="TimerLabel" type="Label" parent="Background/TopPanel" unique_id=331942667]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -197.2096
+offset_top = -20.5
+offset_right = -95.209595
+offset_bottom = 18.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 41
+text = "Day: 0"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="InstructionsPanel" type="TextureRect" parent="Background" unique_id=804229524]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.289
+anchor_top = 0.754
+anchor_right = 0.739
+anchor_bottom = 0.87600005
+offset_left = 0.07998657
+offset_top = 62.119995
+offset_right = -0.37164307
+offset_bottom = 62.27997
+texture = ExtResource("6_mv3jl")
+expand_mode = 1
+
+[node name="InstructionsLabel" type="Label" parent="Background/InstructionsPanel" unique_id=195352550]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -207.5
+offset_top = -30.5
+offset_right = 207.5
+offset_bottom = 30.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 31
+text = "Review the result before
+returning to the shop floor."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="s" type="ColorRect" parent="." unique_id=1760155994]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07058824, 0.07058824, 0.07058824, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="s" unique_id=971768001]
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="s/Parallax2D" unique_id=1469413405]
+scale = Vector2(1.0000001, 1)
+texture = ExtResource("2_xc7ra")
+centered = false
+
+[node name="ResultPanel" type="Panel" parent="." unique_id=282960187]
+layout_mode = 0
+offset_left = 370.0
+offset_top = 202.0
+offset_right = 930.0
+offset_bottom = 570.0
+
+[node name="ResultLabel" type="Label" parent="ResultPanel" unique_id=1178674519]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 15.0
+offset_right = 514.0
+offset_bottom = 80.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 70
+text = "ISSUE RESOLVED!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="ResultPanel" unique_id=326426256]
+layout_mode = 0
+offset_top = 101.0
+offset_right = 571.0
+offset_bottom = 166.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 48
+text = "Money Earned: + P15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SatisfactionLabel" type="Label" parent="ResultPanel" unique_id=2107636550]
+layout_mode = 0
+offset_top = 175.0
+offset_right = 571.0
+offset_bottom = 219.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 48
+text = "Satisfaction Change: +5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="ResultPanel" unique_id=850562607]
+layout_mode = 0
+offset_left = 81.0
+offset_top = 265.0
+offset_right = 458.0
+offset_bottom = 366.0
+theme_override_fonts/font = ExtResource("3_4ch53")
+theme_override_font_sizes/font_size = 32
+icon = ExtResource("7_pubd2")
+flat = true
+
+[connection signal="pressed" from="ResultPanel/ContinueButton" to="." method="_on_continue_button_pressed"]

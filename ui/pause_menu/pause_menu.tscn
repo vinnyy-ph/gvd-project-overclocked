@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://0ye6oiivhu16"]
+
+[ext_resource type="Script" path="res://core/autoloads/pause_menu_autoload.gd" id="1_2nc7s"]
+[ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="1_p81d2"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="2_2nc7s"]
+[ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="3_d3xb4"]
+[ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="4_mxa3g"]
+[ext_resource type="Texture2D" uid="uid://cvwbw0s08pew3" path="res://assets/images/pause.png" id="6_d3xb4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e8sti"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=962891025]
+process_mode = 3
+layer = 128
+script = ExtResource("1_2nc7s")
+
+[node name="PauseButton" type="Button" parent="." unique_id=641646048]
+process_mode = 3
+offset_left = 1222.0
+offset_top = 23.0
+offset_right = 1271.0
+offset_bottom = 71.0
+icon = ExtResource("6_d3xb4")
+flat = true
+
+[node name="DimOverlay" type="ColorRect" parent="." unique_id=1881492644]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.38431373)
+
+[node name="TextureRect" type="TextureRect" parent="DimOverlay" unique_id=1598577420]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -221.0
+offset_right = 190.0
+offset_bottom = 154.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_p81d2")
+
+[node name="PausePanel" type="PanelContainer" parent="DimOverlay" unique_id=206634620]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 169.5
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_e8sti")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DimOverlay/PausePanel" unique_id=548025734]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="PauseLabel" type="Label" parent="DimOverlay/PausePanel/VBoxContainer" unique_id=173452182]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_2nc7s")
+theme_override_font_sizes/font_size = 103
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ContinueButtonPause" type="Button" parent="DimOverlay/PausePanel/VBoxContainer" unique_id=1184582725]
+process_mode = 3
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+icon = ExtResource("3_d3xb4")
+flat = true
+
+[node name="QuitButtonPause" type="Button" parent="DimOverlay/PausePanel/VBoxContainer" unique_id=1441826110]
+process_mode = 3
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+icon = ExtResource("4_mxa3g")
+flat = true

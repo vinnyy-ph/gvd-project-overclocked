@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://ct1e7ts3o1rhm"]
+
+[ext_resource type="Script" path="res://ui/daily_summary/daily_summary.gd" id="1_01f6r"]
+
+[node name="daily_summary" type="Control" unique_id=1724205805]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Control" type="Control" parent="." unique_id=528537800]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_01f6r")
+
+[node name="Background" type="ColorRect" parent="Control" unique_id=534909924]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05882353, 0.09019608, 0.16470589, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="Control" unique_id=1023643509]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer" unique_id=950486474]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="TitleLabel" type="Label" parent="Control/CenterContainer/VBoxContainer" unique_id=983670334]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "DAY 1 SUMMARY"
+horizontal_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="Control/CenterContainer/VBoxContainer" unique_id=583153254]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Revenue: \\u20B10\\nExpenses (Rent): -\\u20B120\\nNet Profit: -\\u20B120"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Control/CenterContainer/VBoxContainer" unique_id=1433758979]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="ShopButton" type="Button" parent="Control/CenterContainer/VBoxContainer/ButtonContainer" unique_id=505945657]
+layout_mode = 2
+text = "Visit Upgrade Shop"
+
+[node name="NextDayButton" type="Button" parent="Control/CenterContainer/VBoxContainer/ButtonContainer" unique_id=1750100896]
+layout_mode = 2
+text = "Start Next Day"

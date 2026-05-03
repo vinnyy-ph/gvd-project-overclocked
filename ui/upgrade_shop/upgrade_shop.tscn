@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://bagno4tmfbx60"]
+
+[ext_resource type="Script" path="res://ui/upgrade_shop/upgrade_shop.gd" id="1_v8ny2"]
+
+[node name="upgrade_shop" type="Control" unique_id=2051483289]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Control" type="Control" parent="." unique_id=664464934]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_v8ny2")
+
+[node name="Background" type="ColorRect" parent="Control" unique_id=1501037477]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.11764706, 0.16078432, 0.23137255, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="Control" unique_id=76480490]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MainVBox" type="VBoxContainer" parent="Control/CenterContainer" unique_id=257037692]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="TitleLabel" type="Label" parent="Control/CenterContainer/MainVBox" unique_id=938614258]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "UPGRADE SHOP"
+horizontal_alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="Control/CenterContainer/MainVBox" unique_id=2125265330]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Balance: \\u20B10"
+horizontal_alignment = 1
+
+[node name="UpgradeContainer" type="GridContainer" parent="Control/CenterContainer/MainVBox" unique_id=1314565782]
+layout_mode = 2
+theme_override_constants/h_separation = 40
+columns = 2
+
+[node name="Hardware" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=1636428205]
+layout_mode = 2
+
+[node name="@Label@1151507" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=2054890933]
+layout_mode = 2
+text = "HARDWARE/MONITORS"
+
+[node name="MonitorsBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=1623636701]
+layout_mode = 2
+
+[node name="CPUBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=1714239447]
+layout_mode = 2
+
+[node name="GraphicsBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=1565304412]
+layout_mode = 2
+
+[node name="Management" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=498843301]
+layout_mode = 2
+
+[node name="@Label@1151508" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=55845041]
+layout_mode = 2
+text = "MANAGEMENT/SPACE"
+
+[node name="PowerStripBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=2017005832]
+layout_mode = 2
+
+[node name="CableKitBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=2115018540]
+layout_mode = 2
+
+[node name="ShopSpaceBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=447316410]
+layout_mode = 2
+
+[node name="NextDayButton" type="Button" parent="Control/CenterContainer/MainVBox" unique_id=163013029]
+layout_mode = 2
+text = "Start Next Day"
