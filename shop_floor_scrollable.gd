@@ -26,6 +26,7 @@ var base_positions: Array = []
 var float_time: float = 0.0
 
 func _ready():
+	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
 	randomize()
 	camera.position = Vector2(1532, 704)
@@ -105,6 +106,7 @@ func _on_spawn_timer_timeout():
 			inactive_indices.append(i)
 
 	if inactive_indices.size() > 0:
+		AudioManager.play_sfx("alert")
 		var random_index = inactive_indices[randi() % inactive_indices.size()]
 		GameManager.active_issues[random_index] = true
 

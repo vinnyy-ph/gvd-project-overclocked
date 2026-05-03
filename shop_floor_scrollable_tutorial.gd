@@ -36,6 +36,7 @@ var current_tutorial_step: TutorialStep = TutorialStep.INTRO
 var initial_cam_pos: Vector2
 
 func _ready():
+	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
 	randomize()
 	camera.position = Vector2(1532, 704)

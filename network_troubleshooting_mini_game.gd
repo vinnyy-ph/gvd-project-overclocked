@@ -41,6 +41,7 @@ var scenarios = [
 var current_scenario: Dictionary
 
 func _ready():
+	AudioManager.play_bgm("minigame")
 	# Timer Setup
 	game_timer.wait_time = 1.0
 	game_timer.one_shot = false 
@@ -167,6 +168,8 @@ func _on_timer_timeout():
 func win_game():
 	game_active = false
 	game_timer.stop()
+	AudioManager.play_sfx("success")
+	AudioManager.play_sfx("coin")
 	
 	link_status_label.text = "> Link Status: BGP ROUTES ESTABLISHED"
 	action_label.text = "> Action Req: None. Network Restored!"
@@ -185,6 +188,7 @@ func win_game():
 func game_over():
 	game_active = false
 	game_timer.stop()
+	AudioManager.play_sfx("fail")
 	
 	link_status_label.text = "> CRITICAL ERROR"
 	action_label.text = "> CONNECTION TIMEOUT"

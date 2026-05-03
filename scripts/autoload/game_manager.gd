@@ -111,6 +111,7 @@ func setup_button_effect(button: BaseButton):
 		button.button_up.connect(_on_button_up.bind(button))
 
 func _on_button_down(button: BaseButton):
+	AudioManager.play_sfx("click")
 	var tween = create_tween()
 	# Optional: Set pause mode to process so it animates even if the game is paused
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS) 

@@ -22,6 +22,7 @@ config/icon="uid://g14n5w5c4nq5"
 GameManager="*uid://tbo7awses1ay"
 PauseMenu="*uid://wmphjhkjc3ss"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+AudioManager="*res://scenes/audio_manager.tscn"
 
 [display]
 

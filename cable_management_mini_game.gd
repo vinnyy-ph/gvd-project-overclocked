@@ -25,6 +25,7 @@ var connected := {
 }
 
 func _ready():
+	AudioManager.play_bgm("minigame")
 	# Save the original positions so they snap back if dropped wrongly
 	start_positions["red"] = cable_red.position
 	start_positions["blue"] = cable_blue.position
@@ -107,6 +108,8 @@ func is_point_inside_rect(point: Vector2, rect_pos: Vector2, rect_size: Vector2)
 
 func check_win():
 	if connected["red"] and connected["blue"] and connected["green"]:
+		AudioManager.play_sfx("success")
+		AudioManager.play_sfx("coin")
 		GameManager.money += 15
 		GameManager.satisfaction += 5
 		if GameManager.satisfaction > 100:
@@ -131,6 +134,7 @@ func _on_game_timer_timeout():
 	update_timer()
 
 	if time_left == 0:
+		AudioManager.play_sfx("fail")
 		GameManager.satisfaction -= 10
 		if GameManager.satisfaction < 0:
 			GameManager.satisfaction = 0

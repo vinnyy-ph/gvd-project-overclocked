@@ -42,6 +42,7 @@ var _is_scrambling: bool   = false
 var _scramble_tween: Tween = null
 
 func _ready():
+	AudioManager.play_bgm("minigame")
 	randomize()
 	original_y = position.y
 
@@ -290,6 +291,8 @@ func win_game():
 	game_active = false
 	game_timer.stop()
 	status_label.text = "> ALL AUTHENTICATIONS VERIFIED. WELL DONE."
+	AudioManager.play_sfx("success")
+	AudioManager.play_sfx("coin")
 
 	GameManager.last_money_change        = 20
 	GameManager.last_satisfaction_change = 10
@@ -307,6 +310,7 @@ func fail_game():
 	_is_scrambling     = false
 	input_box.editable = false
 	status_label.text  = "> AUTHENTICATION TIMEOUT. ACCESS DENIED."
+	AudioManager.play_sfx("fail")
 
 	GameManager.last_money_change        = 0
 	GameManager.last_satisfaction_change = -10

@@ -51,6 +51,7 @@ var decoy_pool = [
 ]
 
 func _ready():
+	AudioManager.play_bgm("minigame")
 	randomize()
 	
 	# 1. Setup Timer correctly
@@ -166,6 +167,8 @@ func win_game():
 	game_active = false
 	game_timer.stop()
 	status_label.text = "> OS RECOVERED SUCCESSFULLY."
+	AudioManager.play_sfx("success")
+	AudioManager.play_sfx("coin")
 	
 	# Disable buttons so they can't spam click
 	choice_button_1.disabled = true
@@ -188,6 +191,7 @@ func fail_game():
 	game_active = false
 	game_timer.stop()
 	status_label.text = "> SYSTEM BRICKED. REPAIR FAILED."
+	AudioManager.play_sfx("fail")
 	
 	choice_button_1.disabled = true
 	choice_button_2.disabled = true

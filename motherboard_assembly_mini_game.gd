@@ -18,6 +18,7 @@ var drag_offset: Vector2 = Vector2.ZERO
 var original_positions: Dictionary = {}
 
 func _ready():
+	AudioManager.play_bgm("minigame")
 	# Timer Setup
 	game_timer.wait_time = 1.0
 	game_timer.one_shot = false 
@@ -120,6 +121,8 @@ func check_drop(part: ColorRect):
 func win_game():
 	game_active = false
 	game_timer.stop()
+	AudioManager.play_sfx("success")
+	AudioManager.play_sfx("coin")
 	
 	GameManager.last_money_change = 25
 	GameManager.last_satisfaction_change = 10
@@ -135,6 +138,7 @@ func win_game():
 func fail_game():
 	game_active = false
 	game_timer.stop()
+	AudioManager.play_sfx("fail")
 	
 	GameManager.last_money_change = 0
 	GameManager.last_satisfaction_change = -10
