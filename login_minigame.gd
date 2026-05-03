@@ -44,6 +44,7 @@ var _scramble_tween: Tween = null
 func _ready():
 	AudioManager.play_bgm("minigame")
 	randomize()
+	time_left += GameManager.get_thermal_paste_bonus()
 	original_y = position.y
 
 	game_timer.wait_time = 1.0
@@ -313,8 +314,7 @@ func fail_game():
 	AudioManager.play_sfx("fail")
 
 	GameManager.last_money_change        = 0
-	GameManager.last_satisfaction_change = -10
-	GameManager.satisfaction = max(GameManager.satisfaction + GameManager.last_satisfaction_change, 0)
+	GameManager.apply_satisfaction_penalty(10)
 	GameManager.save_game()
 
 	await get_tree().create_timer(1.5).timeout

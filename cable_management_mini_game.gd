@@ -26,6 +26,7 @@ var connected := {
 
 func _ready():
 	AudioManager.play_bgm("minigame")
+	time_left += GameManager.get_thermal_paste_bonus()
 	# Save the original positions so they snap back if dropped wrongly
 	start_positions["red"] = cable_red.position
 	start_positions["blue"] = cable_blue.position
@@ -135,12 +136,8 @@ func _on_game_timer_timeout():
 
 	if time_left == 0:
 		AudioManager.play_sfx("fail")
-		GameManager.satisfaction -= 10
-		if GameManager.satisfaction < 0:
-			GameManager.satisfaction = 0
-
 		GameManager.last_money_change = 0
-		GameManager.last_satisfaction_change = -10
+		GameManager.apply_satisfaction_penalty(10)
 		GameManager.save_game()
 		
 		# --- TUTORIAL ROUTING CHECK ---

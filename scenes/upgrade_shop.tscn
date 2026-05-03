@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://b7hnqqv6d0n7c"]
+
+[ext_resource type="Script" uid="uid://qok2xp24pl5u" path="res://scripts/upgrade_shop.gd" id="1_v8ny2"]
+
+[node name="upgrade_shop" type="Control" unique_id=2051483289]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Control" type="Control" parent="." unique_id=664464934]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_v8ny2")
+
+[node name="Background" type="ColorRect" parent="Control" unique_id=1501037477]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.11764706, 0.16078432, 0.23137255, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="Control" unique_id=76480490]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MainVBox" type="VBoxContainer" parent="Control/CenterContainer" unique_id=257037692]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="TitleLabel" type="Label" parent="Control/CenterContainer/MainVBox" unique_id=938614258]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "UPGRADE SHOP"
+horizontal_alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="Control/CenterContainer/MainVBox" unique_id=2125265330]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Balance: \\u20B10"
+horizontal_alignment = 1
+
+[node name="UpgradeContainer" type="HBoxContainer" parent="Control/CenterContainer/MainVBox" unique_id=2079895935]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Upgrade1" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=1865734100]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade1" unique_id=1302024610]
+layout_mode = 2
+text = "Thermal Paste\\n(Adds +5s per level)"
+
+[node name="ThermalPasteBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade1" unique_id=1349666678]
+layout_mode = 2
+text = "Level 0 - Cost \\u20B1100"
+
+[node name="Upgrade2" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=959940645]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade2" unique_id=1604017241]
+layout_mode = 2
+text = "Shop Decor\\n(Reduces penalties)"
+
+[node name="ShopDecorBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade2" unique_id=1595402944]
+layout_mode = 2
+text = "Level 0 - Cost \\u20B1150"
+
+[node name="NextDayButton" type="Button" parent="Control/CenterContainer/MainVBox" unique_id=163013029]
+layout_mode = 2
+text = "Start Next Day"

@@ -1,9 +1,13 @@
 extends Control
 
 
+@onready var max_days_label = $CenterContainer/VBoxContainer/MaxDaysLabel
+@onready var lifetime_money_label = $CenterContainer/VBoxContainer/LifetimeMoneyLabel
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	max_days_label.text = "Max Days Survived: " + str(SaveManager.max_days_survived)
+	lifetime_money_label.text = "Lifetime Earnings: \u20B1" + str(SaveManager.lifetime_money)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

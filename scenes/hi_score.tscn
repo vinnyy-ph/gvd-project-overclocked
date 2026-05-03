@@ -44,6 +44,14 @@ texture = ExtResource("2_q0ml7")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="MaxDaysLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1742466752]
+layout_mode = 2
+text = "Max Days Survived: 0"
+
+[node name="LifetimeMoneyLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1405110768]
+layout_mode = 2
+text = "Lifetime Earnings: \\u20B10"
+
 [node name="MainMenuButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=1085452699]
 custom_minimum_size = Vector2(315, 79)
 layout_mode = 2

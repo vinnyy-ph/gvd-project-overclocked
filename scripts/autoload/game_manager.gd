@@ -1,8 +1,42 @@
 extends Node
 
-var day: int = 1
-var money: int = 0
-var satisfaction: int = 100
+var day: int:
+	get:
+		return SaveManager.current_day
+	set(value):
+		SaveManager.current_day = value
+		SaveManager.save_game()
+var money: int:
+	get:
+		return SaveManager.current_money
+	set(value):
+		var diff = value - SaveManager.current_money
+		if diff > 0:
+			last_day_revenue += diff
+		SaveManager.add_money(diff)
+
+func start_next_day():
+	day += 1
+	time_left = 60
+	last_day_revenue = 0
+	for i in range(active_issues.size()):
+		active_issues[i] = false
+	SaveManager.save_game()
+	get_tree().change_scene_to_file("res://shop_floor_scrollable.tscn")
+
+func end_day():
+	money -= 20 # Rent
+	get_tree().change_scene_to_file("res://scenes/daily_summary.tscn")
+var satisfaction: int = 100:
+	set(value):
+		satisfaction = clamp(value, 0, 100)
+		if satisfaction <= 0:
+			trigger_game_over()
+
+func trigger_game_over():
+	# Transition to game over scene
+	# We might want to clear active issues or other state
+	get_tree().change_scene_to_file("res://scenes/game_over.tscn")
 var save_path: String = "user://savegame.json"
 var last_money_change: int = 0
 var last_satisfaction_change: int = 0
@@ -11,6 +45,19 @@ var time_left: int = 60
 var active_issues: Array = [false, false, false, false, false, false, false, false]
 var is_tutorial: bool = false
 var tutorial_minigame_done: bool = false
+var last_day_revenue: int = 0
+
+func get_thermal_paste_bonus() -> int:
+	return SaveManager.unlocked_upgrades.get("thermal_paste", 0) * 5
+
+func get_satisfaction_penalty(base_penalty: int) -> int:
+	var level = SaveManager.unlocked_upgrades.get("shop_decor", 0)
+	var reduction = level * 2
+	return max(5, base_penalty - reduction)
+
+func apply_satisfaction_penalty(base_penalty: int):
+	last_satisfaction_change = -get_satisfaction_penalty(base_penalty)
+	satisfaction += last_satisfaction_change
 
 # --- SHUFFLED DECK ---
 var minigame_deck: Array = []
@@ -50,8 +97,8 @@ func get_next_minigame() -> String:
 	return minigame_deck.pop_back()
 
 func new_game():
-	day = 1
-	money = 0
+	SaveManager.reset_run_data()
+	SaveManager.current_day = 1
 	satisfaction = 100
 	time_left = 60
 	in_tutorial = false
@@ -60,29 +107,15 @@ func new_game():
 	active_issues = [false, false, false, false, false, false, false, false]
 	minigame_deck = []
 	last_minigame = ""
-	save_game()
+	SaveManager.save_game()
 
 func save_game():
-	var data = {
-		"day": day,
-		"money": money,
-		"satisfaction": satisfaction
-	}
-	var file = FileAccess.open(save_path, FileAccess.WRITE)
-	file.store_string(JSON.stringify(data))
+	SaveManager.save_game()
 
 func load_game():
-	if not FileAccess.file_exists(save_path):
-		return false
-	var file = FileAccess.open(save_path, FileAccess.READ)
-	var text = file.get_as_text()
-	var data = JSON.parse_string(text)
-	if typeof(data) == TYPE_DICTIONARY:
-		day = data.get("day", 1)
-		money = data.get("money", 0)
-		satisfaction = data.get("satisfaction", 100)
-		return true
-	return false
+	SaveManager.load_game()
+	satisfaction = 100 # Reset satisfaction for new load or keep it?
+	return true
 
 func _ready():
 	# 2. Seed the RNG immediately when the Autoload boots

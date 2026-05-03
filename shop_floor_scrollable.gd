@@ -127,14 +127,7 @@ func _on_issue_clicked(pc_index: int):
 	get_tree().change_scene_to_file(GameManager.get_next_minigame())
 
 func end_day():
-	GameManager.day += 1
-	GameManager.money -= 20
-	if GameManager.money < 0: GameManager.money = 0
-	GameManager.time_left = 60
-	for i in range(GameManager.active_issues.size()):
-		GameManager.active_issues[i] = false
-	GameManager.save_game()
-	get_tree().change_scene_to_file("res://success_screen.tscn")
+	GameManager.end_day()
 
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
