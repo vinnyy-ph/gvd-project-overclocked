@@ -42,7 +42,7 @@ var current_scenario: Dictionary
 
 func _ready():
 	AudioManager.play_bgm("minigame")
-	time_left += GameManager.get_thermal_paste_bonus()
+	time_left += GameManager.get_hardware_time_bonus()
 	# Timer Setup
 	game_timer.wait_time = 1.0
 	game_timer.one_shot = false 
@@ -175,7 +175,7 @@ func win_game():
 	link_status_label.text = "> Link Status: BGP ROUTES ESTABLISHED"
 	action_label.text = "> Action Req: None. Network Restored!"
 	
-	GameManager.last_money_change = 40 
+	GameManager.last_money_change = GameManager.get_money_reward(40) 
 	GameManager.last_satisfaction_change = 20
 	
 	GameManager.satisfaction += GameManager.last_satisfaction_change

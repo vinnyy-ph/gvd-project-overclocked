@@ -26,7 +26,7 @@ var connected := {
 
 func _ready():
 	AudioManager.play_bgm("minigame")
-	time_left += GameManager.get_thermal_paste_bonus()
+	time_left += GameManager.get_hardware_time_bonus()
 	# Save the original positions so they snap back if dropped wrongly
 	start_positions["red"] = cable_red.position
 	start_positions["blue"] = cable_blue.position
@@ -111,13 +111,14 @@ func check_win():
 	if connected["red"] and connected["blue"] and connected["green"]:
 		AudioManager.play_sfx("success")
 		AudioManager.play_sfx("coin")
-		GameManager.money += 15
-		GameManager.satisfaction += 5
+		GameManager.last_money_change = GameManager.get_money_reward(15)
+		GameManager.last_satisfaction_change = 5
+		
+		GameManager.money += GameManager.last_money_change
+		GameManager.satisfaction += GameManager.last_satisfaction_change
 		if GameManager.satisfaction > 100:
 			GameManager.satisfaction = 100
 
-		GameManager.last_money_change = 15
-		GameManager.last_satisfaction_change = 5
 		GameManager.save_game()
 		
 		# --- TUTORIAL ROUTING CHECK ---

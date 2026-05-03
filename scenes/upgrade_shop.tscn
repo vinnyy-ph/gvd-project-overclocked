@@ -39,33 +39,42 @@ theme_override_font_sizes/font_size = 24
 text = "Balance: \\u20B10"
 horizontal_alignment = 1
 
-[node name="UpgradeContainer" type="HBoxContainer" parent="Control/CenterContainer/MainVBox" unique_id=2079895935]
+[node name="UpgradeContainer" type="GridContainer" parent="Control/CenterContainer/MainVBox" unique_id=1314565782]
 layout_mode = 2
-theme_override_constants/separation = 50
+theme_override_constants/h_separation = 40
+columns = 2
 
-[node name="Upgrade1" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=1865734100]
+[node name="Hardware" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=1636428205]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade1" unique_id=1302024610]
+[node name="@Label@1151507" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=2054890933]
 layout_mode = 2
-text = "Thermal Paste\\n(Adds +5s per level)"
+text = "HARDWARE/MONITORS"
 
-[node name="ThermalPasteBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade1" unique_id=1349666678]
+[node name="MonitorsBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=1623636701]
 layout_mode = 2
-text = "Level 0 - Cost \\u20B1100"
 
-[node name="Upgrade2" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=959940645]
+[node name="CPUBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=1714239447]
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade2" unique_id=1604017241]
+[node name="GraphicsBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Hardware" unique_id=1565304412]
 layout_mode = 2
-text = "Shop Decor\\n(Reduces penalties)"
 
-[node name="ShopDecorBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Upgrade2" unique_id=1595402944]
+[node name="Management" type="VBoxContainer" parent="Control/CenterContainer/MainVBox/UpgradeContainer" unique_id=498843301]
 layout_mode = 2
-text = "Level 0 - Cost \\u20B1150"
+
+[node name="@Label@1151508" type="Label" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=55845041]
+layout_mode = 2
+text = "MANAGEMENT/SPACE"
+
+[node name="PowerStripBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=2017005832]
+layout_mode = 2
+
+[node name="CableKitBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=2115018540]
+layout_mode = 2
+
+[node name="ShopSpaceBtn" type="Button" parent="Control/CenterContainer/MainVBox/UpgradeContainer/Management" unique_id=447316410]
+layout_mode = 2
 
 [node name="NextDayButton" type="Button" parent="Control/CenterContainer/MainVBox" unique_id=163013029]
 layout_mode = 2

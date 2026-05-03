@@ -7,8 +7,12 @@ var lifetime_money: int = 0
 var max_days_survived: int = 0
 var current_day: int = 1
 var unlocked_upgrades: Dictionary = {
-	"thermal_paste": 0,
-	"shop_decor": 0
+	"flat_monitors": 0,
+	"mid_range_cpu": 0,
+	"graphics_upgrade": 0,
+	"premium_power_strip": 0,
+	"cable_management_kit": 0,
+	"shop_space": 0
 }
 
 func _ready():

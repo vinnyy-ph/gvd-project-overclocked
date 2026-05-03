@@ -37,11 +37,23 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 
+	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
+
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)
 		btn.pivot_offset = btn.size / 2.0
-		btn.visible = GameManager.active_issues[i]
+		
+		var desk_node = get_node_or_null("World/Background/Desk" + str(i+1))
+		
+		if i < unlocked_slots:
+			btn.visible = GameManager.active_issues[i]
+			if desk_node: desk_node.modulate = Color.WHITE
+		else:
+			btn.visible = false
+			GameManager.active_issues[i] = false
+			if desk_node: desk_node.modulate = Color(0.2, 0.2, 0.2)
+
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
 
@@ -99,9 +111,14 @@ func _on_day_timer_timeout():
 
 func _on_spawn_timer_timeout():
 	if GameManager.time_left <= 0: return
+	
+	# Only spawn if RNG rolls below the modifier
+	if randf() > GameManager.get_issue_spawn_chance_modifier():
+		return
 
+	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
 	var inactive_indices = []
-	for i in range(GameManager.active_issues.size()):
+	for i in range(unlocked_slots):
 		if not GameManager.active_issues[i]:
 			inactive_indices.append(i)
 

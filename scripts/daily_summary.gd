@@ -13,11 +13,11 @@ func _ready():
 	title_label.text = "DAY " + str(SaveManager.current_day) + " SUMMARY"
 	
 	var revenue = GameManager.last_day_revenue
-	var expenses = 20 # Constant for now
+	var expenses = GameManager.last_day_expenses
 	var net = revenue - expenses
 	
 	stats_label.text = "Revenue: \u20B1" + str(revenue) + \
-					   "\nExpenses (Rent): -\u20B1" + str(expenses) + \
+					   "\nExpenses (Ops): -\u20B1" + str(expenses) + \
 					   "\nNet Profit: \u20B1" + str(net)
 					
 	shop_button.pressed.connect(_on_shop_pressed)
