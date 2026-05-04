@@ -1,18 +1,18 @@
 extends Control
 
-@onready var money_label = $CenterContainer/MainVBox/MoneyLabel
+@onready var money_label = %MoneyLabel
 
 # Hardware
-@onready var monitors_btn = $CenterContainer/MainVBox/UpgradeContainer/Hardware/MonitorsBtn
-@onready var cpu_btn = $CenterContainer/MainVBox/UpgradeContainer/Hardware/CPUBtn
-@onready var graphics_btn = $CenterContainer/MainVBox/UpgradeContainer/Hardware/GraphicsBtn
+@onready var monitors_btn = %MonitorsBtn
+@onready var cpu_btn = %CPUBtn
+@onready var graphics_btn = %GraphicsBtn
 
 # Management/Space
-@onready var power_strip_btn = $CenterContainer/MainVBox/UpgradeContainer/Management/PowerStripBtn
-@onready var cable_kit_btn = $CenterContainer/MainVBox/UpgradeContainer/Management/CableKitBtn
-@onready var shop_space_btn = $CenterContainer/MainVBox/UpgradeContainer/Management/ShopSpaceBtn
+@onready var power_strip_btn = %PowerStripBtn
+@onready var cable_kit_btn = %CableKitBtn
+@onready var shop_space_btn = %ShopSpaceBtn
 
-@onready var next_day_button = $CenterContainer/MainVBox/NextDayButton
+@onready var next_day_button = %NextDayButton
 
 const COSTS = {
 	"flat_monitors": 5000,
@@ -38,9 +38,9 @@ func update_ui():
 	
 	# DEV MODE: Show unlimited balance visually
 	if GameManager.dev_mode:
-		money_label.text = "Balance: ₱ UNLIMITED (DEV MODE)"
+		money_label.text = "Balance: P UNLIMITED (DEV MODE)"
 	else:
-		money_label.text = "Balance: ₱" + str(GameManager.money)
+		money_label.text = "Balance: P" + str(GameManager.money)
 	
 	_update_btn(monitors_btn, "flat_monitors")
 	_update_btn(cpu_btn, "mid_range_cpu")

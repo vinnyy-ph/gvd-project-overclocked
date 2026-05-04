@@ -4,8 +4,8 @@ extends Node
 @onready var sfx_player = AudioStreamPlayer.new()
 
 var bgm_tracks = {
-	"shop": preload("res://assets/audio/bgm/shop_chill.wav"),
-	"minigame": preload("res://assets/audio/bgm/minigame_fast.wav")
+	"shop": preload("res://assets/audio/bgm/shop_chill.ogg"),
+	"minigame": preload("res://assets/audio/bgm/minigame_fast.ogg")
 }
 
 var sfx_library = {

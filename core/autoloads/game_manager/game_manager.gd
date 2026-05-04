@@ -101,7 +101,8 @@ func get_issue_spawn_chance_modifier() -> float:
 	# Power strip and cable kit reduce overall issue frequency
 	var power_strip = SaveManager.unlocked_upgrades.get("premium_power_strip", 0)
 	var cable_kit = SaveManager.unlocked_upgrades.get("cable_management_kit", 0)
-	return 1.0 - (power_strip * 0.1) - (cable_kit * 0.05)
+	# Cap the reduction so it never reaches 0 (minimum 20% of base rate)
+	return max(0.2, 1.0 - (power_strip * 0.1) - (cable_kit * 0.05))
 
 func get_hardware_time_bonus() -> int:
 	# Each level of CPU upgrade adds 5 seconds to mini-games

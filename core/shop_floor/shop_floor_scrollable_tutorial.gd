@@ -48,6 +48,17 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 
+	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
+	
+	# Handle 16 desks
+	for i in range(16):
+		var desk_node = get_node_or_null("World/Background/Desk" + str(i+1))
+		if desk_node:
+			if i < unlocked_slots:
+				desk_node.modulate = Color.WHITE
+			else:
+				desk_node.modulate = Color(0.2, 0.2, 0.2)
+
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)

@@ -3,7 +3,7 @@ extends Node2D
 @onready var camera = $MainCamera
 @onready var day_label = $CanvasLayer/HUD/DayLabel
 @onready var money_label = $CanvasLayer/HUD/MoneyLabel
-@onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBarContainer/SatisfactionBar
+@onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 
 @onready var issue_buttons = [
@@ -39,20 +39,25 @@ func _ready():
 
 	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
 
+	# Handle 16 desks (even though we only have 8 issue buttons for now)
+	for i in range(16):
+		var desk_node = get_node_or_null("World/Background/Desk" + str(i+1))
+		if desk_node:
+			if i < unlocked_slots:
+				desk_node.modulate = Color.WHITE
+			else:
+				desk_node.modulate = Color(0.2, 0.2, 0.2)
+
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)
 		btn.pivot_offset = btn.size / 2.0
 		
-		var desk_node = get_node_or_null("World/Background/Desk" + str(i+1))
-		
 		if i < unlocked_slots:
 			btn.visible = GameManager.active_issues[i]
-			if desk_node: desk_node.modulate = Color.WHITE
 		else:
 			btn.visible = false
 			GameManager.active_issues[i] = false
-			if desk_node: desk_node.modulate = Color(0.2, 0.2, 0.2)
 
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))

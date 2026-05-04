@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://l87aefkk3ct5"]
+
+[ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="1_kriu2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_at4k0"]
+atlas = ExtResource("1_kriu2")
+region = Rect2(0, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8oxpo"]
+atlas = ExtResource("1_kriu2")
+region = Rect2(114, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_al1kq"]
+atlas = ExtResource("1_kriu2")
+region = Rect2(228, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsslq"]
+atlas = ExtResource("1_kriu2")
+region = Rect2(342, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jkvva"]
+atlas = ExtResource("1_kriu2")
+region = Rect2(456, 0, 114, 191)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o7thd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_at4k0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8oxpo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_al1kq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hsslq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jkvva")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Control" type="Control" unique_id=1553103883]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=321692675]
+process_mode = 3
+position = Vector2(459, 226)
+sprite_frames = SubResource("SpriteFrames_o7thd")
+autoplay = "default"
+frame_progress = 0.56539255

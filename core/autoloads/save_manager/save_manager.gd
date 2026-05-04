@@ -26,10 +26,21 @@ func save_game():
 		"current_day": current_day,
 		"unlocked_upgrades": unlocked_upgrades
 	}
+	
+	var json_string = JSON.stringify(data)
+	
+	# Save to user directory
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(data))
+		file.store_string(json_string)
 		file.close()
+	
+	# Also save to project's saved_checkpoints folder
+	var checkpoint_path = "res://saved_checkpoints/savegame.json"
+	var checkpoint_file = FileAccess.open(checkpoint_path, FileAccess.WRITE)
+	if checkpoint_file:
+		checkpoint_file.store_string(json_string)
+		checkpoint_file.close()
 
 func load_game():
 	if not FileAccess.file_exists(SAVE_PATH):
@@ -45,15 +56,23 @@ func load_game():
 		if parse_result == OK:
 			var data = json.data
 			if typeof(data) == TYPE_DICTIONARY:
-				current_money = data.get("current_money", 0)
-				lifetime_money = data.get("lifetime_money", 0)
-				max_days_survived = data.get("max_days_survived", 0)
-				current_day = data.get("current_day", 1)
-				unlocked_upgrades = data.get("unlocked_upgrades", unlocked_upgrades)
+				current_money = int(data.get("current_money", 0))
+				lifetime_money = int(data.get("lifetime_money", 0))
+				max_days_survived = int(data.get("max_days_survived", 0))
+				current_day = int(data.get("current_day", 1))
+				
+				var saved_upgrades = data.get("unlocked_upgrades", {})
+				if typeof(saved_upgrades) == TYPE_DICTIONARY:
+					for key in saved_upgrades:
+						if unlocked_upgrades.has(key):
+							unlocked_upgrades[key] = int(saved_upgrades[key])
 
 func reset_run_data():
-	# Keep lifetime stats but reset current run
+	# Keep lifetime stats but reset current run and upgrades
 	current_money = 0
+	current_day = 1
+	for key in unlocked_upgrades:
+		unlocked_upgrades[key] = 0
 	save_game()
 
 func update_max_days(days: int):
