@@ -31,6 +31,7 @@ func start_next_day():
 	for i in range(active_issues.size()):
 		active_issues[i] = false
 	SaveManager.save_game()
+	AudioManager.play_sfx("day_start")
 	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
 var last_day_expenses: int = 0
@@ -42,6 +43,7 @@ func end_day():
 	last_day_expenses = base_rent + (unlocked_slots * electricity_per_slot)
 
 	money -= last_day_expenses
+	AudioManager.play_sfx("day_start")
 	get_tree().change_scene_to_file("res://ui/daily_summary/daily_summary.tscn")
 
 var satisfaction: int = 100:

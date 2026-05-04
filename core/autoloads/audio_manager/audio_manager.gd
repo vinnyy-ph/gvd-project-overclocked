@@ -11,9 +11,10 @@ var bgm_tracks = {
 var sfx_library = {
 	"click": preload("res://assets/audio/sfx/button_click.wav"),
 	"alert": preload("res://assets/audio/sfx/issue_spawned.wav"),
-	"success": preload("res://assets/audio/sfx/success.wav"),
-	"fail": preload("res://assets/audio/sfx/fail.wav"),
-	"coin": preload("res://assets/audio/sfx/coin.wav")
+	"success": preload("res://assets/audio/sfx/issue_complete.ogg"),
+	"fail": preload("res://assets/audio/sfx/issue_failed.ogg"),
+	"coin": preload("res://assets/audio/sfx/coin.wav"),
+	"day_start": preload("res://assets/audio/sfx/day_start.ogg")
 }
 
 func _ready():
@@ -27,12 +28,17 @@ func _ready():
 
 func play_bgm(track_name: String):
 	if bgm_tracks.has(track_name):
-		if bgm_player.stream == bgm_tracks[track_name] and bgm_player.playing:
+		var stream = bgm_tracks[track_name]
+		if bgm_player.stream == stream and bgm_player.playing:
 			return # Already playing
 			
-		bgm_player.stream = bgm_tracks[track_name]
-		# Ensure looping is handled. In Godot 4, it's often on the resource or done via code for WAV.
-		# For .wav, we might need to enable it if not set in import settings.
+		bgm_player.stream = stream
+		# Ensure looping is enabled for the stream
+		if stream is AudioStreamOggVorbis:
+			stream.loop = true
+		elif stream is AudioStreamWAV:
+			stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+			
 		bgm_player.play()
 
 func stop_bgm():
