@@ -13,7 +13,7 @@ config_version=5
 config/name="Overclocked"
 config/description="Overclocked"
 config/version="1"
-run/main_scene="uid://bagno4tmfbx60"
+run/main_scene="uid://bmkx452d3kx7r"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 

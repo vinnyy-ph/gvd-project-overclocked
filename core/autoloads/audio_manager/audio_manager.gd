@@ -26,11 +26,18 @@ func _ready():
 	bgm_player.bus = "Master"
 	sfx_player.bus = "Master"
 
+var current_bgm_track: String = ""
+var bgm_positions: Dictionary = {}
+
 func play_bgm(track_name: String):
 	if bgm_tracks.has(track_name):
 		var stream = bgm_tracks[track_name]
-		if bgm_player.stream == stream and bgm_player.playing:
+		if current_bgm_track == track_name and bgm_player.playing:
 			return # Already playing
+		
+		# Save position of the current track before switching
+		if current_bgm_track != "" and bgm_player.playing:
+			bgm_positions[current_bgm_track] = bgm_player.get_playback_position()
 			
 		bgm_player.stream = stream
 		# Ensure looping is enabled for the stream
@@ -38,11 +45,17 @@ func play_bgm(track_name: String):
 			stream.loop = true
 		elif stream is AudioStreamWAV:
 			stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
-			
-		bgm_player.play()
+		
+		# Resume from saved position if available
+		var start_pos = bgm_positions.get(track_name, 0.0)
+		bgm_player.play(start_pos)
+		current_bgm_track = track_name
 
 func stop_bgm():
+	if current_bgm_track != "" and bgm_player.playing:
+		bgm_positions[current_bgm_track] = bgm_player.get_playback_position()
 	bgm_player.stop()
+	current_bgm_track = ""
 
 var active_result_sfx: AudioStreamPlayer = null
 
