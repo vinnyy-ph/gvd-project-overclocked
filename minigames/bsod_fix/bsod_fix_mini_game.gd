@@ -168,7 +168,6 @@ func win_game():
 	game_active = false
 	game_timer.stop()
 	status_label.text = "> OS RECOVERED SUCCESSFULLY."
-	AudioManager.play_sfx("success")
 	AudioManager.play_sfx("coin")
 	
 	# Disable buttons so they can't spam click
@@ -192,7 +191,6 @@ func fail_game():
 	game_active = false
 	game_timer.stop()
 	status_label.text = "> SYSTEM BRICKED. REPAIR FAILED."
-	AudioManager.play_sfx("fail")
 	
 	choice_button_1.disabled = true
 	choice_button_2.disabled = true
@@ -204,4 +202,4 @@ func fail_game():
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.5).timeout
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

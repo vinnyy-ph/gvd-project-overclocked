@@ -26,8 +26,16 @@ func _ready():
 	target_money = GameManager.last_money_change
 	target_satisfaction = GameManager.last_satisfaction_change
 
+	if target_satisfaction >= 0:
+		AudioManager.play_result_sfx("success")
+	else:
+		AudioManager.play_result_sfx("fail")
+
 	setup_static_ui()
 	animate_appearance()
+
+func _exit_tree():
+	AudioManager.stop_result_sfx()
 
 func setup_static_ui():
 	# Set text and color (keeping alpha at 0 for the fade-in)
@@ -80,4 +88,8 @@ func animate_appearance():
 	roll_tween.tween_method(update_satisfaction_text, 0, target_satisfaction, 0.8).set_delay(0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 func _on_continue_button_pressed():
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	if GameManager.is_tutorial:
+		GameManager.tutorial_minigame_done = true
+		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_tutorial.tscn")
+	else:
+		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")

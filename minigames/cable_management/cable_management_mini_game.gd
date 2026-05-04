@@ -109,7 +109,6 @@ func is_point_inside_rect(point: Vector2, rect_pos: Vector2, rect_size: Vector2)
 
 func check_win():
 	if connected["red"] and connected["blue"] and connected["green"]:
-		AudioManager.play_sfx("success")
 		AudioManager.play_sfx("coin")
 		GameManager.last_money_change = GameManager.get_money_reward(15)
 		GameManager.last_satisfaction_change = 5
@@ -121,12 +120,7 @@ func check_win():
 
 		GameManager.save_game()
 		
-		# --- TUTORIAL ROUTING CHECK ---
-		if GameManager.is_tutorial:
-			GameManager.tutorial_minigame_done = true
-			get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_tutorial.tscn") # Make sure this matches your tutorial scene name
-		else:
-			get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
+		get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
 
 func _on_game_timer_timeout():
 	time_left -= 1
@@ -136,14 +130,8 @@ func _on_game_timer_timeout():
 	update_timer()
 
 	if time_left == 0:
-		AudioManager.play_sfx("fail")
 		GameManager.last_money_change = 0
 		GameManager.apply_satisfaction_penalty(10)
 		GameManager.save_game()
 		
-		# --- TUTORIAL ROUTING CHECK ---
-		if GameManager.is_tutorial:
-			GameManager.tutorial_minigame_done = true
-			get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_tutorial.tscn")
-		else:
-			get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
+		get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

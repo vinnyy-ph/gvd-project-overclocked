@@ -169,7 +169,6 @@ func _on_timer_timeout():
 func win_game():
 	game_active = false
 	game_timer.stop()
-	AudioManager.play_sfx("success")
 	AudioManager.play_sfx("coin")
 	
 	link_status_label.text = "> Link Status: BGP ROUTES ESTABLISHED"
@@ -189,7 +188,6 @@ func win_game():
 func game_over():
 	game_active = false
 	game_timer.stop()
-	AudioManager.play_sfx("fail")
 	
 	link_status_label.text = "> CRITICAL ERROR"
 	action_label.text = "> CONNECTION TIMEOUT"
@@ -199,4 +197,4 @@ func game_over():
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.5).timeout
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

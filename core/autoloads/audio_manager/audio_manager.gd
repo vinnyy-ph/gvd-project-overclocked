@@ -44,6 +44,39 @@ func play_bgm(track_name: String):
 func stop_bgm():
 	bgm_player.stop()
 
+var active_result_sfx: AudioStreamPlayer = null
+
+func play_result_sfx(sfx_name: String):
+	if not sfx_library.has(sfx_name): return
+	
+	stop_result_sfx()
+	
+	active_result_sfx = AudioStreamPlayer.new()
+	add_child(active_result_sfx)
+	active_result_sfx.stream = sfx_library[sfx_name]
+	active_result_sfx.bus = "Master"
+	
+	# Duck BGM
+	var tween = create_tween()
+	tween.tween_property(bgm_player, "volume_db", -15.0, 0.2)
+	
+	active_result_sfx.finished.connect(_on_result_sfx_finished)
+	active_result_sfx.play()
+
+func _on_result_sfx_finished():
+	if active_result_sfx:
+		active_result_sfx.queue_free()
+		active_result_sfx = null
+	
+	var tween = create_tween()
+	# Restore BGM volume
+	tween.tween_property(bgm_player, "volume_db", 0.0, 0.5)
+
+func stop_result_sfx():
+	if active_result_sfx and is_instance_valid(active_result_sfx):
+		active_result_sfx.stop()
+		_on_result_sfx_finished()
+
 func play_sfx(sfx_name: String):
 	if sfx_library.has(sfx_name):
 		# For overlapping SFX, we might want multiple players, 

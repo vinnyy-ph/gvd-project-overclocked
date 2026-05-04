@@ -122,7 +122,6 @@ func check_drop(part: ColorRect):
 func win_game():
 	game_active = false
 	game_timer.stop()
-	AudioManager.play_sfx("success")
 	AudioManager.play_sfx("coin")
 	
 	GameManager.last_money_change = GameManager.get_money_reward(25)
@@ -139,11 +138,10 @@ func win_game():
 func fail_game():
 	game_active = false
 	game_timer.stop()
-	AudioManager.play_sfx("fail")
 	
 	GameManager.last_money_change = 0
 	GameManager.apply_satisfaction_penalty(10)
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.5).timeout
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
