@@ -69,6 +69,7 @@ animations = [{
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghd6s"]
 
 [node name="ShopFloorScrollable" type="Node2D" unique_id=104881244]
+every_pc_unlocked = false
 script = ExtResource("1_q7epe")
 
 [node name="World" type="Node2D" parent="." unique_id=495853787]

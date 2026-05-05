@@ -14,7 +14,8 @@ var money: int:
 	get:
 		return SaveManager.current_money
 	set(value):
-		var diff = value - SaveManager.current_money
+		var new_money = max(0, value)
+		var diff = new_money - SaveManager.current_money
 		
 		# DEV MODE: Block any money deductions (expenses, purchases)
 		if dev_mode and diff < 0:
@@ -22,7 +23,9 @@ var money: int:
 			
 		if diff > 0:
 			last_day_revenue += diff
-		SaveManager.add_money(diff)
+		
+		SaveManager.current_money = new_money
+		SaveManager.save_game()
 
 func start_next_day():
 	day += 1
@@ -46,6 +49,11 @@ func end_day():
 	var base_rent = 50
 	var electricity_per_slot = 15
 	last_day_expenses = base_rent + (unlocked_slots * electricity_per_slot)
+
+	if money < last_day_expenses:
+		money = 0
+		trigger_game_over()
+		return
 
 	money -= last_day_expenses
 	AudioManager.play_sfx("day_start")

@@ -6,6 +6,8 @@ extends Node2D
 @onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 
+@export var every_pc_unlocked: bool = true
+
 @onready var issue_buttons = [
 	$World/Background/IssueButton2, # Slot 0
 	$World/Background/IssueButton3, # Slot 1
@@ -51,7 +53,7 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 
-	var unlocked_slots = GameManager.get_unlocked_slots()
+	var unlocked_slots = 8 if every_pc_unlocked else GameManager.get_unlocked_slots()
 
 	# Explicit mapping of logical slots to desk sprite numbers in the scene
 	var slot_to_desks = {
