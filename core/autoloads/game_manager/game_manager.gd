@@ -96,6 +96,7 @@ var time_left: int = 60
 var active_issues: Array = ["", "", "", "", "", "", "", ""]
 var occupied_slots: Array = [false, false, false, false, false, false, false, false]
 var is_tutorial: bool = false
+var tutorial_minigame_index: int = 0
 var tutorial_minigame_done: bool = false
 var last_day_revenue: int = 0
 var persisted_customers: Array = [] # Stores customer data when changing scenes
@@ -182,6 +183,9 @@ func new_game():
 	satisfaction = 100
 	time_left = 60
 	in_tutorial = false
+	is_tutorial = false
+	tutorial_minigame_index = 0
+	tutorial_minigame_done = false
 	last_money_change = 0
 	last_satisfaction_change = 0
 	active_issues = ["", "", "", "", "", "", "", ""]

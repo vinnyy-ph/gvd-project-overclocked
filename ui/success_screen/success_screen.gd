@@ -89,7 +89,9 @@ func animate_appearance():
 
 func _on_continue_button_pressed():
 	if GameManager.is_tutorial:
-		GameManager.tutorial_minigame_done = true
+		GameManager.tutorial_minigame_index += 1
+		if GameManager.tutorial_minigame_index >= GameManager.ALL_MINIGAMES.size():
+			GameManager.tutorial_minigame_done = true
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_tutorial.tscn")
 	else:
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")

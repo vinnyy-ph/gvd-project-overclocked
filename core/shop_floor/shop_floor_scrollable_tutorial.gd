@@ -127,8 +127,19 @@ func _ready():
 	
 	if GameManager.tutorial_minigame_done:
 		finish_tutorial_sequence()
+	elif GameManager.tutorial_minigame_index > 0:
+		resume_minigame_sequence()
 	else:
 		start_tutorial()
+
+func resume_minigame_sequence():
+	tutorial_ui.show()
+	tutorial_box.show()
+	current_tutorial_step = TutorialStep.WAIT_FOR_ISSUE
+	var progress = GameManager.tutorial_minigame_index
+	var total = GameManager.ALL_MINIGAMES.size()
+	tutorial_label.text = "Great job! You've fixed " + str(progress) + " of " + str(total) + " issues.\nLet's try another one!\nTap 'Next' to continue."
+	tutorial_next_btn.show()
 
 func _setup_issue_label(slot_idx: int):
 	var label = Label.new()
@@ -252,12 +263,18 @@ func _on_tutorial_next_pressed():
 	elif current_tutorial_step == TutorialStep.POST_MINIGAME:
 		GameManager.is_tutorial = false
 		GameManager.tutorial_minigame_done = false
+		GameManager.tutorial_minigame_index = 0
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
 func force_tutorial_issue():
 	current_tutorial_step = TutorialStep.CLICK_ISSUE
 	var target_index = 0
-	GameManager.active_issues[target_index] = "res://minigames/cable_management/cable_management_mini_game.tscn"
+	
+	var issue_path = "res://minigames/cable_management/cable_management_mini_game.tscn"
+	if GameManager.tutorial_minigame_index < GameManager.ALL_MINIGAMES.size():
+		issue_path = GameManager.ALL_MINIGAMES[GameManager.tutorial_minigame_index]
+	
+	GameManager.active_issues[target_index] = issue_path
 	var btn = issue_buttons[target_index]
 	if btn:
 		btn.visible = true
@@ -268,7 +285,8 @@ func force_tutorial_issue():
 	
 	tutorial_box.show()
 	tutorial_next_btn.hide()
-	tutorial_label.text = "OH NO! THE CUSTOMER HAS A PROBLEM!\nTap the red alert icon above them to start the repair."
+	var issue_name = GameManager.get_issue_title(issue_path)
+	tutorial_label.text = "OH NO! THE CUSTOMER HAS A " + issue_name.to_upper() + "!\nTap the red alert icon above them to start the repair."
 
 func spawn_customer():
 	var customer = customer_scene.instantiate()
