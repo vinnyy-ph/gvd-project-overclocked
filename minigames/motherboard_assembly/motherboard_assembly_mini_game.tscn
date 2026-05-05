@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://dyd83plq87q7d"]
 
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_7limr"]
-[ext_resource type="Script" path="res://minigames/motherboard_assembly/motherboard_assembly_mini_game.gd" id="1_dfubv"]
+[ext_resource type="Script" uid="uid://c8ysd636t1n7k" path="res://minigames/motherboard_assembly/motherboard_assembly_mini_game.gd" id="1_dfubv"]
 [ext_resource type="Texture2D" uid="uid://p86owqgrdv1w" path="res://assets/images/game_screen_2.png" id="2_akl6o"]
 [ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="4_7cxnj"]
 [ext_resource type="Texture2D" uid="uid://c86trvmhw8wsn" path="res://assets/images/motherboard.png" id="4_ymx2j"]
 [ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_uf8by"]
+[ext_resource type="Texture2D" uid="uid://cvj7ub06rl22i" path="res://assets/images/motherboard_assembly/cpu.png" id="7_3ueub"]
+[ext_resource type="Texture2D" uid="uid://eke330p7wurb" path="res://assets/images/motherboard_assembly/ram1.png" id="8_shs08"]
+[ext_resource type="Texture2D" uid="uid://be2jwvrlvhb7d" path="res://assets/images/motherboard_assembly/ram2.png" id="9_61vuo"]
 
 [node name="MotherboardAssemblyMiniGame" type="Control" unique_id=834253147]
 layout_mode = 3
@@ -177,12 +180,26 @@ offset_right = 13.0
 offset_bottom = -37.0
 color = Color(1, 0.5833334, 0, 0.41568628)
 
-[node name="RAM_Slot" type="ColorRect" parent="BuildArea/Slots" unique_id=122991548]
+[node name="SSD_Slot" type="ColorRect" parent="BuildArea/Slots" unique_id=122991548]
 offset_left = -66.0
 offset_top = 46.0
 offset_right = 23.0
 offset_bottom = 58.0
 color = Color(1, 0.5833334, 0, 0.5294118)
+
+[node name="RAM2_Slot" type="ColorRect" parent="BuildArea/Slots" unique_id=1267828203]
+offset_left = 58.0
+offset_top = -119.0
+offset_right = 80.0
+offset_bottom = -14.0
+color = Color(1, 0.5833334, 0, 0.4862745)
+
+[node name="RAM1_Slot" type="ColorRect" parent="BuildArea/Slots" unique_id=70809518]
+offset_left = 35.0
+offset_top = -119.0
+offset_right = 57.0
+offset_bottom = -14.0
+color = Color(1, 0.5833334, 0, 0.4862745)
 
 [node name="GPU_Slot" type="ColorRect" parent="BuildArea/Slots" unique_id=1743490861]
 offset_left = -100.0
@@ -194,17 +211,48 @@ color = Color(1, 0.5833334, 0, 0.4862745)
 [node name="Parts" type="Node2D" parent="BuildArea" unique_id=367942659]
 position = Vector2(408, 26)
 
-[node name="CPU_Part" type="ColorRect" parent="BuildArea/Parts" unique_id=469471290]
-offset_right = 64.0
-offset_bottom = 64.0
-color = Color(1, 0.5833334, 0, 1)
+[node name="CPU_Part" type="TextureRect" parent="BuildArea/Parts" unique_id=1223675961]
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 73.0
+offset_bottom = 59.795776
+texture = ExtResource("7_3ueub")
+expand_mode = 1
 
-[node name="RAM_Part" type="ColorRect" parent="BuildArea/Parts" unique_id=9174151]
+[node name="Label" type="Label" parent="BuildArea/Parts/CPU_Part" unique_id=1520019043]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 56.0
+offset_bottom = 20.204224
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_7limr")
+text = "CPU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SSD_Part" type="ColorRect" parent="BuildArea/Parts" unique_id=9174151]
 offset_left = 85.0
 offset_top = 24.0
 offset_right = 174.0
 offset_bottom = 36.0
 color = Color(1, 0.5833334, 0, 1)
+
+[node name="SSD" type="Label" parent="BuildArea/Parts/SSD_Part" unique_id=1817829986]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 15.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_7limr")
+text = "SSD"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="GPU_Part" type="ColorRect" parent="BuildArea/Parts" unique_id=2051029546]
 offset_left = 21.0
@@ -212,6 +260,64 @@ offset_top = 100.0
 offset_right = 152.0
 offset_bottom = 120.0
 color = Color(1, 0.5833334, 0, 1)
+
+[node name="Label" type="Label" parent="BuildArea/Parts/GPU_Part" unique_id=1670662562]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 24.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_7limr")
+text = "GPU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RAM1_Part" type="TextureRect" parent="BuildArea/Parts" unique_id=948138403]
+offset_left = 166.0
+offset_top = 66.0
+offset_right = 204.0
+offset_bottom = 180.0
+texture = ExtResource("8_shs08")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="BuildArea/Parts/RAM1_Part" unique_id=20857355]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 82.0
+offset_bottom = 46.204224
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_7limr")
+text = "RAM"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RAM2_Part" type="TextureRect" parent="BuildArea/Parts" unique_id=10793443]
+offset_left = 216.0
+offset_top = 65.0
+offset_right = 254.0
+offset_bottom = 179.0
+texture = ExtResource("9_61vuo")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="BuildArea/Parts/RAM2_Part" unique_id=851967261]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 81.0
+offset_bottom = 45.204224
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_7limr")
+text = "RAM"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="GameTimer" type="Timer" parent="." unique_id=744926545]
 autostart = true

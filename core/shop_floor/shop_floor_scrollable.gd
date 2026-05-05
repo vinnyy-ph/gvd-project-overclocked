@@ -7,14 +7,14 @@ extends Node2D
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 
 @onready var issue_buttons = [
-	$World/Background/IssueButton1,
-	$World/Background/IssueButton2,
-	$World/Background/IssueButton3,
-	$World/Background/IssueButton4,
-	$World/Background/IssueButton5,
-	$World/Background/IssueButton6,
-	$World/Background/IssueButton7,
-	$World/Background/IssueButton8
+	$World/Background/IssueButton2, # Slot 0
+	$World/Background/IssueButton3, # Slot 1
+	$World/Background/IssueButton4, # Slot 2
+	$World/Background/IssueButton1, # Slot 3
+	$World/Background/IssueButton6, # Slot 4
+	$World/Background/IssueButton7, # Slot 5
+	$World/Background/IssueButton8, # Slot 6
+	$World/Background/IssueButton5  # Slot 7
 ]
 
 var scroll_speed: float = 900.0
@@ -37,16 +37,28 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 
-	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
+	var unlocked_slots = GameManager.get_unlocked_slots()
 
-	# Handle 16 desks (even though we only have 8 issue buttons for now)
-	for i in range(16):
-		var desk_node = get_node_or_null("World/Background/Desk" + str(i+1))
-		if desk_node:
-			if i < unlocked_slots:
-				desk_node.modulate = Color.WHITE
-			else:
-				desk_node.modulate = Color(0.2, 0.2, 0.2)
+	# Explicit mapping of logical slots to desk sprite numbers in the scene
+	var slot_to_desks = {
+		0: [1, 2],
+		1: [3, 4],
+		2: [5, 6],
+		3: [7, 8],
+		4: [9, 14],
+		5: [10, 15],
+		6: [11, 16],
+		7: [12, 13]
+	}
+
+	# Sync visual modulation for all 16 desk nodes based on slot status
+	for slot_idx in range(8):
+		var is_unlocked = slot_idx < unlocked_slots
+		var modulate_color = Color.WHITE if is_unlocked else Color(0.2, 0.2, 0.2)
+		for desk_num in slot_to_desks[slot_idx]:
+			var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
+			if desk_node:
+				desk_node.modulate = modulate_color
 
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
@@ -121,7 +133,7 @@ func _on_spawn_timer_timeout():
 	if randf() > GameManager.get_issue_spawn_chance_modifier():
 		return
 
-	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
+	var unlocked_slots = GameManager.get_unlocked_slots()
 	var inactive_indices = []
 	for i in range(unlocked_slots):
 		if not GameManager.active_issues[i]:

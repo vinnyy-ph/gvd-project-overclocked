@@ -36,8 +36,11 @@ func start_next_day():
 
 var last_day_expenses: int = 0
 
+func get_unlocked_slots() -> int:
+	return clamp(2 + SaveManager.unlocked_upgrades.get("shop_space", 0), 2, 8)
+
 func end_day():
-	var unlocked_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
+	var unlocked_slots = get_unlocked_slots()
 	var base_rent = 50
 	var electricity_per_slot = 15
 	last_day_expenses = base_rent + (unlocked_slots * electricity_per_slot)

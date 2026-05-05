@@ -9,17 +9,21 @@ extends Control
 
 var time_left: int = 20
 var placed_count: int = 0
-var total_parts: int = 3
+var total_parts: int = 0 # Will be set dynamically in _ready
 var game_active: bool = true
 
 # Drag and drop variables
-var dragged_part: ColorRect = null
+var dragged_part: Control = null # Changed from ColorRect to Control to support TextureRects
 var drag_offset: Vector2 = Vector2.ZERO
 var original_positions: Dictionary = {}
 
 func _ready():
 	AudioManager.play_bgm("minigame")
 	time_left += GameManager.get_hardware_time_bonus()
+	
+	# Dynamically set total parts based on the children in the Parts container
+	total_parts = parts_container.get_child_count()
+	
 	# Timer Setup
 	game_timer.wait_time = 1.0
 	game_timer.one_shot = false 
@@ -31,7 +35,7 @@ func _ready():
 
 	# Initialize parts
 	for part in parts_container.get_children():
-		if part is ColorRect:
+		if part is Control: # Changed to Control to catch both ColorRect and TextureRect
 			# Store starting position so we can snap back if dropped wrong
 			original_positions[part] = part.position
 			
@@ -58,7 +62,7 @@ func _on_game_timer_timeout():
 
 # --- DRAG AND DROP LOGIC ---
 
-func _on_part_gui_input(event: InputEvent, part: ColorRect):
+func _on_part_gui_input(event: InputEvent, part: Control): # Changed to Control
 	if not game_active: return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -80,7 +84,7 @@ func _process(_delta):
 		# Update position while dragging
 		dragged_part.global_position = get_global_mouse_position() + drag_offset
 
-func check_drop(part: ColorRect):
+func check_drop(part: Control): # Changed to Control
 	var dropped_correctly = false
 	
 	# We expect the slot name to end with "_Slot" and the part name to end with "_Part"
@@ -105,8 +109,9 @@ func check_drop(part: ColorRect):
 				placed_count += 1
 				update_status()
 				
-				# Give visual feedback (e.g., turn the slot green)
-				slot.color = Color(0.1, 0.8, 0.1, 0.5) 
+				# Give visual feedback (e.g., turn the slot green) if it's a ColorRect
+				if slot is ColorRect:
+					slot.color = Color(0.1, 0.8, 0.1, 0.5) 
 				
 				if placed_count >= total_parts:
 					win_game()
