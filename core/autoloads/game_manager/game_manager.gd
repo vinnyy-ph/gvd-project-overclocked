@@ -30,6 +30,8 @@ func start_next_day():
 	last_day_revenue = 0
 	for i in range(active_issues.size()):
 		active_issues[i] = ""
+	for i in range(occupied_slots.size()):
+		occupied_slots[i] = false
 	SaveManager.save_game()
 	AudioManager.play_sfx("day_start")
 	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
