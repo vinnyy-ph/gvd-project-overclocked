@@ -13,14 +13,14 @@ extends Node2D
 @onready var tutorial_next_btn = $CanvasLayer/TutorialUI/TutorialBox/NextButton
 
 @onready var issue_buttons = [
-	$World/Background/IssueButton2, # Slot 0
-	$World/Background/IssueButton3, # Slot 1
-	$World/Background/IssueButton4, # Slot 2
-	$World/Background/IssueButton1, # Slot 3
-	$World/Background/IssueButton6, # Slot 4
-	$World/Background/IssueButton7, # Slot 5
-	$World/Background/IssueButton8, # Slot 6
-	$World/Background/IssueButton5  # Slot 7
+	get_node_or_null("World/Background/IssueButton2"), # Slot 0
+	get_node_or_null("World/Background/IssueButton3"), # Slot 1
+	get_node_or_null("World/Background/IssueButton4"), # Slot 2
+	get_node_or_null("World/Background/IssueButton1"), # Slot 3
+	get_node_or_null("World/Background/IssueButton6"), # Slot 4
+	get_node_or_null("World/Background/IssueButton7"), # Slot 5
+	get_node_or_null("World/Background/IssueButton8"), # Slot 6
+	get_node_or_null("World/Background/IssueButton5")  # Slot 7
 ]
 
 var scroll_speed: float = 900.0
@@ -31,7 +31,16 @@ var last_drag_position: Vector2 = Vector2.ZERO
 var base_positions: Array = []
 var float_time: float = 0.0
 
-enum TutorialStep { INTRO, CAMERA_MOVE, WAIT_FOR_ISSUE, CLICK_ISSUE, POST_MINIGAME, DONE }
+enum TutorialStep { 
+	INTRO, 
+	CAMERA_MOVE, 
+	CUSTOMER_ARRIVE, 
+	ASSIGN_CUSTOMER, 
+	WAIT_FOR_ISSUE, 
+	CLICK_ISSUE, 
+	POST_MINIGAME, 
+	DONE 
+}
 var current_tutorial_step: TutorialStep = TutorialStep.INTRO
 var initial_cam_pos: Vector2
 
@@ -62,52 +71,32 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 
-	var unlocked_slots = GameManager.get_unlocked_slots()
+	var unlocked_slots = 1 # Force only one for the tutorial
 	
-	# Explicit mapping of logical slots to desk sprite numbers in the scene
-	var slot_to_desks = {
-		0: [1, 2],
-		1: [3, 4],
-		2: [5, 6],
-		3: [7, 8],
-		4: [9, 14],
-		5: [10, 15],
-		6: [11, 16],
-		7: [12, 13]
-	}
-	
-	# Explicit mapping of logical slots to chair placeholder nodes (TextureRects)
-	var slot_to_chair_names = {
-		0: "TextureRect2",
-		1: "TextureRect3",
-		2: "TextureRect4",
-		3: "TextureRect",
-		4: "TextureRect8",
-		5: "TextureRect7",
-		6: "TextureRect6",
-		7: "TextureRect5"
-	}
+	# Explicit mapping
+	var slot_to_desks = { 0: [1, 2] }
+	var slot_to_chair_names = { 0: "ChairSlot0" }
 
 	seat_nodes.resize(8)
 	seat_positions.resize(8)
 	issue_labels.resize(8)
 
-	# Sync visual modulation and setup target positions
+	# Setup Stations
 	for slot_idx in range(8):
 		var is_unlocked = slot_idx < unlocked_slots
-		var modulate_color = Color.WHITE if is_unlocked else Color(0.2, 0.2, 0.2)
 		
 		# Desk visuals
-		for desk_num in slot_to_desks[slot_idx]:
+		var desks = slot_to_desks.get(slot_idx, [])
+		for desk_num in desks:
 			var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
 			if desk_node:
-				desk_node.modulate = modulate_color
+				desk_node.visible = is_unlocked
 				if is_unlocked:
 					_setup_desk_click(desk_node, slot_idx)
 		
-		# Seat positions and nodes
-		var chair_name = slot_to_chair_names[slot_idx]
-		var chair_node = get_node_or_null("World/Background/" + chair_name)
+		# Chair visuals
+		var chair_name = slot_to_chair_names.get(slot_idx, "")
+		var chair_node = get_node_or_null("World/Background/" + chair_name) if chair_name != "" else null
 		if chair_node:
 			chair_node.visible = false
 			seat_nodes[slot_idx] = chair_node
@@ -115,28 +104,27 @@ func _ready():
 		
 		_setup_issue_label(slot_idx)
 
+	# Setup Issue Buttons
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
-		base_positions.append(btn.position)
-		btn.pivot_offset = btn.size / 2.0
-		# Hide all issues initially for the tutorial
-		btn.visible = GameManager.active_issues[i] != ""
-		if not btn.pressed.is_connected(_on_issue_clicked):
-			btn.pressed.connect(_on_issue_clicked.bind(i))
+		if btn:
+			base_positions.append(btn.position)
+			btn.pivot_offset = btn.size / 2.0
+			btn.visible = GameManager.active_issues[i] != ""
+			if not btn.pressed.is_connected(_on_issue_clicked):
+				btn.pressed.connect(_on_issue_clicked.bind(i))
+		else:
+			base_positions.append(Vector2.ZERO)
 
-	# --- RESTORE PERSISTED CUSTOMERS ---
 	_restore_customers()
 	update_hud()
 	
-	# Connect tutorial button
 	if not tutorial_next_btn.pressed.is_connected(_on_tutorial_next_pressed):
 		tutorial_next_btn.pressed.connect(_on_tutorial_next_pressed)
 
-	# Stop standard simulation timers during tutorial onboarding
 	$DayTimer.stop()
 	$SpawnTimer.stop()
 	
-	# --- CHECK IF RETURNING FROM MINIGAME ---
 	if GameManager.tutorial_minigame_done:
 		finish_tutorial_sequence()
 	else:
@@ -146,13 +134,11 @@ func _setup_issue_label(slot_idx: int):
 	var label = Label.new()
 	label.name = "IssueLabel_" + str(slot_idx)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	var font = load("res://assets/fonts/ThaleahFat.ttf")
-	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", 48) # Increased font size
+	if font: label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 48)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 10)
-	
 	$World/Background.add_child(label)
 	label.hide()
 	issue_labels[slot_idx] = label
@@ -162,13 +148,12 @@ func _restore_customers():
 		var customer = customer_scene.instantiate()
 		customer_container.add_child(customer)
 		customer.customer_selected.connect(_on_customer_selected)
-		
 		if data["state"] == Customer.State.WAITING:
 			customer.global_position = data["pos"]
 		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
-			customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
-	
+			if idx < seat_positions.size():
+				customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
 	GameManager.persisted_customers.clear()
 
 func _save_customers_state():
@@ -188,11 +173,19 @@ func _setup_desk_click(desk: Sprite2D, slot_idx: int):
 
 func _on_desk_clicked(slot_idx: int):
 	if selected_customer != null:
-		if not GameManager.occupied_slots[slot_idx]:
+		if slot_idx < GameManager.occupied_slots.size() and not GameManager.occupied_slots[slot_idx]:
 			var target_pos = seat_positions[slot_idx]
+			if target_pos == null and issue_buttons[slot_idx]:
+				target_pos = issue_buttons[slot_idx].global_position
+				
 			var chair = seat_nodes[slot_idx]
 			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
 			_deselect_customer()
+			
+			if current_tutorial_step == TutorialStep.ASSIGN_CUSTOMER:
+				current_tutorial_step = TutorialStep.WAIT_FOR_ISSUE
+				tutorial_label.text = "Great! The customer is now using the PC and generating money.\nLet's wait for them to have a problem."
+				tutorial_next_btn.show()
 		else:
 			_show_station_occupied_feedback(slot_idx)
 
@@ -201,7 +194,7 @@ func _show_station_occupied_feedback(slot_idx: int):
 	label.text = "STATION OCCUPIED!"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var font = load("res://assets/fonts/ThaleahFat.ttf")
-	label.add_theme_font_override("font", font)
+	if font: label.add_theme_font_override("font", font)
 	label.add_theme_font_size_override("font_size", 40)
 	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
@@ -220,6 +213,8 @@ func _on_customer_selected(customer: Customer):
 		_deselect_customer()
 		selected_customer = customer
 		selected_customer.set_selection(true)
+		if current_tutorial_step == TutorialStep.ASSIGN_CUSTOMER:
+			tutorial_label.text = "The customer is selected! Now tap an empty desk to assign them."
 
 func _deselect_customer():
 	if selected_customer:
@@ -245,39 +240,62 @@ func _on_tutorial_next_pressed():
 	if current_tutorial_step == TutorialStep.INTRO:
 		current_tutorial_step = TutorialStep.CAMERA_MOVE
 		tutorial_label.text = "Swipe and drag the screen to look around your shop floor. Pinch to zoom in and out!"
-		tutorial_next_btn.hide() # Hide next button; they must move the camera to progress
-		
+		tutorial_next_btn.hide()
+	elif current_tutorial_step == TutorialStep.CUSTOMER_ARRIVE:
+		spawn_customer()
+		current_tutorial_step = TutorialStep.ASSIGN_CUSTOMER
+		tutorial_label.text = "A customer has arrived! Tap the customer to select them."
+		tutorial_next_btn.hide()
 	elif current_tutorial_step == TutorialStep.WAIT_FOR_ISSUE:
 		tutorial_box.hide()
 		force_tutorial_issue()
-		
 	elif current_tutorial_step == TutorialStep.POST_MINIGAME:
-		# Clean up tutorial flags and launch the real game
 		GameManager.is_tutorial = false
 		GameManager.tutorial_minigame_done = false
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
 func force_tutorial_issue():
 	current_tutorial_step = TutorialStep.CLICK_ISSUE
-	
-	# Force spawn an issue on the first PC
 	var target_index = 0
-	GameManager.active_issues[target_index] = GameManager.get_next_minigame()
+	GameManager.active_issues[target_index] = "res://minigames/cable_management/cable_management_mini_game.tscn"
 	var btn = issue_buttons[target_index]
-	btn.visible = true
-
-	# Pop-in animation
-	btn.scale = Vector2.ZERO
-	var tween = create_tween()
-	tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	if btn:
+		btn.visible = true
+		btn.scale = Vector2.ZERO
+		var tween = create_tween()
+		tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
 	
-	# Show tutorial instructions
 	tutorial_box.show()
 	tutorial_next_btn.hide()
-	tutorial_label.text = "A CUSTOMER HAS A PROBLEM!\nTap the alert to assist them. You'll need to beat mini-games like Cable Management, Hardware Plug-in, Network Routing, or Virus Removal!"
+	tutorial_label.text = "OH NO! THE CUSTOMER HAS A PROBLEM!\nTap the red alert icon above them to start the repair."
 
-# --- SATISFACTION BAR COLOR ---
+func spawn_customer():
+	var customer = customer_scene.instantiate()
+	customer_container.add_child(customer)
+	customer.global_position = waiting_area.global_position
+	customer.customer_selected.connect(_on_customer_selected)
+
+func _on_issue_clicked(pc_index: int):
+	var issue_path = GameManager.active_issues[pc_index]
+	if issue_path == "": return
+	GameManager.active_issues[pc_index] = ""
+	_save_customers_state()
+	GameManager.save_game()
+	if current_tutorial_step == TutorialStep.CLICK_ISSUE:
+		GameManager.is_tutorial = true
+		get_tree().change_scene_to_file(issue_path)
+
+func update_hud():
+	day_label.text = "Day: " + str(GameManager.day)
+	money_label.text = "Money: ₱" + str(GameManager.money)
+	if GameManager.money <= 0:
+		money_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+	else:
+		money_label.remove_theme_color_override("font_color")
+	time_label.text = "Time: " + str(GameManager.time_left)
+	satisfaction_bar.value = GameManager.satisfaction
+	_apply_bar_style()
 
 func _get_bar_color(value: int) -> Color:
 	if value > 60: return Color(0.2, 0.85, 0.3)
@@ -289,89 +307,36 @@ func _apply_bar_style():
 	fill_style.bg_color = _get_bar_color(GameManager.satisfaction)
 	fill_style.set_corner_radius_all(4)
 	satisfaction_bar.add_theme_stylebox_override("fill", fill_style)
-
 	var bg_style = StyleBoxFlat.new()
 	bg_style.bg_color = Color(0.1, 0.1, 0.15, 0.85)
 	bg_style.set_corner_radius_all(4)
 	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
 	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
-# --- ANIMATION & PROCESS LOGIC ---
-
 func _process(delta):
 	float_time += delta
-
-	# Float active issue buttons
 	for i in range(issue_buttons.size()):
+		var btn = issue_buttons[i]
+		if not btn: continue
+		
 		var issue_path = GameManager.active_issues[i]
 		if issue_path != "":
-			var btn = issue_buttons[i]
 			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
 			var label = issue_labels[i]
-			label.show()
-			label.text = GameManager.get_issue_title(issue_path)
-			# Center the label relative to the button and move it closer
-			var label_x_offset = -150 # Adjust based on average label width
-			label.global_position = btn.global_position + Vector2(label_x_offset, -45)
+			if label:
+				label.show()
+				label.text = GameManager.get_issue_title(issue_path)
+				label.global_position = btn.global_position + Vector2(-150, -45)
 		else:
-			issue_buttons[i].visible = false
+			btn.visible = false
 			if issue_labels[i]: issue_labels[i].hide()
 
-	# Tutorial Event Checkers
 	if current_tutorial_step == TutorialStep.CAMERA_MOVE:
 		if camera.position.distance_to(initial_cam_pos) > 150:
-			current_tutorial_step = TutorialStep.WAIT_FOR_ISSUE
-			tutorial_label.text = "Great job! Now, let's wait for a customer to need help.\nTap 'Next' to continue."
+			current_tutorial_step = TutorialStep.CUSTOMER_ARRIVE
+			tutorial_label.text = "Great job! Now, let's wait for a customer to arrive.\nTap 'Next' to continue."
 			tutorial_next_btn.show()
-
-# --- SIMULATION LOGIC ---
-
-func _on_day_timer_timeout():
-	pass # Disabled entirely for tutorial
-
-func _on_spawn_timer_timeout():
-	if current_tutorial_step == TutorialStep.WAIT_FOR_ISSUE:
-		var waiting_count = 0
-		for child in customer_container.get_children():
-			if child is Customer and child.current_state == Customer.State.WAITING:
-				waiting_count += 1
-		
-		if waiting_count < 1:
-			spawn_customer()
-
-func spawn_customer():
-	var customer = customer_scene.instantiate()
-	customer_container.add_child(customer)
-	var waiting_count = 0
-	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING:
-			waiting_count += 1
-	var base_pos = waiting_area.global_position
-	var spacing = 180.0
-	customer.global_position = base_pos + Vector2((waiting_count - 1) * spacing, 0)
-	customer.customer_selected.connect(_on_customer_selected)
-
-func _on_issue_clicked(pc_index: int):
-	var issue_path = GameManager.active_issues[pc_index]
-	if issue_path == "": return
-
-	GameManager.active_issues[pc_index] = ""
-	_save_customers_state() # Save before minigame
-	GameManager.save_game()
-
-	if current_tutorial_step == TutorialStep.CLICK_ISSUE:
-		GameManager.is_tutorial = true
-		get_tree().change_scene_to_file(issue_path) 
-
-func update_hud():
-	day_label.text = "Day: " + str(GameManager.day)
-	money_label.text = "Money: ₱" + str(GameManager.money)
-	time_label.text = "Time: " + str(GameManager.time_left)
-	satisfaction_bar.value = GameManager.satisfaction
-	_apply_bar_style()
-
-# --- CAMERA LOGIC ---
 
 func _unhandled_input(event):
 	handle_drag_and_zoom(event)
@@ -379,8 +344,7 @@ func _unhandled_input(event):
 func handle_drag_and_zoom(event):
 	if event is InputEventScreenTouch or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
 		dragging = event.pressed
-		if dragging: 
-			last_drag_position = event.position
+		if dragging: last_drag_position = event.position
 	elif event is InputEventScreenDrag or (event is InputEventMouseMotion and dragging):
 		camera.position.x -= (event.position.x - last_drag_position.x) / camera.zoom.x
 		camera.position.y -= (event.position.y - last_drag_position.y) / camera.zoom.y

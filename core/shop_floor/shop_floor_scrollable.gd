@@ -290,6 +290,13 @@ func _apply_bar_style():
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
 	money_label.text = "Money: P" + str(GameManager.money)
+	
+	# Color-code money: Red if 0 or negative
+	if GameManager.money <= 0:
+		money_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+	else:
+		money_label.remove_theme_color_override("font_color")
+		
 	time_label.text = "Time: " + str(GameManager.time_left)
 	satisfaction_bar.value = GameManager.satisfaction
 	_apply_bar_style()

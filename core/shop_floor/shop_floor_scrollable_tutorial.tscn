@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://bgpfn8x11mwvp"]
 
-[ext_resource type="Script" path="res://core/shop_floor/shop_floor_scrollable_tutorial.gd" id="1_drvdj"]
+[ext_resource type="Script" uid="uid://yealhs7v3e2v" path="res://core/shop_floor/shop_floor_scrollable_tutorial.gd" id="1_drvdj"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_tryt6"]
 [ext_resource type="Texture2D" uid="uid://c808q0igji7a7" path="res://assets/images/envinronment.png" id="3_owkhd"]
 [ext_resource type="Texture2D" uid="uid://ducobkdcx22em" path="res://assets/images/default_desk.png" id="4_aosc0"]
 [ext_resource type="Texture2D" uid="uid://c62rwn62yk8gr" path="res://assets/images/default_pc_front.png" id="5_c2hs7"]
-[ext_resource type="Texture2D" uid="uid://cbbh7tg41kga2" path="res://assets/images/default_pc_back.png" id="6_cefam"]
 [ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="7_6s41h"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="8_xpdn8"]
 [ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="9_6j3qw"]
@@ -13,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="11_lb4gu"]
 [ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_bdcp2"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_s65hm"]
+[ext_resource type="Texture2D" uid="uid://cu83syh5ymjmw" path="res://assets/images/shop_floor/person_placeholder_back.png" id="14_sitting_back"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghd6s"]
 
@@ -48,157 +48,39 @@ scale = Vector2(0.7, 0.7)
 position = Vector2(-9.999999, 15.714285)
 texture = ExtResource("3_owkhd")
 
-[node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id="customer_container"]
-
-[node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id="waiting_area"]
-position = Vector2(0, 100)
-
-[node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id="exit_point"]
-position = Vector2(800, 300)
-
 [node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=806564770]
-position = Vector2(-598.5, 149.19629)
-scale = Vector2(0.511592, 0.511592)
+position = Vector2(-300, 150)
+scale = Vector2(0.6, 0.6)
 texture = ExtResource("4_aosc0")
 
 [node name="Desk2" type="Sprite2D" parent="World/Background" unique_id=133867853]
-position = Vector2(-589.84045, 69.66013)
-scale = Vector2(0.5809414, 0.5809414)
+position = Vector2(-290, 70)
+scale = Vector2(0.65, 0.65)
 texture = ExtResource("5_c2hs7")
-
-[node name="Desk3" type="Sprite2D" parent="World/Background" unique_id=1627987628]
-position = Vector2(-302.5, -7.803711)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk4" type="Sprite2D" parent="World/Background" unique_id=493954332]
-position = Vector2(-293.84045, -87.33985)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("5_c2hs7")
-
-[node name="Desk5" type="Sprite2D" parent="World/Background" unique_id=1473803056]
-position = Vector2(-21.5, -158.80371)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk6" type="Sprite2D" parent="World/Background" unique_id=1481155064]
-position = Vector2(-12.840487, -238.33984)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("5_c2hs7")
-
-[node name="Desk7" type="Sprite2D" parent="World/Background" unique_id=1497769056]
-position = Vector2(-896.5, 307.1963)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk9" type="Sprite2D" parent="World/Background" unique_id=391266338]
-position = Vector2(-195.5, 342.1963)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk8" type="Sprite2D" parent="World/Background" unique_id=579109508]
-position = Vector2(-887.84045, 227.66016)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("5_c2hs7")
-
-[node name="Desk10" type="Sprite2D" parent="World/Background" unique_id=1660358488]
-position = Vector2(100.5, 185.19629)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk11" type="Sprite2D" parent="World/Background" unique_id=1929664934]
-position = Vector2(381.5, 34.19629)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk12" type="Sprite2D" parent="World/Background" unique_id=104690400]
-position = Vector2(-493.5, 500.1963)
-scale = Vector2(0.511592, 0.511592)
-texture = ExtResource("4_aosc0")
-
-[node name="Desk13" type="Sprite2D" parent="World/Background" unique_id=955533982]
-position = Vector2(-503, 403)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("6_cefam")
-
-[node name="Desk14" type="Sprite2D" parent="World/Background" unique_id=1779659459]
-position = Vector2(-200.00003, 244)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("6_cefam")
-
-[node name="Desk15" type="Sprite2D" parent="World/Background" unique_id=451122833]
-position = Vector2(94.99995, 87.000015)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("6_cefam")
-
-[node name="Desk16" type="Sprite2D" parent="World/Background" unique_id=1273222513]
-position = Vector2(378, -65.99997)
-scale = Vector2(0.5809414, 0.5809414)
-texture = ExtResource("6_cefam")
-
-[node name="IssueButton1" type="Button" parent="World/Background" unique_id=1167117532]
-offset_left = -1008.0
-offset_top = -50.0
-offset_right = -907.0
-offset_bottom = 177.0
-icon = ExtResource("7_6s41h")
-flat = true
 
 [node name="IssueButton2" type="Button" parent="World/Background" unique_id=1559353774]
-offset_left = -716.0
-offset_top = -201.0
-offset_right = -615.0
-offset_bottom = 26.0
+offset_left = -400.0
+offset_top = -100.0
+offset_right = -299.0
+offset_bottom = 127.0
 icon = ExtResource("7_6s41h")
 flat = true
 
-[node name="IssueButton3" type="Button" parent="World/Background" unique_id=66640178]
-offset_left = -420.0
-offset_top = -358.0
-offset_right = -319.0
-offset_bottom = -131.0
-icon = ExtResource("7_6s41h")
-flat = true
+[node name="ChairSlot0" type="TextureRect" parent="World/Background" unique_id=1328029831]
+offset_left = -380.0
+offset_top = 110.0
+offset_right = -160.0
+offset_bottom = 410.0
+texture = ExtResource("14_sitting_back")
+expand_mode = 1
 
-[node name="IssueButton4" type="Button" parent="World/Background" unique_id=266520497]
-offset_left = -137.0
-offset_top = -505.0
-offset_right = -36.0
-offset_bottom = -278.0
-icon = ExtResource("7_6s41h")
-flat = true
+[node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=953350803]
 
-[node name="IssueButton5" type="Button" parent="World/Background" unique_id=803769110]
-offset_left = -540.0
-offset_top = 170.0
-offset_right = -439.0
-offset_bottom = 397.0
-icon = ExtResource("7_6s41h")
-flat = true
+[node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id=2034711380]
+position = Vector2(200, 300)
 
-[node name="IssueButton6" type="Button" parent="World/Background" unique_id=1240297333]
-offset_left = -256.0
-offset_top = 20.0
-offset_right = -155.0
-offset_bottom = 247.0
-icon = ExtResource("7_6s41h")
-flat = true
-
-[node name="IssueButton7" type="Button" parent="World/Background" unique_id=1706057628]
-offset_left = 40.0
-offset_top = -137.0
-offset_right = 141.0
-offset_bottom = 90.0
-icon = ExtResource("7_6s41h")
-flat = true
-
-[node name="IssueButton8" type="Button" parent="World/Background" unique_id=1645449897]
-offset_left = 324.0
-offset_top = -302.0
-offset_right = 425.0
-offset_bottom = -75.0
-icon = ExtResource("7_6s41h")
-flat = true
+[node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id=152733795]
+position = Vector2(800, 400)
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 position = Vector2(640, 724)
@@ -296,8 +178,6 @@ offset_right = 88.0
 offset_bottom = 96.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_xpdn8")
-theme_override_font_sizes/font_size = 30
-text = "a"
 vertical_alignment = 1
 
 [node name="DimOverlay" type="ColorRect" parent="CanvasLayer/HUD" unique_id=1635064106]

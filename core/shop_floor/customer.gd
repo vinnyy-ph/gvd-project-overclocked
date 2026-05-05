@@ -33,7 +33,10 @@ func _ready():
 	# Randomize session duration (15 to 40 seconds)
 	session_timer.wait_time = randf_range(15.0, 40.0)
 
-func assign_to_pc(pc_index: int, pos: Vector2, chair: TextureRect, resume_data: Dictionary = {}):
+func assign_to_pc(pc_index: int, pos, chair: TextureRect, resume_data: Dictionary = {}):
+	if pos == null:
+		pos = global_position # Stay where we are if no valid pos
+		
 	assigned_pc_index = pc_index
 	target_position = pos
 	chair_node = chair
