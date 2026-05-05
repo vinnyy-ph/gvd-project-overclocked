@@ -25,12 +25,25 @@ var last_drag_position: Vector2 = Vector2.ZERO
 var base_positions: Array = []
 var float_time: float = 0.0
 
+@onready var customer_container = $World/Background/CustomerContainer
+@onready var waiting_area = $World/Background/WaitingArea
+@onready var customer_scene = preload("res://assets/sprites/walking_person.tscn")
+
+var selected_customer: Customer = null
+signal customer_selected(customer)
+
+# Map slots to their chair placeholder nodes
+var seat_nodes: Array = []
+var seat_positions: Array = []
+
 func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
 	randomize()
 	camera.position = Vector2(1532, 704)
 	clamp_camera()
+
+	customer_selected.connect(_on_customer_selected)
 
 	satisfaction_bar.min_value = 0
 	satisfaction_bar.max_value = 100
@@ -50,71 +63,116 @@ func _ready():
 		6: [11, 16],
 		7: [12, 13]
 	}
+	
+	# Explicit mapping of logical slots to chair placeholder nodes (TextureRects)
+	var slot_to_chair_names = {
+		0: "TextureRect2",
+		1: "TextureRect3",
+		2: "TextureRect4",
+		3: "TextureRect",
+		4: "TextureRect8",
+		5: "TextureRect7",
+		6: "TextureRect6",
+		7: "TextureRect5"
+	}
 
-	# Sync visual modulation for all 16 desk nodes based on slot status
+	seat_nodes.resize(8)
+	seat_positions.resize(8)
+
+	# Sync visual modulation and setup target positions
 	for slot_idx in range(8):
 		var is_unlocked = slot_idx < unlocked_slots
 		var modulate_color = Color.WHITE if is_unlocked else Color(0.2, 0.2, 0.2)
+		
+		# Desk visuals
 		for desk_num in slot_to_desks[slot_idx]:
 			var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
 			if desk_node:
 				desk_node.modulate = modulate_color
+				if is_unlocked:
+					_setup_desk_click(desk_node, slot_idx)
+		
+		# Seat positions and nodes
+		var chair_name = slot_to_chair_names[slot_idx]
+		var chair_node = get_node_or_null("World/Background/" + chair_name)
+		if chair_node:
+			chair_node.visible = false
+			seat_nodes[slot_idx] = chair_node
+			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
 
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)
 		btn.pivot_offset = btn.size / 2.0
-		
-		if i < unlocked_slots:
-			btn.visible = GameManager.active_issues[i]
-		else:
-			btn.visible = false
-			GameManager.active_issues[i] = false
-
+		btn.visible = GameManager.active_issues[i]
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
 
+	# --- RESTORE PERSISTED CUSTOMERS ---
+	_restore_customers()
 	update_hud()
 
-# --- SATISFACTION BAR COLOR ---
+func _restore_customers():
+	for data in GameManager.persisted_customers:
+		var customer = customer_scene.instantiate()
+		customer_container.add_child(customer)
+		customer.customer_selected.connect(_on_customer_selected)
+		
+		if data["state"] == Customer.State.WAITING:
+			customer.global_position = data["pos"]
+		elif data["state"] == Customer.State.USING_PC:
+			var idx = data["pc_index"]
+			customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
+	
+	GameManager.persisted_customers.clear()
 
-func _get_bar_color(value: int) -> Color:
-	if value > 60:
-		return Color(0.2, 0.85, 0.3)
-	elif value > 30:
-		return Color(1.0, 0.75, 0.0)
+func _save_customers_state():
+	GameManager.persisted_customers.clear()
+	for child in customer_container.get_children():
+		if child is Customer:
+			GameManager.persisted_customers.append(child.get_data())
+
+func _setup_desk_click(desk: Sprite2D, slot_idx: int):
+	var btn = Button.new()
+	btn.flat = true
+	btn.name = "ClickArea"
+	btn.custom_minimum_size = Vector2(200, 200)
+	btn.position = -btn.custom_minimum_size / 2.0
+	desk.add_child(btn)
+	btn.pressed.connect(_on_desk_clicked.bind(slot_idx))
+
+func _on_desk_clicked(slot_idx: int):
+	if selected_customer != null:
+		if not GameManager.occupied_slots[slot_idx]:
+			var target_pos = seat_positions[slot_idx]
+			var chair = seat_nodes[slot_idx]
+			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
+			_deselect_customer()
+
+func _on_customer_selected(customer: Customer):
+	if selected_customer == customer:
+		_deselect_customer()
 	else:
-		return Color(0.9, 0.15, 0.15)
+		_deselect_customer()
+		selected_customer = customer
+		selected_customer.set_selection(true)
 
-func _apply_bar_style():
-	var fill_style = StyleBoxFlat.new()
-	fill_style.bg_color = _get_bar_color(GameManager.satisfaction)
-	fill_style.corner_radius_top_left = 4
-	fill_style.corner_radius_top_right = 4
-	fill_style.corner_radius_bottom_left = 4
-	fill_style.corner_radius_bottom_right = 4
-	satisfaction_bar.add_theme_stylebox_override("fill", fill_style)
-
-	var bg_style = StyleBoxFlat.new()
-	bg_style.bg_color = Color(0.1, 0.1, 0.15, 0.85)
-	bg_style.corner_radius_top_left = 4
-	bg_style.corner_radius_top_right = 4
-	bg_style.corner_radius_bottom_left = 4
-	bg_style.corner_radius_bottom_right = 4
-	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
-
-	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
+func _deselect_customer():
+	if selected_customer:
+		selected_customer.set_selection(false)
+		selected_customer = null
 
 # --- ANIMATION LOGIC ---
 
 func _process(delta):
 	float_time += delta
-
 	for i in range(issue_buttons.size()):
 		if GameManager.active_issues[i]:
 			var btn = issue_buttons[i]
+			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
-
+		else:
+			issue_buttons[i].visible = false
 	handle_keyboard_scroll(delta)
 
 # --- SIMULATION LOGIC ---
@@ -128,40 +186,51 @@ func _on_day_timer_timeout():
 
 func _on_spawn_timer_timeout():
 	if GameManager.time_left <= 0: return
-	
-	# Only spawn if RNG rolls below the modifier
-	if randf() > GameManager.get_issue_spawn_chance_modifier():
-		return
+	var waiting_count = 0
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_count += 1
+	if waiting_count < 3:
+		spawn_customer()
 
-	var unlocked_slots = GameManager.get_unlocked_slots()
-	var inactive_indices = []
-	for i in range(unlocked_slots):
-		if not GameManager.active_issues[i]:
-			inactive_indices.append(i)
-
-	if inactive_indices.size() > 0:
-		AudioManager.play_sfx("alert")
-		var random_index = inactive_indices[randi() % inactive_indices.size()]
-		GameManager.active_issues[random_index] = true
-
-		var btn = issue_buttons[random_index]
-		btn.visible = true
-
-		btn.scale = Vector2.ZERO
-		var tween = create_tween()
-		tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+func spawn_customer():
+	var customer = customer_scene.instantiate()
+	customer_container.add_child(customer)
+	var waiting_count = 0
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_count += 1
+	var base_pos = waiting_area.global_position
+	var spacing = 180.0 # Increased spacing
+	customer.global_position = base_pos + Vector2((waiting_count - 1) * spacing, 0)
+	customer.customer_selected.connect(_on_customer_selected)
 
 func _on_issue_clicked(pc_index: int):
 	if not GameManager.active_issues[pc_index]: return
-
 	GameManager.active_issues[pc_index] = false
+	_save_customers_state()
 	GameManager.save_game()
-
 	get_tree().change_scene_to_file(GameManager.get_next_minigame())
 
 func end_day():
+	GameManager.persisted_customers.clear()
 	GameManager.end_day()
+
+func _get_bar_color(value: int) -> Color:
+	if value > 60: return Color(0.2, 0.85, 0.3)
+	elif value > 30: return Color(1.0, 0.75, 0.0)
+	else: return Color(0.9, 0.15, 0.15)
+
+func _apply_bar_style():
+	var fill_style = StyleBoxFlat.new()
+	fill_style.bg_color = _get_bar_color(GameManager.satisfaction)
+	fill_style.set_corner_radius_all(4)
+	satisfaction_bar.add_theme_stylebox_override("fill", fill_style)
+	var bg_style = StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.1, 0.1, 0.15, 0.85)
+	bg_style.set_corner_radius_all(4)
+	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
+	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
@@ -172,7 +241,7 @@ func update_hud():
 
 # --- CAMERA LOGIC ---
 
-func _input(event):
+func _unhandled_input(event):
 	handle_drag_and_zoom(event)
 
 func handle_keyboard_scroll(delta):
@@ -190,13 +259,12 @@ func handle_drag_and_zoom(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
 			camera.zoom = Vector2(min(camera.zoom.x + 0.1, 1.5), min(camera.zoom.y + 0.1, 1.5))
-			clamp_camera()
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
 			camera.zoom = Vector2(max(camera.zoom.x - 0.1, 0.5), max(camera.zoom.y - 0.1, 0.5))
-			clamp_camera()
 		elif event.button_index == MOUSE_BUTTON_LEFT:
 			dragging = event.pressed
 			if dragging: last_drag_position = event.position
+		clamp_camera()
 	elif event is InputEventMagnifyGesture:
 		var new_zoom = camera.zoom * event.factor
 		camera.zoom.x = clamp(new_zoom.x, 0.5, 1.5)

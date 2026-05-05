@@ -92,9 +92,11 @@ var last_satisfaction_change: int = 0
 var in_tutorial: bool = false
 var time_left: int = 60
 var active_issues: Array = [false, false, false, false, false, false, false, false]
+var occupied_slots: Array = [false, false, false, false, false, false, false, false]
 var is_tutorial: bool = false
 var tutorial_minigame_done: bool = false
 var last_day_revenue: int = 0
+var persisted_customers: Array = [] # Stores customer data when changing scenes
 
 func get_money_reward(base_amount: int) -> int:
 	var bonus = 1.0
@@ -169,6 +171,8 @@ func new_game():
 	last_money_change = 0
 	last_satisfaction_change = 0
 	active_issues = [false, false, false, false, false, false, false, false]
+	occupied_slots = [false, false, false, false, false, false, false, false]
+	persisted_customers = []
 	minigame_deck = []
 	last_minigame = ""
 	SaveManager.save_game()

@@ -35,6 +35,17 @@ enum TutorialStep { INTRO, CAMERA_MOVE, WAIT_FOR_ISSUE, CLICK_ISSUE, POST_MINIGA
 var current_tutorial_step: TutorialStep = TutorialStep.INTRO
 var initial_cam_pos: Vector2
 
+@onready var customer_container = $World/Background/CustomerContainer
+@onready var waiting_area = $World/Background/WaitingArea
+@onready var customer_scene = preload("res://assets/sprites/walking_person.tscn")
+
+var selected_customer: Customer = null
+signal customer_selected(customer)
+
+# Map slots to their chair placeholder nodes
+var seat_nodes: Array = []
+var seat_positions: Array = []
+
 func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
@@ -42,6 +53,8 @@ func _ready():
 	camera.position = Vector2(1532, 704)
 	initial_cam_pos = camera.position
 	clamp_camera()
+
+	customer_selected.connect(_on_customer_selected)
 
 	satisfaction_bar.min_value = 0
 	satisfaction_bar.max_value = 100
@@ -61,15 +74,44 @@ func _ready():
 		6: [11, 16],
 		7: [12, 13]
 	}
+	
+	# Explicit mapping of logical slots to chair placeholder nodes (TextureRects)
+	var slot_to_chair_names = {
+		0: "TextureRect2",
+		1: "TextureRect3",
+		2: "TextureRect4",
+		3: "TextureRect",
+		4: "TextureRect8",
+		5: "TextureRect7",
+		6: "TextureRect6",
+		7: "TextureRect5"
+	}
 
-	# Sync visual modulation for all 16 desk nodes based on slot status
+	seat_nodes.resize(8)
+	seat_positions.resize(8)
+
+	# Sync visual modulation and setup target positions
 	for slot_idx in range(8):
 		var is_unlocked = slot_idx < unlocked_slots
 		var modulate_color = Color.WHITE if is_unlocked else Color(0.2, 0.2, 0.2)
+		
+		# Desk visuals
 		for desk_num in slot_to_desks[slot_idx]:
 			var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
 			if desk_node:
 				desk_node.modulate = modulate_color
+				if is_unlocked:
+					_setup_desk_click(desk_node, slot_idx)
+		
+		# Seat positions and nodes
+		var chair_name = slot_to_chair_names[slot_idx]
+		var chair_node = get_node_or_null("World/Background/" + chair_name)
+		if chair_node:
+			# Hide the placeholder initially
+			chair_node.visible = false
+			seat_nodes[slot_idx] = chair_node
+			# Store center of the chair placeholder
+			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
 
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
@@ -81,6 +123,8 @@ func _ready():
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
 
+	# --- RESTORE PERSISTED CUSTOMERS ---
+	_restore_customers()
 	update_hud()
 	
 	# Connect tutorial button
@@ -96,6 +140,56 @@ func _ready():
 		finish_tutorial_sequence()
 	else:
 		start_tutorial()
+
+func _restore_customers():
+	for data in GameManager.persisted_customers:
+		var customer = customer_scene.instantiate()
+		customer_container.add_child(customer)
+		customer.customer_selected.connect(_on_customer_selected)
+		
+		if data["state"] == Customer.State.WAITING:
+			customer.global_position = data["pos"]
+		elif data["state"] == Customer.State.USING_PC:
+			var idx = data["pc_index"]
+			customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data["time_left"])
+	
+	GameManager.persisted_customers.clear()
+
+func _save_customers_state():
+	GameManager.persisted_customers.clear()
+	for child in customer_container.get_children():
+		if child is Customer:
+			GameManager.persisted_customers.append(child.get_data())
+
+func _setup_desk_click(desk: Sprite2D, slot_idx: int):
+	var btn = Button.new()
+	btn.flat = true
+	btn.name = "ClickArea"
+	btn.custom_minimum_size = Vector2(200, 200)
+	btn.position = -btn.custom_minimum_size / 2.0
+	desk.add_child(btn)
+	btn.pressed.connect(_on_desk_clicked.bind(slot_idx))
+
+func _on_desk_clicked(slot_idx: int):
+	if selected_customer != null:
+		if not GameManager.occupied_slots[slot_idx]:
+			var target_pos = seat_positions[slot_idx]
+			var chair = seat_nodes[slot_idx]
+			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
+			_deselect_customer()
+
+func _on_customer_selected(customer: Customer):
+	if selected_customer == customer:
+		_deselect_customer()
+	else:
+		_deselect_customer()
+		selected_customer = customer
+		selected_customer.set_selection(true)
+
+func _deselect_customer():
+	if selected_customer:
+		selected_customer.set_selection(false)
+		selected_customer = null
 
 # --- TUTORIAL LOGIC ---
 
@@ -182,7 +276,10 @@ func _process(delta):
 	for i in range(issue_buttons.size()):
 		if GameManager.active_issues[i]:
 			var btn = issue_buttons[i]
+			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
+		else:
+			issue_buttons[i].visible = false
 
 	# Tutorial Event Checkers
 	if current_tutorial_step == TutorialStep.CAMERA_MOVE:
@@ -197,12 +294,36 @@ func _on_day_timer_timeout():
 	pass # Disabled entirely for tutorial
 
 func _on_spawn_timer_timeout():
-	pass # Disabled entirely for tutorial
+	if current_tutorial_step == TutorialStep.WAIT_FOR_ISSUE:
+		var waiting_count = 0
+		for child in customer_container.get_children():
+			if child is Customer and child.current_state == Customer.State.WAITING:
+				waiting_count += 1
+		
+		if waiting_count < 1:
+			spawn_customer()
+
+func spawn_customer():
+	var customer = customer_scene.instantiate()
+	customer_container.add_child(customer)
+	
+	# Fix spacing in tutorial
+	var waiting_count = 0
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_count += 1
+			
+	var base_pos = waiting_area.global_position
+	var spacing = 150.0
+	customer.global_position = base_pos + Vector2(waiting_count * spacing, 0)
+	
+	customer.customer_selected.connect(_on_customer_selected)
 
 func _on_issue_clicked(pc_index: int):
 	if not GameManager.active_issues[pc_index]: return
 
 	GameManager.active_issues[pc_index] = false
+	_save_customers_state() # Save before minigame
 	GameManager.save_game()
 
 	if current_tutorial_step == TutorialStep.CLICK_ISSUE:
@@ -219,7 +340,7 @@ func update_hud():
 
 # --- CAMERA LOGIC ---
 
-func _input(event):
+func _unhandled_input(event):
 	handle_drag_and_zoom(event)
 
 func handle_drag_and_zoom(event):

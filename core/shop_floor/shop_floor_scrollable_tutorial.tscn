@@ -48,6 +48,14 @@ scale = Vector2(0.7, 0.7)
 position = Vector2(-9.999999, 15.714285)
 texture = ExtResource("3_owkhd")
 
+[node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id="customer_container"]
+
+[node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id="waiting_area"]
+position = Vector2(0, 100)
+
+[node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id="exit_point"]
+position = Vector2(800, 300)
+
 [node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=806564770]
 position = Vector2(-598.5, 149.19629)
 scale = Vector2(0.511592, 0.511592)

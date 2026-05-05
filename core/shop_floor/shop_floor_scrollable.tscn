@@ -360,9 +360,18 @@ texture = ExtResource("10_jajnr")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
+
+[node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id=12243615]
+position = Vector2(0, 100)
+
+[node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id=1758434083]
+position = Vector2(800, 300)
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
 unique_name_in_owner = true
 process_mode = 3
+visible = false
 position = Vector2(770, -54.285732)
 scale = Vector2(1.590225, 1.590225)
 sprite_frames = SubResource("SpriteFrames_f7hrx")

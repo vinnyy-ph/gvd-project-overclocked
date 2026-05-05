@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://l87aefkk3ct5"]
 
 [ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="1_kriu2"]
+[ext_resource type="Script" path="res://core/shop_floor/customer.gd" id="2_customer"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_at4k0"]
 atlas = ExtResource("1_kriu2")
@@ -45,15 +46,20 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Control" type="Control" unique_id=1553103883]
+[node name="Customer" type="Control" unique_id=1553103883]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -85.0
+offset_top = -250.0
+offset_right = 85.0
+offset_bottom = 35.0
+mouse_filter = 0
+script = ExtResource("2_customer")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=321692675]
 process_mode = 3
-position = Vector2(459, 226)
+position = Vector2(85, 142)
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_o7thd")
 autoplay = "default"
 frame_progress = 0.56539255
