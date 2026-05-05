@@ -29,7 +29,7 @@ func start_next_day():
 	time_left = 60
 	last_day_revenue = 0
 	for i in range(active_issues.size()):
-		active_issues[i] = false
+		active_issues[i] = ""
 	SaveManager.save_game()
 	AudioManager.play_sfx("day_start")
 	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
@@ -68,10 +68,10 @@ func _process(delta):
 		return
 		
 	# Only decay satisfaction if we are on the shop floor and there are active issues
-	if get_tree().current_scene and get_tree().current_scene.name == "ShopFloorScrollable":
+	if get_tree().current_scene and (get_tree().current_scene.name == "ShopFloorScrollable" or get_tree().current_scene.name == "TutorialFloor"):
 		var active_count = 0
 		for issue in active_issues:
-			if issue: active_count += 1
+			if issue != "": active_count += 1
 		
 		if active_count > 0:
 			# Decay 0.2 points per second per active issue
@@ -91,7 +91,7 @@ var last_money_change: int = 0
 var last_satisfaction_change: int = 0
 var in_tutorial: bool = false
 var time_left: int = 60
-var active_issues: Array = [false, false, false, false, false, false, false, false]
+var active_issues: Array = ["", "", "", "", "", "", "", ""]
 var occupied_slots: Array = [false, false, false, false, false, false, false, false]
 var is_tutorial: bool = false
 var tutorial_minigame_done: bool = false
@@ -141,6 +141,18 @@ const ALL_MINIGAMES: Array = [
 	"res://minigames/motherboard_assembly/motherboard_assembly_mini_game.tscn"
 ]
 
+const MINIGAME_TITLES = {
+	"res://minigames/login/login_minigame.tscn": "Login Support",
+	"res://minigames/malware/malware_minigame.tscn": "Malware Removal",
+	"res://minigames/cable_management/cable_management_mini_game.tscn": "Cable Management",
+	"res://minigames/network_troubleshooting/network_troubleshooting_mini_game.tscn": "Network Issue",
+	"res://minigames/bsod_fix/bsod_fix_mini_game.tscn": "BSOD Repair",
+	"res://minigames/motherboard_assembly/motherboard_assembly_mini_game.tscn": "Hardware Assembly"
+}
+
+func get_issue_title(path: String) -> String:
+	return MINIGAME_TITLES.get(path, "Technical Issue")
+
 func get_next_minigame() -> String:
 	if minigame_deck.is_empty():
 		minigame_deck = ALL_MINIGAMES.duplicate()
@@ -170,7 +182,7 @@ func new_game():
 	in_tutorial = false
 	last_money_change = 0
 	last_satisfaction_change = 0
-	active_issues = [false, false, false, false, false, false, false, false]
+	active_issues = ["", "", "", "", "", "", "", ""]
 	occupied_slots = [false, false, false, false, false, false, false, false]
 	persisted_customers = []
 	minigame_deck = []

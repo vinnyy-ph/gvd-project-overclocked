@@ -35,6 +35,7 @@ signal customer_selected(customer)
 # Map slots to their chair placeholder nodes
 var seat_nodes: Array = []
 var seat_positions: Array = []
+var issue_labels: Array = []
 
 func _ready():
 	AudioManager.play_bgm("shop")
@@ -78,6 +79,7 @@ func _ready():
 
 	seat_nodes.resize(8)
 	seat_positions.resize(8)
+	issue_labels.resize(8)
 
 	# Sync visual modulation and setup target positions
 	for slot_idx in range(8):
@@ -99,18 +101,38 @@ func _ready():
 			chair_node.visible = false
 			seat_nodes[slot_idx] = chair_node
 			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
+		
+		# Setup issue labels
+		_setup_issue_label(slot_idx)
 
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)
 		btn.pivot_offset = btn.size / 2.0
-		btn.visible = GameManager.active_issues[i]
+		btn.visible = GameManager.active_issues[i] != ""
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
 
 	# --- RESTORE PERSISTED CUSTOMERS ---
 	_restore_customers()
 	update_hud()
+
+func _setup_issue_label(slot_idx: int):
+	var label = Label.new()
+	label.name = "IssueLabel_" + str(slot_idx)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	
+	# Load theme font
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 48) # Increased font size
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.hide()
+	issue_labels[slot_idx] = label
 
 func _restore_customers():
 	for data in GameManager.persisted_customers:
@@ -148,6 +170,27 @@ func _on_desk_clicked(slot_idx: int):
 			var chair = seat_nodes[slot_idx]
 			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
 			_deselect_customer()
+		else:
+			_show_station_occupied_feedback(slot_idx)
+
+func _show_station_occupied_feedback(slot_idx: int):
+	var label = Label.new()
+	label.text = "STATION OCCUPIED!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 40)
+	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.global_position = seat_positions[slot_idx] + Vector2(-100, -100)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 50, 0.8)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
 
 func _on_customer_selected(customer: Customer):
 	if selected_customer == customer:
@@ -167,12 +210,22 @@ func _deselect_customer():
 func _process(delta):
 	float_time += delta
 	for i in range(issue_buttons.size()):
-		if GameManager.active_issues[i]:
+		var issue_path = GameManager.active_issues[i]
+		if issue_path != "":
 			var btn = issue_buttons[i]
 			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
+			
+			var label = issue_labels[i]
+			label.show()
+			label.text = GameManager.get_issue_title(issue_path)
+			# Center the label relative to the button and move it closer
+			var label_x_offset = -150 # Adjust based on average label width
+			label.global_position = btn.global_position + Vector2(label_x_offset, -45)
 		else:
 			issue_buttons[i].visible = false
+			if issue_labels[i]: issue_labels[i].hide()
+			
 	handle_keyboard_scroll(delta)
 
 # --- SIMULATION LOGIC ---
@@ -201,16 +254,18 @@ func spawn_customer():
 		if child is Customer and child.current_state == Customer.State.WAITING:
 			waiting_count += 1
 	var base_pos = waiting_area.global_position
-	var spacing = 180.0 # Increased spacing
+	var spacing = 180.0
 	customer.global_position = base_pos + Vector2((waiting_count - 1) * spacing, 0)
 	customer.customer_selected.connect(_on_customer_selected)
 
 func _on_issue_clicked(pc_index: int):
-	if not GameManager.active_issues[pc_index]: return
-	GameManager.active_issues[pc_index] = false
+	var issue_path = GameManager.active_issues[pc_index]
+	if issue_path == "": return
+	
+	GameManager.active_issues[pc_index] = ""
 	_save_customers_state()
 	GameManager.save_game()
-	get_tree().change_scene_to_file(GameManager.get_next_minigame())
+	get_tree().change_scene_to_file(issue_path)
 
 func end_day():
 	GameManager.persisted_customers.clear()

@@ -24,7 +24,7 @@ func _ready():
 	next_day_button.pressed.connect(_on_next_day_pressed)
 
 func _on_shop_pressed():
-	get_tree().change_scene_to_file("res://ui/upgrade_shop/upgrade_shop.tscn")
+	get_tree().change_scene_to_file("res://ui/shop/shop_scene.tscn")
 
 func _on_next_day_pressed():
 	GameManager.start_next_day()

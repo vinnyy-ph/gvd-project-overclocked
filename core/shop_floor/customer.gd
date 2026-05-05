@@ -26,7 +26,7 @@ func _ready():
 	session_timer.timeout.connect(_on_session_timeout)
 	
 	add_child(issue_timer)
-	issue_timer.wait_time = randf_range(10.0, 20.0) # Adjusted frequency
+	issue_timer.wait_time = randf_range(10.0, 20.0)
 	issue_timer.timeout.connect(_on_issue_timeout)
 
 	sprite.play("default")
@@ -74,17 +74,17 @@ func _on_arrival():
 	issue_timer.start()
 
 func _on_revenue_timeout():
-	if current_state == State.USING_PC and not GameManager.active_issues[assigned_pc_index]:
+	if current_state == State.USING_PC and GameManager.active_issues[assigned_pc_index] == "":
 		GameManager.money += 1 # +1 money every 2 seconds
 
 func _on_session_timeout():
 	exit_shop()
 
 func _on_issue_timeout():
-	if current_state == State.USING_PC and not GameManager.active_issues[assigned_pc_index]:
+	if current_state == State.USING_PC and GameManager.active_issues[assigned_pc_index] == "":
 		# Chance to trigger an issue
-		if randf() < 0.35: # 30% chance every check
-			GameManager.active_issues[assigned_pc_index] = true
+		if randf() < 0.35: # 35% chance every check
+			GameManager.active_issues[assigned_pc_index] = GameManager.get_next_minigame()
 			AudioManager.play_sfx("alert")
 		else:
 			# Reset check timer if no issue spawned
@@ -96,7 +96,7 @@ func exit_shop():
 	current_state = State.EXITING
 	if assigned_pc_index != -1:
 		GameManager.occupied_slots[assigned_pc_index] = false
-		GameManager.active_issues[assigned_pc_index] = false
+		GameManager.active_issues[assigned_pc_index] = ""
 		
 	revenue_timer.stop()
 	issue_timer.stop()

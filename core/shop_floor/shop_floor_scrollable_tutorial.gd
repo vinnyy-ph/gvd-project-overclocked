@@ -45,6 +45,7 @@ signal customer_selected(customer)
 # Map slots to their chair placeholder nodes
 var seat_nodes: Array = []
 var seat_positions: Array = []
+var issue_labels: Array = []
 
 func _ready():
 	AudioManager.play_bgm("shop")
@@ -89,6 +90,7 @@ func _ready():
 
 	seat_nodes.resize(8)
 	seat_positions.resize(8)
+	issue_labels.resize(8)
 
 	# Sync visual modulation and setup target positions
 	for slot_idx in range(8):
@@ -107,19 +109,18 @@ func _ready():
 		var chair_name = slot_to_chair_names[slot_idx]
 		var chair_node = get_node_or_null("World/Background/" + chair_name)
 		if chair_node:
-			# Hide the placeholder initially
 			chair_node.visible = false
 			seat_nodes[slot_idx] = chair_node
-			# Store center of the chair placeholder
 			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
+		
+		_setup_issue_label(slot_idx)
 
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
 		base_positions.append(btn.position)
 		btn.pivot_offset = btn.size / 2.0
 		# Hide all issues initially for the tutorial
-		GameManager.active_issues[i] = false 
-		btn.visible = false
+		btn.visible = GameManager.active_issues[i] != ""
 		if not btn.pressed.is_connected(_on_issue_clicked):
 			btn.pressed.connect(_on_issue_clicked.bind(i))
 
@@ -141,6 +142,21 @@ func _ready():
 	else:
 		start_tutorial()
 
+func _setup_issue_label(slot_idx: int):
+	var label = Label.new()
+	label.name = "IssueLabel_" + str(slot_idx)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 48) # Increased font size
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.hide()
+	issue_labels[slot_idx] = label
+
 func _restore_customers():
 	for data in GameManager.persisted_customers:
 		var customer = customer_scene.instantiate()
@@ -151,7 +167,7 @@ func _restore_customers():
 			customer.global_position = data["pos"]
 		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
-			customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data["time_left"])
+			customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
 	
 	GameManager.persisted_customers.clear()
 
@@ -177,6 +193,25 @@ func _on_desk_clicked(slot_idx: int):
 			var chair = seat_nodes[slot_idx]
 			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
 			_deselect_customer()
+		else:
+			_show_station_occupied_feedback(slot_idx)
+
+func _show_station_occupied_feedback(slot_idx: int):
+	var label = Label.new()
+	label.text = "STATION OCCUPIED!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 40)
+	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	$World/Background.add_child(label)
+	label.global_position = seat_positions[slot_idx] + Vector2(-100, -100)
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 50, 0.8)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
 
 func _on_customer_selected(customer: Customer):
 	if selected_customer == customer:
@@ -227,7 +262,7 @@ func force_tutorial_issue():
 	
 	# Force spawn an issue on the first PC
 	var target_index = 0
-	GameManager.active_issues[target_index] = true
+	GameManager.active_issues[target_index] = GameManager.get_next_minigame()
 	var btn = issue_buttons[target_index]
 	btn.visible = true
 
@@ -252,18 +287,12 @@ func _get_bar_color(value: int) -> Color:
 func _apply_bar_style():
 	var fill_style = StyleBoxFlat.new()
 	fill_style.bg_color = _get_bar_color(GameManager.satisfaction)
-	fill_style.corner_radius_top_left = 4
-	fill_style.corner_radius_top_right = 4
-	fill_style.corner_radius_bottom_left = 4
-	fill_style.corner_radius_bottom_right = 4
+	fill_style.set_corner_radius_all(4)
 	satisfaction_bar.add_theme_stylebox_override("fill", fill_style)
 
 	var bg_style = StyleBoxFlat.new()
 	bg_style.bg_color = Color(0.1, 0.1, 0.15, 0.85)
-	bg_style.corner_radius_top_left = 4
-	bg_style.corner_radius_top_right = 4
-	bg_style.corner_radius_bottom_left = 4
-	bg_style.corner_radius_bottom_right = 4
+	bg_style.set_corner_radius_all(4)
 	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
 	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
@@ -274,12 +303,20 @@ func _process(delta):
 
 	# Float active issue buttons
 	for i in range(issue_buttons.size()):
-		if GameManager.active_issues[i]:
+		var issue_path = GameManager.active_issues[i]
+		if issue_path != "":
 			var btn = issue_buttons[i]
 			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
+			var label = issue_labels[i]
+			label.show()
+			label.text = GameManager.get_issue_title(issue_path)
+			# Center the label relative to the button and move it closer
+			var label_x_offset = -150 # Adjust based on average label width
+			label.global_position = btn.global_position + Vector2(label_x_offset, -45)
 		else:
 			issue_buttons[i].visible = false
+			if issue_labels[i]: issue_labels[i].hide()
 
 	# Tutorial Event Checkers
 	if current_tutorial_step == TutorialStep.CAMERA_MOVE:
@@ -306,30 +343,26 @@ func _on_spawn_timer_timeout():
 func spawn_customer():
 	var customer = customer_scene.instantiate()
 	customer_container.add_child(customer)
-	
-	# Fix spacing in tutorial
 	var waiting_count = 0
 	for child in customer_container.get_children():
 		if child is Customer and child.current_state == Customer.State.WAITING:
 			waiting_count += 1
-			
 	var base_pos = waiting_area.global_position
-	var spacing = 150.0
-	customer.global_position = base_pos + Vector2(waiting_count * spacing, 0)
-	
+	var spacing = 180.0
+	customer.global_position = base_pos + Vector2((waiting_count - 1) * spacing, 0)
 	customer.customer_selected.connect(_on_customer_selected)
 
 func _on_issue_clicked(pc_index: int):
-	if not GameManager.active_issues[pc_index]: return
+	var issue_path = GameManager.active_issues[pc_index]
+	if issue_path == "": return
 
-	GameManager.active_issues[pc_index] = false
+	GameManager.active_issues[pc_index] = ""
 	_save_customers_state() # Save before minigame
 	GameManager.save_game()
 
 	if current_tutorial_step == TutorialStep.CLICK_ISSUE:
 		GameManager.is_tutorial = true
-		# Force the cable management minigame directly for the tutorial
-		get_tree().change_scene_to_file("res://minigames/cable_management/cable_management_mini_game.tscn") 
+		get_tree().change_scene_to_file(issue_path) 
 
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
