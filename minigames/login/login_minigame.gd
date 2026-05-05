@@ -280,10 +280,12 @@ func _on_game_timer_timeout():
 
 # ── Mobile Keyboard Slide ─────────────────────────────────────────────────────
 func _on_keyboard_opened():
+	if not OS.has_feature("mobile"): return
 	var tween = create_tween()
 	tween.tween_property(self, "position:y", original_y - 250, 0.3).set_trans(Tween.TRANS_SINE)
 
 func _on_keyboard_closed():
+	if not OS.has_feature("mobile"): return
 	var tween = create_tween()
 	tween.tween_property(self, "position:y", original_y, 0.3).set_trans(Tween.TRANS_SINE)
 
