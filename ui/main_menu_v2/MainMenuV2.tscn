@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://px01bxewowry"]
+
+[ext_resource type="Script" uid="uid://cjsnsqtrh84jr" path="res://ui/main_menu_v2/main_menu_v_2.gd" id="1_xekhy"]
+[ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="2_mogwd"]
+[ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="3_xnmy1"]
+[ext_resource type="Texture2D" uid="uid://lc5kjow7q26l" path="res://assets/images/btns/new_game_btn.png" id="4_urlxg"]
+[ext_resource type="Texture2D" uid="uid://ccfedf1cisqke" path="res://assets/images/btns/continue_btn.png" id="5_7ipku"]
+[ext_resource type="Texture2D" uid="uid://mmkvwdb8nvg3" path="res://assets/images/btns/hi_score_btn.png" id="6_opwq2"]
+[ext_resource type="Texture2D" uid="uid://df4q2n8js5wf5" path="res://assets/images/btns/tutorial_btn.png" id="7_8ical"]
+[ext_resource type="Texture2D" uid="uid://b8b23jdviklv7" path="res://assets/images/main_menu/settings.png" id="8_aekdc"]
+[ext_resource type="Texture2D" uid="uid://b8eu4u3xpefqx" path="res://assets/images/main_menu/exit.png" id="9_iwxy6"]
+[ext_resource type="Texture2D" uid="uid://my71y07da7hc" path="res://assets/images/main_menu/guide.png" id="10_ab4n1"]
+[ext_resource type="Texture2D" uid="uid://d35t5lltdauj" path="res://assets/images/title.png" id="11_ihqeb"]
+[ext_resource type="Texture2D" uid="uid://nykonni73pnr" path="res://assets/images/main_menu/daily_tip.png" id="12_nqwpd"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="13_ye8lw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wbfha"]
+shader = ExtResource("2_mogwd")
+shader_parameter/scroll_speed = Vector2(0.04, 0)
+
+[node name="MainMenuV2" type="Control" unique_id=984505949]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xekhy")
+
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=602546629]
+z_index = -1
+material = SubResource("ShaderMaterial_wbfha")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_xnmy1")
+
+[node name="Buttons" type="VBoxContainer" parent="." unique_id=1007109448]
+layout_mode = 0
+offset_left = 826.0
+offset_top = 153.0
+offset_right = 1239.0
+offset_bottom = 595.0
+theme_override_constants/separation = 1
+
+[node name="NewGameButton" type="TextureButton" parent="Buttons" unique_id=634567871]
+custom_minimum_size = Vector2(413.58, 103.8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("4_urlxg")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ContinueButton" type="TextureButton" parent="Buttons" unique_id=649547868]
+custom_minimum_size = Vector2(413.58, 103.8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("5_7ipku")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="HiScoreButton" type="TextureButton" parent="Buttons" unique_id=56955723]
+custom_minimum_size = Vector2(413.58, 103.8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("6_opwq2")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TutorialButton" type="TextureButton" parent="Buttons" unique_id=415012985]
+custom_minimum_size = Vector2(413.58, 103.8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("7_8ical")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SettingsButton" type="TextureButton" parent="." unique_id=1679318041]
+custom_minimum_size = Vector2(71, 68)
+layout_mode = 0
+offset_left = 1068.0
+offset_top = 581.0
+offset_right = 1139.0
+offset_bottom = 649.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("8_aekdc")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ExitButton" type="TextureButton" parent="." unique_id=303620861]
+custom_minimum_size = Vector2(71, 68)
+layout_mode = 0
+offset_left = 1158.0
+offset_top = 581.0
+offset_right = 1229.0
+offset_bottom = 649.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("9_iwxy6")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=841180617]
+visible = false
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_ab4n1")
+metadata/_edit_lock_ = true
+
+[node name="TitleCard" type="TextureRect" parent="." unique_id=646057602]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 65.0
+offset_right = 754.0
+offset_bottom = 270.13882
+texture = ExtResource("11_ihqeb")
+expand_mode = 1
+
+[node name="DailyTip" type="TextureRect" parent="." unique_id=1505937333]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 43.0
+offset_top = 313.0
+offset_right = -623.0
+offset_bottom = -178.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_nqwpd")
+
+[node name="MarginContainer" type="MarginContainer" parent="DailyTip" unique_id=665505089]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="DailyTipText" type="Label" parent="DailyTip/MarginContainer" unique_id=1387245668]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("13_ye8lw")
+theme_override_font_sizes/font_size = 25
+text = ">_Daily Tip !
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software."
+autowrap_mode = 3
+metadata/_edit_use_anchors_ = true

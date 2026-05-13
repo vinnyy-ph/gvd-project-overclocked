@@ -21,9 +21,9 @@ config/icon="res://icon.svg"
 
 GameManager="*res://core/autoloads/game_manager/game_manager.gd"
 PauseMenu="*res://ui/pause_menu/pause_menu.tscn"
-_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 AudioManager="*res://core/autoloads/audio_manager/audio_manager.tscn"
 SaveManager="*res://core/autoloads/save_manager/save_manager.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 
