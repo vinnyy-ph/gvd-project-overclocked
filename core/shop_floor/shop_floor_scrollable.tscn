@@ -319,7 +319,7 @@ autoplay = "default"
 script = ExtResource("12_f7hrx")
 
 [node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=744454501]
-position = Vector2(-95.71424, 840)
+position = Vector2(-444.2857, 652.8571)
 scale = Vector2(0.6091899, 0.6091899)
 texture = ExtResource("10_jajnr")
 
