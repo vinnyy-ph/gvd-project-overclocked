@@ -19,7 +19,7 @@ var base_positions: Array = []
 var float_time: float = 0.0
 
 @onready var customer_container = $World/Background/CustomerContainer
-@onready var waiting_area = $World/Background/WaitingArea
+@onready var waiting_area = $World/Background/CustomerWaiting
 @onready var customer_scene = preload("res://assets/sprites/walking_person.tscn")
 
 var selected_customer: Customer = null
@@ -166,6 +166,7 @@ func _on_desk_clicked(slot_idx: int, customer: Customer = null):
 			
 			_connect_customer_signals(target_customer, slot_idx)
 			target_customer.assign_to_pc(slot_idx, target_pos, desk)
+			_show_station_assigned_feedback(slot_idx)
 			if target_customer == selected_customer:
 				_deselect_customer()
 		else:
@@ -220,6 +221,25 @@ func _show_station_occupied_feedback(slot_idx: int):
 	
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", label.position.y - 50, 0.8)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
+
+func _show_station_assigned_feedback(slot_idx: int):
+	var label = Label.new()
+	label.text = "STATION ASSIGNED!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 40)
+	label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.global_position = seat_positions[slot_idx] + Vector2(-150, -120)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 60, 0.8).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
 	tween.finished.connect(label.queue_free)
 
@@ -280,13 +300,20 @@ func _on_spawn_timer_timeout():
 		spawn_customer()
 
 func spawn_customer():
+	var waiting_count = 0
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_count += 1
+			
 	var customer = customer_scene.instantiate()
 	customer_container.add_child(customer)
 	customer.customer_selected.connect(_on_customer_selected)
 	customer.drag_started.connect(_on_customer_drag_started)
 	customer.drag_ended.connect(_on_customer_drag_ended)
 	
-	var waiting_count = 0
+	if waiting_area:
+		# First customer at exact position, others offset slightly
+		customer.global_position = waiting_area.global_position + Vector2(waiting_count * 80, 0)
 
 func _on_issue_clicked(pc_index: int):
 	var issue_path = GameManager.active_issues[pc_index]

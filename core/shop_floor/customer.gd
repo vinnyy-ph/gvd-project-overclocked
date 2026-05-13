@@ -54,9 +54,15 @@ func assign_to_pc(pc_index: int, pos, chair: Node, resume_data: Dictionary = {})
 	
 	if resume_data.is_empty():
 		GameManager.occupied_slots[pc_index] = true
-		var tween = create_tween()
-		tween.tween_property(self, "global_position", target_position, 2.0).set_trans(Tween.TRANS_SINE)
-		tween.finished.connect(_on_arrival)
+		global_position = target_position
+		
+		# Subtle indication: quick scale bounce on the chair/desk
+		if chair_node:
+			var tween = create_tween()
+			tween.tween_property(chair_node, "scale", chair_node.scale * 1.1, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			tween.tween_property(chair_node, "scale", chair_node.scale, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		
+		_on_arrival()
 	else:
 		# Resume with exact state
 		global_position = target_position
