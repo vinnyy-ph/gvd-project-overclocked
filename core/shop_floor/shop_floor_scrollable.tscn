@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="8_sru07"]
 [ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="9_i6wj4"]
 [ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="9_u2yt3"]
+[ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="10_jajnr"]
 [ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="11_8jxs8"]
 [ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_am8fm"]
 [ext_resource type="Script" uid="uid://c157mbb0pqg2x" path="res://core/shop_floor/animated_sprite_2d.gd" id="12_f7hrx"]
@@ -213,12 +214,6 @@ flat = true
 
 [node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
 
-[node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id=12243615]
-position = Vector2(948.5714, -87.14285)
-
-[node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id=1758434083]
-position = Vector2(800, 300)
-
 [node name="Desk13" type="Sprite2D" parent="World/Background" unique_id=1047420753]
 position = Vector2(179.4354, -92.87397)
 scale = Vector2(0.51159173, 0.51159173)
@@ -322,6 +317,11 @@ scale = Vector2(1.5902249, 1.5902249)
 sprite_frames = SubResource("SpriteFrames_f7hrx")
 autoplay = "default"
 script = ExtResource("12_f7hrx")
+
+[node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=744454501]
+position = Vector2(-95.71424, 840)
+scale = Vector2(0.6091899, 0.6091899)
+texture = ExtResource("10_jajnr")
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 position = Vector2(640, 724)

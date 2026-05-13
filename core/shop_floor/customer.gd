@@ -16,6 +16,12 @@ var chair_node: Node = null
 
 signal arrived_at_pc
 signal exited_pc
+signal drag_started(customer)
+signal drag_ended(customer, global_pos)
+
+var is_dragging = false
+var drag_offset = Vector2.ZERO
+var original_waiting_position = Vector2.ZERO
 
 func _ready():
 	add_child(revenue_timer)
@@ -32,6 +38,10 @@ func _ready():
 
 	# Randomize session duration (15 to 40 seconds)
 	session_timer.wait_time = randf_range(15.0, 40.0)
+
+func return_to_waiting_position():
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", original_waiting_position, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func assign_to_pc(pc_index: int, pos, chair: Node, resume_data: Dictionary = {}):
 	if pos == null:
@@ -129,9 +139,37 @@ func _gui_input(event):
 	if current_state != State.WAITING: return
 
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				is_dragging = true
+				drag_offset = get_global_mouse_position() - global_position
+				original_waiting_position = global_position
+				drag_started.emit(self)
+				accept_event()
+			elif is_dragging:
+				is_dragging = false
+				drag_ended.emit(self, get_global_mouse_position())
+				accept_event()
+	
+	elif event is InputEventMouseMotion and is_dragging:
+		global_position = get_global_mouse_position() - drag_offset
+		accept_event()
+	
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			is_dragging = true
+			drag_offset = get_global_mouse_position() - global_position
+			original_waiting_position = global_position
+			drag_started.emit(self)
 			accept_event()
-			customer_selected.emit(self)
+		elif is_dragging:
+			is_dragging = false
+			drag_ended.emit(self, get_global_mouse_position())
+			accept_event()
+	
+	elif event is InputEventScreenDrag and is_dragging:
+		global_position = get_global_mouse_position() - drag_offset
+		accept_event()
 
 func set_selection(selected: bool):
 	is_selected = selected

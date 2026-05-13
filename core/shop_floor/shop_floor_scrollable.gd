@@ -25,6 +25,8 @@ var float_time: float = 0.0
 var selected_customer: Customer = null
 signal customer_selected(customer)
 
+var is_customer_dragging: bool = false
+
 # Map slots to their desk nodes and positions
 var seat_nodes: Array = []
 var seat_positions: Array = []
@@ -127,6 +129,8 @@ func _restore_customers():
 		var customer = customer_scene.instantiate()
 		customer_container.add_child(customer)
 		customer.customer_selected.connect(_on_customer_selected)
+		customer.drag_started.connect(_on_customer_drag_started)
+		customer.drag_ended.connect(_on_customer_drag_ended)
 		
 		if data["state"] == Customer.State.WAITING:
 			customer.global_position = data["pos"]
@@ -153,17 +157,46 @@ func _setup_desk_click(desk: Sprite2D, slot_idx: int):
 	desk.add_child(btn)
 	btn.pressed.connect(_on_desk_clicked.bind(slot_idx))
 
-func _on_desk_clicked(slot_idx: int):
-	if selected_customer != null:
+func _on_desk_clicked(slot_idx: int, customer: Customer = null):
+	var target_customer = customer if customer else selected_customer
+	if target_customer != null:
 		if not GameManager.occupied_slots[slot_idx]:
 			var target_pos = seat_positions[slot_idx]
 			var desk = seat_nodes[slot_idx]
 			
-			_connect_customer_signals(selected_customer, slot_idx)
-			selected_customer.assign_to_pc(slot_idx, target_pos, desk)
-			_deselect_customer()
+			_connect_customer_signals(target_customer, slot_idx)
+			target_customer.assign_to_pc(slot_idx, target_pos, desk)
+			if target_customer == selected_customer:
+				_deselect_customer()
 		else:
 			_show_station_occupied_feedback(slot_idx)
+
+func _on_customer_drag_started(_customer: Customer):
+	is_customer_dragging = true
+
+func _on_customer_drag_ended(customer: Customer, global_pos: Vector2):
+	is_customer_dragging = false
+	
+	var best_dist = 250.0 # Threshold for dropping (increased for better feel)
+	var best_slot = -1
+	
+	var unlocked_slots = 13 if every_pc_unlocked else GameManager.get_unlocked_slots()
+	
+	for i in range(seat_nodes.size()):
+		var desk = seat_nodes[i]
+		if not desk: continue
+		if GameManager.occupied_slots[i]: continue
+		if i >= unlocked_slots: continue
+		
+		var dist = global_pos.distance_to(desk.global_position)
+		if dist < best_dist:
+			best_dist = dist
+			best_slot = i
+			
+	if best_slot != -1:
+		_on_desk_clicked(best_slot, customer)
+	else:
+		customer.return_to_waiting_position()
 
 func _connect_customer_signals(customer: Customer, slot_idx: int):
 	if not customer.arrived_at_pc.is_connected(_update_desk_texture):
@@ -249,14 +282,11 @@ func _on_spawn_timer_timeout():
 func spawn_customer():
 	var customer = customer_scene.instantiate()
 	customer_container.add_child(customer)
-	var waiting_count = 0
-	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING:
-			waiting_count += 1
-	var base_pos = waiting_area.global_position
-	var spacing = 180.0
-	customer.global_position = base_pos + Vector2((waiting_count - 1) * spacing, 0)
 	customer.customer_selected.connect(_on_customer_selected)
+	customer.drag_started.connect(_on_customer_drag_started)
+	customer.drag_ended.connect(_on_customer_drag_ended)
+	
+	var waiting_count = 0
 
 func _on_issue_clicked(pc_index: int):
 	var issue_path = GameManager.active_issues[pc_index]
@@ -317,6 +347,8 @@ func handle_keyboard_scroll(delta):
 		clamp_camera()
 
 func handle_drag_and_zoom(event):
+	if is_customer_dragging: return
+	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
 			camera.zoom = Vector2(min(camera.zoom.x + 0.1, 1.5), min(camera.zoom.y + 0.1, 1.5))
