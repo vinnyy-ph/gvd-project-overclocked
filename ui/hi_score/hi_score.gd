@@ -16,4 +16,4 @@ func _process(delta: float) -> void:
 
 
 func _on_main_menu_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://ui/main_menu/main_menu.tscn")
+	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")

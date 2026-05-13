@@ -13,7 +13,7 @@ config_version=5
 config/name="Overclocked"
 config/description="Overclocked"
 config/version="1"
-run/main_scene="uid://dgcj3rubwmuos"
+run/main_scene="res://ui/main_menu_v2/MainMenuV2.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
@@ -23,8 +23,8 @@ GameManager="*res://core/autoloads/game_manager/game_manager.gd"
 PauseMenu="*res://ui/pause_menu/pause_menu.tscn"
 AudioManager="*res://core/autoloads/audio_manager/audio_manager.tscn"
 SaveManager="*res://core/autoloads/save_manager/save_manager.gd"
-_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 SettingsManager="*res://core/autoloads/settings_manager.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 

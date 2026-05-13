@@ -39,7 +39,7 @@ func _on_quit_pressed():
 	is_paused = false
 	get_tree().paused = false
 	dim_overlay.visible = false
-	get_tree().change_scene_to_file("res://ui/main_menu/main_menu.tscn")
+	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")
 
 # ==========================================
 # BUTTON PRESS EFFECTS
