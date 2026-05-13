@@ -19,12 +19,25 @@ var sfx_library = {
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_setup_buses()
 	add_child(bgm_player)
 	add_child(sfx_player)
 	
-	# Set BGM to loop
-	bgm_player.bus = "Master"
-	sfx_player.bus = "Master"
+	bgm_player.bus = "Music"
+	sfx_player.bus = "SFX"
+
+func _setup_buses():
+	if AudioServer.get_bus_index("Music") == -1:
+		AudioServer.add_bus()
+		var bus_idx = AudioServer.get_bus_count() - 1
+		AudioServer.set_bus_name(bus_idx, "Music")
+		AudioServer.set_bus_send(bus_idx, "Master")
+	
+	if AudioServer.get_bus_index("SFX") == -1:
+		AudioServer.add_bus()
+		var bus_idx = AudioServer.get_bus_count() - 1
+		AudioServer.set_bus_name(bus_idx, "SFX")
+		AudioServer.set_bus_send(bus_idx, "Master")
 
 var current_bgm_track: String = ""
 var bgm_positions: Dictionary = {}
@@ -67,7 +80,7 @@ func play_result_sfx(sfx_name: String):
 	active_result_sfx = AudioStreamPlayer.new()
 	add_child(active_result_sfx)
 	active_result_sfx.stream = sfx_library[sfx_name]
-	active_result_sfx.bus = "Master"
+	active_result_sfx.bus = "SFX"
 	
 	# Duck BGM
 	var tween = create_tween()
@@ -92,10 +105,9 @@ func stop_result_sfx():
 
 func play_sfx(sfx_name: String):
 	if sfx_library.has(sfx_name):
-		# For overlapping SFX, we might want multiple players, 
-		# but for this task, a simple one-shot or dedicated player is fine.
 		var p = AudioStreamPlayer.new()
 		add_child(p)
 		p.stream = sfx_library[sfx_name]
+		p.bus = "SFX"
 		p.finished.connect(p.queue_free)
 		p.play()

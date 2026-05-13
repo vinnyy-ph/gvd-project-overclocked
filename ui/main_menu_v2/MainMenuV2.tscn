@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://df4q2n8js5wf5" path="res://assets/images/btns/tutorial_btn.png" id="7_8ical"]
 [ext_resource type="Texture2D" uid="uid://b8b23jdviklv7" path="res://assets/images/main_menu/settings.png" id="8_aekdc"]
 [ext_resource type="Texture2D" uid="uid://b8eu4u3xpefqx" path="res://assets/images/main_menu/exit.png" id="9_iwxy6"]
-[ext_resource type="Texture2D" uid="uid://my71y07da7hc" path="res://assets/images/main_menu/guide.png" id="10_ab4n1"]
 [ext_resource type="Texture2D" uid="uid://d35t5lltdauj" path="res://assets/images/title.png" id="11_ihqeb"]
 [ext_resource type="Texture2D" uid="uid://nykonni73pnr" path="res://assets/images/main_menu/daily_tip.png" id="12_nqwpd"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="13_ye8lw"]
@@ -108,18 +107,6 @@ texture_normal = ExtResource("9_iwxy6")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=841180617]
-visible = false
-z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("10_ab4n1")
-metadata/_edit_lock_ = true
-
 [node name="TitleCard" type="TextureRect" parent="." unique_id=646057602]
 layout_mode = 0
 offset_left = 41.0
@@ -163,3 +150,10 @@ text = ">_Daily Tip !
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software."
 autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Buttons/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Buttons/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="Buttons/HiScoreButton" to="." method="_on_hi_score_button_pressed"]
+[connection signal="pressed" from="Buttons/TutorialButton" to="." method="_on_tutorial_button_pressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

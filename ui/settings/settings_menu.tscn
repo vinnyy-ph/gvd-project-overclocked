@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://ca6185n8ijfea"]
+
+[ext_resource type="Script" uid="uid://c6bmp5hkl5y45" path="res://ui/settings/settings_menu.gd" id="1_jwxja"]
+
+[node name="settings_menu" type="Control" unique_id=1887114027]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jwxja")
+
+[node name="SettingsMenu" type="Control" parent="." unique_id=930824805]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Background" type="ColorRect" parent="SettingsMenu" unique_id=1151513173]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.2, 1)
+
+[node name="Content" type="VBoxContainer" parent="SettingsMenu" unique_id=1556159568]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.5
+offset_top = -167.5
+offset_right = 110.5
+offset_bottom = 167.5
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="SettingsMenu/Content" unique_id=134379855]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "SETTINGS"
+
+[node name="@HSeparator@141670" type="HSeparator" parent="SettingsMenu/Content" unique_id=1034498992]
+layout_mode = 2
+
+[node name="MusicContainer" type="VBoxContainer" parent="SettingsMenu/Content" unique_id=591977903]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="SettingsMenu/Content/MusicContainer" unique_id=2081691466]
+layout_mode = 2
+text = "Music Volume: 80%"
+
+[node name="MusicSlider" type="HSlider" parent="SettingsMenu/Content/MusicContainer" unique_id=50818523]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="SFXContainer" type="VBoxContainer" parent="SettingsMenu/Content" unique_id=145429384]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="SettingsMenu/Content/SFXContainer" unique_id=1952953918]
+layout_mode = 2
+text = "SFX Volume: 80%"
+
+[node name="SFXSlider" type="HSlider" parent="SettingsMenu/Content/SFXContainer" unique_id=86396283]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="QualityContainer" type="VBoxContainer" parent="SettingsMenu/Content" unique_id=992207462]
+layout_mode = 2
+
+[node name="QualityLabel" type="Label" parent="SettingsMenu/Content/QualityContainer" unique_id=1347806120]
+layout_mode = 2
+text = "Quality:"
+
+[node name="QualityOption" type="OptionButton" parent="SettingsMenu/Content/QualityContainer" unique_id=1895318956]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="SettingsMenu/Content" unique_id=1815259817]
+layout_mode = 2
+text = "Back"
