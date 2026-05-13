@@ -1,4 +1,4 @@
-shader_type canvas_item;
+ shader_type canvas_item;
 
 // Controls the direction and speed of the scroll
 // Positive X moves the texture left, Negative Y moves the texture down

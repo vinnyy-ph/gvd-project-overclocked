@@ -46,4 +46,7 @@ func _on_quality_selected(index: int):
 
 func _on_back_pressed():
 	SettingsManager.save_settings()
-	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")
+	if GameManager.previous_scene != "":
+		get_tree().change_scene_to_file(GameManager.previous_scene)
+	else:
+		get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")

@@ -97,6 +97,7 @@ func trigger_game_over():
 	get_tree().change_scene_to_file("res://ui/game_over/game_over.tscn")
 
 var save_path: String = "user://savegame.json"
+var previous_scene: String = ""
 var last_money_change: int = 0
 var last_satisfaction_change: int = 0
 var in_tutorial: bool = false

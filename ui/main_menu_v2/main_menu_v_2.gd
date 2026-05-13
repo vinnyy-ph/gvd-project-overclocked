@@ -63,9 +63,7 @@ func _display_next_tip() -> void:
 	tween.tween_property(daily_tip_label, "visible_ratio", 1.0, duration).set_trans(Tween.TRANS_LINEAR)
 
 func _on_continue_button_pressed() -> void:
-	if GameManager.load_game():
-		PauseMenu.pause_button.visible = true
-		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	get_tree().change_scene_to_file("res://ui/profile_selection/profile_selection.tscn")
 
 func _on_hi_score_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://ui/hi_score/hi_score.tscn")
@@ -76,13 +74,53 @@ func _on_tutorial_button_pressed():
 	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_tutorial.tscn")
 
 func _on_settings_button_pressed() -> void:
+	GameManager.previous_scene = "res://ui/main_menu_v2/MainMenuV2.tscn"
 	get_tree().change_scene_to_file("res://ui/settings/settings_menu.tscn")
 
 func _on_exit_button_pressed() -> void:
-	get_tree().quit()
+	_show_exit_confirmation()
 
+func _show_exit_confirmation() -> void:
+	var dialog = ColorRect.new()
+	dialog.name = "ExitConfirmation"
+	dialog.color = Color(0, 0, 0, 0.8)
+	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(dialog)
+	
+	var panel = PanelContainer.new()
+	panel.custom_minimum_size = Vector2(400, 200)
+	dialog.add_child(panel)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	
+	var vbox = VBoxContainer.new()
+	vbox.set("theme_override_constants/separation", 30)
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	panel.add_child(vbox)
+	
+	var label = Label.new()
+	label.text = "ARE YOU SURE YOU WANT TO EXIT?"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(label)
+	
+	var hbox = HBoxContainer.new()
+	hbox.set("theme_override_constants/separation", 50)
+	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_child(hbox)
+	
+	var yes_btn = Button.new()
+	yes_btn.text = " YES "
+	yes_btn.pressed.connect(func(): get_tree().quit())
+	hbox.add_child(yes_btn)
+	
+	var no_btn = Button.new()
+	no_btn.text = " NO "
+	no_btn.pressed.connect(func(): dialog.queue_free())
+	hbox.add_child(no_btn)
+	
+	# Optional: Apply GameManager button effects if they exist
+	if GameManager.has_method("setup_button_effect"):
+		GameManager.setup_button_effect(yes_btn)
+		GameManager.setup_button_effect(no_btn)
 
 func _on_new_game_button_pressed() -> void:
-	GameManager.new_game()
-	PauseMenu.pause_button.visible = true
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	get_tree().change_scene_to_file("res://ui/profile_selection/profile_selection.tscn")

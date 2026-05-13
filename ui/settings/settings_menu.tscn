@@ -24,7 +24,8 @@ color = Color(0.1, 0.1, 0.2, 1)
 
 [node name="Content" type="VBoxContainer" parent="SettingsMenu" unique_id=1556159568]
 custom_minimum_size = Vector2(400, 0)
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
