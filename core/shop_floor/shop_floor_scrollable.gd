@@ -20,7 +20,6 @@ var float_time: float = 0.0
 
 @onready var customer_container = $World/Background/CustomerContainer
 @onready var waiting_area = $World/Background/CustomerWaiting
-@onready var customer_scene = preload("res://assets/sprites/walking_person.tscn")
 
 var selected_customer: Customer = null
 signal customer_selected(customer)
@@ -92,6 +91,10 @@ func _ready():
 		_update_desk_texture(slot_idx)
 
 	# --- RESTORE PERSISTED CUSTOMERS ---
+	if waiting_area:
+		waiting_area.visible = false
+		waiting_area.process_mode = PROCESS_MODE_DISABLED
+		
 	_restore_customers()
 	update_hud()
 
@@ -126,8 +129,11 @@ func _setup_issue_label(slot_idx: int):
 
 func _restore_customers():
 	for data in GameManager.persisted_customers:
-		var customer = customer_scene.instantiate()
+		var customer = waiting_area.duplicate()
 		customer_container.add_child(customer)
+		customer.process_mode = PROCESS_MODE_INHERIT
+		customer.visible = true
+		
 		customer.customer_selected.connect(_on_customer_selected)
 		customer.drag_started.connect(_on_customer_drag_started)
 		customer.drag_ended.connect(_on_customer_drag_ended)
@@ -175,11 +181,13 @@ func _on_desk_clicked(slot_idx: int, customer: Customer = null):
 func _on_customer_drag_started(_customer: Customer):
 	is_customer_dragging = true
 
-func _on_customer_drag_ended(customer: Customer, global_pos: Vector2):
+func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 	is_customer_dragging = false
 	
-	var best_dist = 250.0 # Threshold for dropping (increased for better feel)
+	var best_dist = 400.0 # Increased threshold for easier dropping
 	var best_slot = -1
+	
+	var drop_point = customer.global_position
 	
 	var unlocked_slots = 13 if every_pc_unlocked else GameManager.get_unlocked_slots()
 	
@@ -189,7 +197,7 @@ func _on_customer_drag_ended(customer: Customer, global_pos: Vector2):
 		if GameManager.occupied_slots[i]: continue
 		if i >= unlocked_slots: continue
 		
-		var dist = global_pos.distance_to(desk.global_position)
+		var dist = drop_point.distance_to(desk.global_position)
 		if dist < best_dist:
 			best_dist = dist
 			best_slot = i
@@ -305,8 +313,11 @@ func spawn_customer():
 		if child is Customer and child.current_state == Customer.State.WAITING:
 			waiting_count += 1
 			
-	var customer = customer_scene.instantiate()
+	var customer = waiting_area.duplicate()
 	customer_container.add_child(customer)
+	customer.process_mode = PROCESS_MODE_INHERIT
+	customer.visible = true
+	
 	customer.customer_selected.connect(_on_customer_selected)
 	customer.drag_started.connect(_on_customer_drag_started)
 	customer.drag_ended.connect(_on_customer_drag_ended)

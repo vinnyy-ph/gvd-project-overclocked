@@ -1,4 +1,4 @@
-extends Control
+extends Sprite2D
 
 class_name Customer
 
@@ -9,10 +9,10 @@ var assigned_pc_index: int = -1
 var target_position: Vector2 = Vector2.ZERO
 var chair_node: Node = null
 
-@onready var sprite = $Sprite2D
-@onready var revenue_timer = Timer.new()
-@onready var session_timer = Timer.new()
-@onready var issue_timer = Timer.new()
+@onready var sprite = self
+var revenue_timer = Timer.new()
+var session_timer = Timer.new()
+var issue_timer = Timer.new()
 
 signal arrived_at_pc
 signal exited_pc
@@ -24,17 +24,20 @@ var drag_offset = Vector2.ZERO
 var original_waiting_position = Vector2.ZERO
 
 func _ready():
-	add_child(revenue_timer)
-	revenue_timer.wait_time = 2.0
-	revenue_timer.timeout.connect(_on_revenue_timeout)
+	if not revenue_timer.get_parent():
+		add_child(revenue_timer)
+		revenue_timer.wait_time = 2.0
+		revenue_timer.timeout.connect(_on_revenue_timeout)
 	
-	add_child(session_timer)
-	session_timer.one_shot = true
-	session_timer.timeout.connect(_on_session_timeout)
+	if not session_timer.get_parent():
+		add_child(session_timer)
+		session_timer.one_shot = true
+		session_timer.timeout.connect(_on_session_timeout)
 	
-	add_child(issue_timer)
-	issue_timer.wait_time = randf_range(10.0, 20.0)
-	issue_timer.timeout.connect(_on_issue_timeout)
+	if not issue_timer.get_parent():
+		add_child(issue_timer)
+		issue_timer.wait_time = randf_range(10.0, 20.0)
+		issue_timer.timeout.connect(_on_issue_timeout)
 
 	# Randomize session duration (15 to 40 seconds)
 	session_timer.wait_time = randf_range(15.0, 40.0)
@@ -59,8 +62,9 @@ func assign_to_pc(pc_index: int, pos, chair: Node, resume_data: Dictionary = {})
 		# Subtle indication: quick scale bounce on the chair/desk
 		if chair_node:
 			var tween = create_tween()
-			tween.tween_property(chair_node, "scale", chair_node.scale * 1.1, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-			tween.tween_property(chair_node, "scale", chair_node.scale, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+			var original_scale = chair_node.scale
+			tween.tween_property(chair_node, "scale", original_scale * 1.1, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			tween.tween_property(chair_node, "scale", original_scale, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		
 		_on_arrival()
 	else:
@@ -83,10 +87,9 @@ func _on_arrival():
 	current_state = State.USING_PC
 	arrived_at_pc.emit()
 	
-	# Hide walking sprite and show the sitting placeholder (chair)
+	# Hide walking sprite
 	sprite.visible = false
-	if chair_node is Control:
-		chair_node.visible = true
+	# Desk texture change is handled by signal in shop_floor_scrollable
 		
 	revenue_timer.start()
 	session_timer.start()
@@ -121,10 +124,8 @@ func exit_shop():
 	revenue_timer.stop()
 	issue_timer.stop()
 	
-	# Show walking sprite again and hide sitting placeholder
+	# Show walking sprite again
 	sprite.visible = true
-	if chair_node is Control:
-		chair_node.visible = false
 	
 	var exit_pos = global_position + Vector2(1200, 200) # Default fallback
 	# Correct pathing to ExitPoint marker
@@ -141,41 +142,56 @@ signal customer_selected(customer)
 var is_selected = false
 var selection_tween: Tween = null
 
-func _gui_input(event):
+func _input(event):
 	if current_state != State.WAITING: return
-
+	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				is_dragging = true
-				drag_offset = get_global_mouse_position() - global_position
-				original_waiting_position = global_position
-				drag_started.emit(self)
-				accept_event()
+				# Check if mouse is over sprite
+				var local_pos = to_local(get_global_mouse_position())
+				if texture:
+					var size = texture.get_size()
+					var rect = Rect2(-size/2, size)
+					if rect.has_point(local_pos):
+						is_dragging = true
+						drag_offset = get_global_mouse_position() - global_position
+						original_waiting_position = global_position
+						customer_selected.emit(self)
+						drag_started.emit(self)
+						get_viewport().set_input_as_handled()
 			elif is_dragging:
 				is_dragging = false
-				drag_ended.emit(self, get_global_mouse_position())
-				accept_event()
+				drag_ended.emit(self, global_position)
+				get_viewport().set_input_as_handled()
 	
 	elif event is InputEventMouseMotion and is_dragging:
 		global_position = get_global_mouse_position() - drag_offset
-		accept_event()
+		get_viewport().set_input_as_handled()
 	
 	elif event is InputEventScreenTouch:
 		if event.pressed:
-			is_dragging = true
-			drag_offset = get_global_mouse_position() - global_position
-			original_waiting_position = global_position
-			drag_started.emit(self)
-			accept_event()
+			var mouse_pos = get_canvas_transform().affine_inverse() * event.position
+			var local_pos = to_local(mouse_pos)
+			if texture:
+				var size = texture.get_size()
+				var rect = Rect2(-size/2, size)
+				if rect.has_point(local_pos):
+					is_dragging = true
+					drag_offset = mouse_pos - global_position
+					original_waiting_position = global_position
+					customer_selected.emit(self)
+					drag_started.emit(self)
+					get_viewport().set_input_as_handled()
 		elif is_dragging:
 			is_dragging = false
-			drag_ended.emit(self, get_global_mouse_position())
-			accept_event()
+			drag_ended.emit(self, global_position)
+			get_viewport().set_input_as_handled()
 	
 	elif event is InputEventScreenDrag and is_dragging:
-		global_position = get_global_mouse_position() - drag_offset
-		accept_event()
+		var mouse_pos = get_canvas_transform().affine_inverse() * event.position
+		global_position = mouse_pos - drag_offset
+		get_viewport().set_input_as_handled()
 
 func set_selection(selected: bool):
 	is_selected = selected
