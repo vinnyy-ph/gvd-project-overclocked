@@ -214,7 +214,7 @@ flat = true
 [node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
 
 [node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id=12243615]
-position = Vector2(1157.1428, 95.71429)
+position = Vector2(948.5714, -87.14285)
 
 [node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id=1758434083]
 position = Vector2(800, 300)

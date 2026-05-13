@@ -42,7 +42,7 @@ func start_next_day():
 var last_day_expenses: int = 0
 
 func get_unlocked_slots() -> int:
-	return clamp(2 + SaveManager.unlocked_upgrades.get("shop_space", 0), 2, 8)
+	return clamp(2 + SaveManager.unlocked_upgrades.get("shop_space", 0), 2, 13)
 
 func end_day():
 	var unlocked_slots = get_unlocked_slots()
@@ -102,8 +102,8 @@ var last_money_change: int = 0
 var last_satisfaction_change: int = 0
 var in_tutorial: bool = false
 var time_left: int = 60
-var active_issues: Array = ["", "", "", "", "", "", "", ""]
-var occupied_slots: Array = [false, false, false, false, false, false, false, false]
+var active_issues: Array = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
+var occupied_slots: Array = [false, false, false, false, false, false, false, false, false, false, false, false, false]
 var is_tutorial: bool = false
 var tutorial_minigame_index: int = 0
 var tutorial_minigame_done: bool = false
@@ -197,8 +197,8 @@ func new_game():
 	tutorial_minigame_done = false
 	last_money_change = 0
 	last_satisfaction_change = 0
-	active_issues = ["", "", "", "", "", "", "", ""]
-	occupied_slots = [false, false, false, false, false, false, false, false]
+	active_issues = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
+	occupied_slots = [false, false, false, false, false, false, false, false, false, false, false, false, false]
 	persisted_customers = []
 	minigame_deck = []
 	last_minigame = ""

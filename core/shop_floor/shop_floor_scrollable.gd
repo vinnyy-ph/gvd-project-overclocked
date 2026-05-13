@@ -8,16 +8,7 @@ extends Node2D
 
 @export var every_pc_unlocked: bool = true
 
-@onready var issue_buttons = [
-	$World/Background/IssueButton2, # Slot 0
-	$World/Background/IssueButton3, # Slot 1
-	$World/Background/IssueButton4, # Slot 2
-	$World/Background/IssueButton1, # Slot 3
-	$World/Background/IssueButton6, # Slot 4
-	$World/Background/IssueButton7, # Slot 5
-	$World/Background/IssueButton8, # Slot 6
-	$World/Background/IssueButton5  # Slot 7
-]
+@onready var issue_buttons: Array = []
 
 var scroll_speed: float = 900.0
 var dragging: bool = false
@@ -34,10 +25,16 @@ var float_time: float = 0.0
 var selected_customer: Customer = null
 signal customer_selected(customer)
 
-# Map slots to their chair placeholder nodes
+# Map slots to their desk nodes and positions
 var seat_nodes: Array = []
 var seat_positions: Array = []
 var issue_labels: Array = []
+
+# Texture constants
+const EMPTY_7 = preload("res://assets/images/shop_floor/empty_slot.png")
+const OCCUPIED_7 = preload("res://assets/images/shop_floor/occupied_slot.png")
+const EMPTY_13 = preload("res://assets/images/shop_floor/empty_slot_front.png")
+const OCCUPIED_13 = preload("res://assets/images/shop_floor/occupied_slot_front.png")
 
 func _ready():
 	AudioManager.play_bgm("shop")
@@ -53,71 +50,60 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 
-	var unlocked_slots = 8 if every_pc_unlocked else GameManager.get_unlocked_slots()
+	var num_slots = 13
+	var unlocked_slots = num_slots if every_pc_unlocked else GameManager.get_unlocked_slots()
 
-	# Explicit mapping of logical slots to desk sprite numbers in the scene
-	var slot_to_desks = {
-		0: [1, 2],
-		1: [3, 4],
-		2: [5, 6],
-		3: [7, 8],
-		4: [9, 14],
-		5: [10, 15],
-		6: [11, 16],
-		7: [12, 13]
-	}
-	
-	# Explicit mapping of logical slots to chair placeholder nodes (TextureRects)
-	var slot_to_chair_names = {
-		0: "TextureRect2",
-		1: "TextureRect3",
-		2: "TextureRect4",
-		3: "TextureRect",
-		4: "TextureRect8",
-		5: "TextureRect7",
-		6: "TextureRect6",
-		7: "TextureRect5"
-	}
+	seat_nodes.resize(num_slots)
+	seat_positions.resize(num_slots)
+	issue_labels.resize(num_slots)
+	issue_buttons.resize(num_slots)
+	base_positions.resize(num_slots)
 
-	seat_nodes.resize(8)
-	seat_positions.resize(8)
-	issue_labels.resize(8)
-
-	# Sync visual modulation and setup target positions
-	for slot_idx in range(8):
+	# Setup desks and issue buttons
+	for slot_idx in range(num_slots):
+		var desk_num = slot_idx + 1
 		var is_unlocked = slot_idx < unlocked_slots
 		var modulate_color = Color.WHITE if is_unlocked else Color(0.2, 0.2, 0.2)
 		
-		# Desk visuals
-		for desk_num in slot_to_desks[slot_idx]:
-			var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
-			if desk_node:
-				desk_node.modulate = modulate_color
-				if is_unlocked:
-					_setup_desk_click(desk_node, slot_idx)
-		
-		# Seat positions and nodes
-		var chair_name = slot_to_chair_names[slot_idx]
-		var chair_node = get_node_or_null("World/Background/" + chair_name)
-		if chair_node:
-			chair_node.visible = false
-			seat_nodes[slot_idx] = chair_node
-			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
+		var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
+		if desk_node:
+			desk_node.modulate = modulate_color
+			seat_nodes[slot_idx] = desk_node
+			seat_positions[slot_idx] = desk_node.global_position
+			
+			if is_unlocked:
+				_setup_desk_click(desk_node, slot_idx)
+			
+			var btn = desk_node.get_node_or_null("Desk" + str(desk_num) + "IssueButton")
+			if btn:
+				issue_buttons[slot_idx] = btn
+				base_positions[slot_idx] = btn.position
+				btn.pivot_offset = btn.size / 2.0
+				btn.visible = GameManager.active_issues[slot_idx] != ""
+				if not btn.pressed.is_connected(_on_issue_clicked):
+					btn.pressed.connect(_on_issue_clicked.bind(slot_idx))
 		
 		# Setup issue labels
 		_setup_issue_label(slot_idx)
-
-	for i in range(issue_buttons.size()):
-		var btn = issue_buttons[i]
-		base_positions.append(btn.position)
-		btn.pivot_offset = btn.size / 2.0
-		btn.visible = GameManager.active_issues[i] != ""
-		if not btn.pressed.is_connected(_on_issue_clicked):
-			btn.pressed.connect(_on_issue_clicked.bind(i))
+		
+		# Initial visual state
+		_update_desk_texture(slot_idx)
 
 	# --- RESTORE PERSISTED CUSTOMERS ---
 	_restore_customers()
 	update_hud()
+
+func _update_desk_texture(slot_idx: int):
+	var desk = seat_nodes[slot_idx]
+	if not desk: return
+	
+	var desk_num = slot_idx + 1
+	var is_occupied = GameManager.occupied_slots[slot_idx]
+	
+	if desk_num <= 7:
+		desk.texture = OCCUPIED_7 if is_occupied else EMPTY_7
+	else:
+		desk.texture = OCCUPIED_13 if is_occupied else EMPTY_13
 
 func _setup_issue_label(slot_idx: int):
 	var label = Label.new()
@@ -128,7 +114,7 @@ func _setup_issue_label(slot_idx: int):
 	# Load theme font
 	var font = load("res://assets/fonts/ThaleahFat.ttf")
 	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", 48) # Increased font size
+	label.add_theme_font_size_override("font_size", 48)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 10)
 	
@@ -146,7 +132,9 @@ func _restore_customers():
 			customer.global_position = data["pos"]
 		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
+			_connect_customer_signals(customer, idx)
 			customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
+			_update_desk_texture(idx)
 	
 	GameManager.persisted_customers.clear()
 
@@ -169,11 +157,19 @@ func _on_desk_clicked(slot_idx: int):
 	if selected_customer != null:
 		if not GameManager.occupied_slots[slot_idx]:
 			var target_pos = seat_positions[slot_idx]
-			var chair = seat_nodes[slot_idx]
-			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
+			var desk = seat_nodes[slot_idx]
+			
+			_connect_customer_signals(selected_customer, slot_idx)
+			selected_customer.assign_to_pc(slot_idx, target_pos, desk)
 			_deselect_customer()
 		else:
 			_show_station_occupied_feedback(slot_idx)
+
+func _connect_customer_signals(customer: Customer, slot_idx: int):
+	if not customer.arrived_at_pc.is_connected(_update_desk_texture):
+		customer.arrived_at_pc.connect(_update_desk_texture.bind(slot_idx))
+	if not customer.exited_pc.is_connected(_update_desk_texture):
+		customer.exited_pc.connect(_update_desk_texture.bind(slot_idx))
 
 func _show_station_occupied_feedback(slot_idx: int):
 	var label = Label.new()
@@ -212,9 +208,11 @@ func _deselect_customer():
 func _process(delta):
 	float_time += delta
 	for i in range(issue_buttons.size()):
+		var btn = issue_buttons[i]
+		if not btn: continue
+		
 		var issue_path = GameManager.active_issues[i]
 		if issue_path != "":
-			var btn = issue_buttons[i]
 			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
 			
@@ -222,10 +220,10 @@ func _process(delta):
 			label.show()
 			label.text = GameManager.get_issue_title(issue_path)
 			# Center the label relative to the button and move it closer
-			var label_x_offset = -150 # Adjust based on average label width
+			var label_x_offset = -150
 			label.global_position = btn.global_position + Vector2(label_x_offset, -45)
 		else:
-			issue_buttons[i].visible = false
+			btn.visible = false
 			if issue_labels[i]: issue_labels[i].hide()
 			
 	handle_keyboard_scroll(delta)
@@ -293,7 +291,6 @@ func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
 	money_label.text = "Money: P" + str(GameManager.money)
 	
-	# Color-code money: Red if 0 or negative
 	if GameManager.money <= 0:
 		money_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
 	else:

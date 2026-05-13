@@ -7,14 +7,15 @@ enum State { WAITING, MOVING_TO_PC, USING_PC, EXITING }
 var current_state: State = State.WAITING
 var assigned_pc_index: int = -1
 var target_position: Vector2 = Vector2.ZERO
-var chair_node: TextureRect = null
+var chair_node: Node = null
 
-@onready var sprite = $AnimatedSprite2D
+@onready var sprite = $Sprite2D
 @onready var revenue_timer = Timer.new()
 @onready var session_timer = Timer.new()
 @onready var issue_timer = Timer.new()
 
 signal arrived_at_pc
+signal exited_pc
 
 func _ready():
 	add_child(revenue_timer)
@@ -29,11 +30,10 @@ func _ready():
 	issue_timer.wait_time = randf_range(10.0, 20.0)
 	issue_timer.timeout.connect(_on_issue_timeout)
 
-	sprite.play("default")
 	# Randomize session duration (15 to 40 seconds)
 	session_timer.wait_time = randf_range(15.0, 40.0)
 
-func assign_to_pc(pc_index: int, pos, chair: TextureRect, resume_data: Dictionary = {}):
+func assign_to_pc(pc_index: int, pos, chair: Node, resume_data: Dictionary = {}):
 	if pos == null:
 		pos = global_position # Stay where we are if no valid pos
 		
@@ -69,7 +69,7 @@ func _on_arrival():
 	
 	# Hide walking sprite and show the sitting placeholder (chair)
 	sprite.visible = false
-	if chair_node:
+	if chair_node is Control:
 		chair_node.visible = true
 		
 	revenue_timer.start()
@@ -100,13 +100,14 @@ func exit_shop():
 	if assigned_pc_index != -1:
 		GameManager.occupied_slots[assigned_pc_index] = false
 		GameManager.active_issues[assigned_pc_index] = ""
+		exited_pc.emit()
 		
 	revenue_timer.stop()
 	issue_timer.stop()
 	
 	# Show walking sprite again and hide sitting placeholder
 	sprite.visible = true
-	if chair_node:
+	if chair_node is Control:
 		chair_node.visible = false
 	
 	var exit_pos = global_position + Vector2(1200, 200) # Default fallback
@@ -114,7 +115,6 @@ func exit_shop():
 	if get_parent() and get_parent().has_node("../ExitPoint"):
 		exit_pos = get_parent().get_node("../ExitPoint").global_position
 		
-	sprite.play("default")
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", exit_pos, 2.5).set_trans(Tween.TRANS_SINE)
 	tween.finished.connect(func(): queue_free())

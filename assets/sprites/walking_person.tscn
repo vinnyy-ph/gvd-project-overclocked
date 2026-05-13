@@ -1,65 +1,18 @@
 [gd_scene format=3 uid="uid://l87aefkk3ct5"]
 
-[ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="1_kriu2"]
-[ext_resource type="Script" path="res://core/shop_floor/customer.gd" id="2_customer"]
+[ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="1_waiting"]
+[ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="2_customer"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_at4k0"]
-atlas = ExtResource("1_kriu2")
-region = Rect2(0, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8oxpo"]
-atlas = ExtResource("1_kriu2")
-region = Rect2(114, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_al1kq"]
-atlas = ExtResource("1_kriu2")
-region = Rect2(228, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hsslq"]
-atlas = ExtResource("1_kriu2")
-region = Rect2(342, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jkvva"]
-atlas = ExtResource("1_kriu2")
-region = Rect2(456, 0, 114, 191)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_o7thd"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_at4k0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8oxpo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_al1kq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hsslq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jkvva")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="Customer" type="Control" unique_id=1553103883]
+[node name="Customer" type="Control" unique_id=397887288]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -85.0
 offset_top = -250.0
 offset_right = 85.0
 offset_bottom = 35.0
-mouse_filter = 0
 script = ExtResource("2_customer")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=321692675]
-process_mode = 3
-position = Vector2(85, 142)
-scale = Vector2(1.5, 1.5)
-sprite_frames = SubResource("SpriteFrames_o7thd")
-autoplay = "default"
-frame_progress = 0.56539255
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=265613417]
+position = Vector2(78.99999, 242)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("1_waiting")
