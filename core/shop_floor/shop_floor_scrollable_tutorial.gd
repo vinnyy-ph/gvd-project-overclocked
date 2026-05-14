@@ -34,7 +34,9 @@ var float_time: float = 0.0
 enum TutorialStep { 
 	INTRO, 
 	CAMERA_MOVE, 
-	CUSTOMER_ARRIVE, 
+	CUSTOMER_ARRIVE,
+	QUEUE_INFO,
+	DRAG_INFO, 
 	ASSIGN_CUSTOMER, 
 	WAIT_FOR_ISSUE, 
 	CLICK_ISSUE, 
@@ -45,13 +47,13 @@ var current_tutorial_step: TutorialStep = TutorialStep.INTRO
 var initial_cam_pos: Vector2
 
 @onready var customer_container = $World/Background/CustomerContainer
-@onready var waiting_area = $World/Background/WaitingArea
-@onready var customer_scene = preload("res://assets/sprites/walking_person.tscn")
+@onready var waiting_area = $World/Background/CustomerWaiting
 
 var selected_customer: Customer = null
 signal customer_selected(customer)
+var is_customer_dragging: bool = false
 
-# Map slots to their chair placeholder nodes
+# Map slots to their desk visual nodes
 var seat_nodes: Array = []
 var seat_positions: Array = []
 var issue_labels: Array = []
@@ -73,7 +75,7 @@ func _ready():
 
 	var unlocked_slots = 1 # Force only one for the tutorial
 	
-	# Explicit mapping
+	# Explicit mapping for tutorial desk setup
 	var slot_to_desks = { 0: [1, 2] }
 	var slot_to_chair_names = { 0: "ChairSlot0" }
 
@@ -92,17 +94,20 @@ func _ready():
 			if desk_node:
 				desk_node.visible = is_unlocked
 				if is_unlocked:
+					seat_nodes[slot_idx] = desk_node # Reference for opacity/animations
 					_setup_desk_click(desk_node, slot_idx)
 		
-		# Chair visuals
+		# Position for arrival
 		var chair_name = slot_to_chair_names.get(slot_idx, "")
 		var chair_node = get_node_or_null("World/Background/" + chair_name) if chair_name != "" else null
 		if chair_node:
 			chair_node.visible = false
-			seat_nodes[slot_idx] = chair_node
+			# Store the chair itself as the target node for assignment visuals
+			# But we'll use its position for the customer snap
 			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
 		
 		_setup_issue_label(slot_idx)
+		_update_desk_visuals(slot_idx)
 
 	# Setup Issue Buttons
 	for i in range(issue_buttons.size()):
@@ -115,6 +120,11 @@ func _ready():
 				btn.pressed.connect(_on_issue_clicked.bind(i))
 		else:
 			base_positions.append(Vector2.ZERO)
+
+	# --- HIDE TEMPLATE ---
+	if waiting_area:
+		waiting_area.visible = false
+		waiting_area.process_mode = PROCESS_MODE_DISABLED
 
 	_restore_customers()
 	update_hud()
@@ -131,6 +141,14 @@ func _ready():
 		resume_minigame_sequence()
 	else:
 		start_tutorial()
+
+func _update_desk_visuals(slot_idx: int):
+	var desk = seat_nodes[slot_idx]
+	if not desk: return
+	
+	var is_occupied = GameManager.occupied_slots[slot_idx]
+	# Aesthetic rule: 1.0 if busy, 0.8 if free
+	desk.modulate.a = 1.0 if is_occupied else 0.8
 
 func resume_minigame_sequence():
 	tutorial_ui.show()
@@ -156,15 +174,23 @@ func _setup_issue_label(slot_idx: int):
 
 func _restore_customers():
 	for data in GameManager.persisted_customers:
-		var customer = customer_scene.instantiate()
+		var customer = waiting_area.duplicate()
 		customer_container.add_child(customer)
+		customer.process_mode = PROCESS_MODE_INHERIT
+		customer.visible = true
+		
 		customer.customer_selected.connect(_on_customer_selected)
+		customer.drag_started.connect(_on_customer_drag_started)
+		customer.drag_ended.connect(_on_customer_drag_ended)
+		
 		if data["state"] == Customer.State.WAITING:
 			customer.global_position = data["pos"]
 		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
 			if idx < seat_positions.size():
-				customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
+				var chair = get_node_or_null("World/Background/ChairSlot" + str(idx))
+				customer.assign_to_pc(idx, seat_positions[idx], chair, data)
+				_update_desk_visuals(idx)
 	GameManager.persisted_customers.clear()
 
 func _save_customers_state():
@@ -182,20 +208,24 @@ func _setup_desk_click(desk: Sprite2D, slot_idx: int):
 	desk.add_child(btn)
 	btn.pressed.connect(_on_desk_clicked.bind(slot_idx))
 
-func _on_desk_clicked(slot_idx: int):
-	if selected_customer != null:
+func _on_desk_clicked(slot_idx: int, customer: Customer = null):
+	var target_customer = customer if customer else selected_customer
+	if target_customer != null:
 		if slot_idx < GameManager.occupied_slots.size() and not GameManager.occupied_slots[slot_idx]:
 			var target_pos = seat_positions[slot_idx]
-			if target_pos == null and issue_buttons[slot_idx]:
-				target_pos = issue_buttons[slot_idx].global_position
-				
-			var chair = seat_nodes[slot_idx]
-			selected_customer.assign_to_pc(slot_idx, target_pos, chair)
-			_deselect_customer()
+			var chair = get_node_or_null("World/Background/ChairSlot" + str(slot_idx))
+			
+			target_customer.assign_to_pc(slot_idx, target_pos, chair)
+			_show_station_assigned_feedback(slot_idx)
+			AudioManager.play_sfx("assign")
+			_update_desk_visuals(slot_idx)
+			
+			if target_customer == selected_customer:
+				_deselect_customer()
 			
 			if current_tutorial_step == TutorialStep.ASSIGN_CUSTOMER:
 				current_tutorial_step = TutorialStep.WAIT_FOR_ISSUE
-				tutorial_label.text = "Great! The customer is now using the PC and generating money.\nLet's wait for them to have a problem."
+				tutorial_label.text = "Success! The customer is now generating money every 2 seconds.\nNotice the PC is now fully opaque. Let's wait for a technical issue..."
 				tutorial_next_btn.show()
 		else:
 			_show_station_occupied_feedback(slot_idx)
@@ -217,6 +247,25 @@ func _show_station_occupied_feedback(slot_idx: int):
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
 	tween.finished.connect(label.queue_free)
 
+func _show_station_assigned_feedback(slot_idx: int):
+	var label = Label.new()
+	label.text = "STATION ASSIGNED!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 40)
+	label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.global_position = seat_positions[slot_idx] + Vector2(-150, -120)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 60, 0.8).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
+
 func _on_customer_selected(customer: Customer):
 	if selected_customer == customer:
 		_deselect_customer()
@@ -225,12 +274,38 @@ func _on_customer_selected(customer: Customer):
 		selected_customer = customer
 		selected_customer.set_selection(true)
 		if current_tutorial_step == TutorialStep.ASSIGN_CUSTOMER:
-			tutorial_label.text = "The customer is selected! Now tap an empty desk to assign them."
+			tutorial_label.text = "Customer selected! Now drag them to the PC slot."
 
 func _deselect_customer():
 	if selected_customer:
 		selected_customer.set_selection(false)
 		selected_customer = null
+
+func _on_customer_drag_started(_customer: Customer):
+	is_customer_dragging = true
+
+func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
+	is_customer_dragging = false
+	var best_dist = 180.0
+	var best_slot = -1
+	var drop_point = customer.global_position
+	
+	# Only slot 0 is unlocked in tutorial
+	for i in range(1):
+		var desk = seat_nodes[i]
+		if not desk: continue
+		if GameManager.occupied_slots[i]: continue
+		
+		var dist = drop_point.distance_to(desk.global_position)
+		if dist < best_dist:
+			best_dist = dist
+			best_slot = i
+			
+	if best_slot != -1:
+		_on_desk_clicked(best_slot, customer)
+		_refresh_queue_positions()
+	else:
+		customer.return_to_waiting_position()
 
 # --- TUTORIAL LOGIC ---
 
@@ -254,8 +329,12 @@ func _on_tutorial_next_pressed():
 		tutorial_next_btn.hide()
 	elif current_tutorial_step == TutorialStep.CUSTOMER_ARRIVE:
 		spawn_customer()
-		current_tutorial_step = TutorialStep.ASSIGN_CUSTOMER
-		tutorial_label.text = "A customer has arrived! Tap the customer to select them."
+		current_tutorial_step = TutorialStep.QUEUE_INFO
+		tutorial_label.text = "A customer has arrived! Notice they wait at the front of the line.\nYou must manage the queue in order—only the first person in line can be dragged!"
+		tutorial_next_btn.show()
+	elif current_tutorial_step == TutorialStep.QUEUE_INFO:
+		current_tutorial_step = TutorialStep.DRAG_INFO
+		tutorial_label.text = "Drag the customer to the PC slot. While they use the computer, they'll generate P1 every 2 seconds automatically!"
 		tutorial_next_btn.hide()
 	elif current_tutorial_step == TutorialStep.WAIT_FOR_ISSUE:
 		tutorial_box.hide()
@@ -289,10 +368,69 @@ func force_tutorial_issue():
 	tutorial_label.text = "OH NO! THE CUSTOMER HAS A " + issue_name.to_upper() + "!\nTap the red alert icon above them to start the repair."
 
 func spawn_customer():
-	var customer = customer_scene.instantiate()
+	var waiting_count = 0
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_count += 1
+			
+	var customer = waiting_area.duplicate()
 	customer_container.add_child(customer)
-	customer.global_position = waiting_area.global_position
+	customer_container.move_child(customer, 0)
+	
+	customer.process_mode = PROCESS_MODE_INHERIT
+	customer.visible = true
+	
 	customer.customer_selected.connect(_on_customer_selected)
+	customer.drag_started.connect(_on_customer_drag_started)
+	customer.drag_ended.connect(_on_customer_drag_ended)
+	
+	if waiting_area:
+		customer.global_position = waiting_area.global_position + Vector2(waiting_count * -70, waiting_count * -50)
+		AudioManager.play_sfx("spawn")
+		var final_scale = customer.scale
+		customer.scale = Vector2.ZERO
+		var tween = create_tween()
+		tween.tween_property(customer, "scale", final_scale, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+func _refresh_queue_positions():
+	var waiting_customers = []
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_customers.append(child)
+	waiting_customers.reverse()
+	for i in range(waiting_customers.size()):
+		var c = waiting_customers[i]
+		var target_pos = waiting_area.global_position + Vector2(i * -70, i * -50)
+		if c.global_position != target_pos:
+			var tween = create_tween()
+			tween.tween_property(c, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func is_first_in_line(customer: Customer) -> bool:
+	var waiting_customers = []
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_customers.append(child)
+	if waiting_customers.size() > 0:
+		return waiting_customers[waiting_customers.size() - 1] == customer
+	return false
+
+func show_queue_warning(pos: Vector2):
+	var label = Label.new()
+	label.text = "WAIT YOUR TURN!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 35)
+	label.add_theme_color_override("font_color", Color(1, 0.8, 0.2))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 8)
+	label.custom_minimum_size = Vector2(400, 0)
+	$World/Background.add_child(label)
+	label.global_position = pos + Vector2(-200, -180)
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 40, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
 
 func _on_issue_clicked(pc_index: int):
 	var issue_path = GameManager.active_issues[pc_index]
@@ -360,6 +498,8 @@ func _unhandled_input(event):
 	handle_drag_and_zoom(event)
 
 func handle_drag_and_zoom(event):
+	if is_customer_dragging: return
+	
 	if event is InputEventScreenTouch or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
 		dragging = event.pressed
 		if dragging: last_drag_position = event.position
