@@ -314,6 +314,7 @@ metadata/_edit_use_anchors_ = true
 [node name="OwnerWalkiing" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
 unique_name_in_owner = true
 process_mode = 3
+visible = false
 position = Vector2(770, -54.285645)
 scale = Vector2(1.5902249, 1.5902249)
 sprite_frames = SubResource("SpriteFrames_f7hrx")

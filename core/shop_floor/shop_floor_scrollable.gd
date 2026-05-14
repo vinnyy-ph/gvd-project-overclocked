@@ -191,18 +191,15 @@ func _on_customer_drag_started(_customer: Customer):
 func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 	is_customer_dragging = false
 	
-	var best_dist = 180.0 # Reduced threshold as requested
+	var best_dist = 180.0
 	var best_slot = -1
 	
 	var drop_point = customer.global_position
-	
 	var unlocked_slots = 13 if every_pc_unlocked else GameManager.get_unlocked_slots()
 	
 	for i in range(seat_nodes.size()):
 		var desk = seat_nodes[i]
 		if not desk: continue
-		if GameManager.occupied_slots[i]: continue
-		if i >= unlocked_slots: continue
 		
 		var dist = drop_point.distance_to(desk.global_position)
 		if dist < best_dist:
@@ -210,8 +207,16 @@ func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 			best_slot = i
 			
 	if best_slot != -1:
-		_on_desk_clicked(best_slot, customer)
-		_refresh_queue_positions()
+		if best_slot < unlocked_slots:
+			if not GameManager.occupied_slots[best_slot]:
+				_on_desk_clicked(best_slot, customer)
+				_refresh_queue_positions()
+			else:
+				_show_station_occupied_feedback(best_slot)
+				customer.return_to_waiting_position()
+		else:
+			_show_station_locked_feedback(best_slot)
+			customer.return_to_waiting_position()
 	else:
 		customer.return_to_waiting_position()
 
@@ -229,6 +234,25 @@ func _show_station_occupied_feedback(slot_idx: int):
 	label.add_theme_font_override("font", font)
 	label.add_theme_font_size_override("font_size", 40)
 	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.global_position = seat_positions[slot_idx] + Vector2(-100, -100)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 50, 0.8)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
+
+func _show_station_locked_feedback(slot_idx: int):
+	var label = Label.new()
+	label.text = "STATION LOCKED!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 40)
+	label.add_theme_color_override("font_color", Color(0.8, 0.4, 1.0)) # Purple/Pink for locked
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 10)
 	
