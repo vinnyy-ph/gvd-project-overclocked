@@ -454,7 +454,7 @@ func update_hud():
 	else:
 		money_label.remove_theme_color_override("font_color")
 		
-	time_label.text = "Time: " + str(GameManager.time_left)
+	time_label.text = GameManager.get_formatted_time()
 	satisfaction_bar.value = GameManager.satisfaction
 	_apply_bar_style()
 

@@ -110,6 +110,26 @@ var tutorial_minigame_done: bool = false
 var last_day_revenue: int = 0
 var persisted_customers: Array = [] # Stores customer data when changing scenes
 
+func get_formatted_time() -> String:
+	var total_ticks = 60
+	var elapsed_ticks = total_ticks - time_left
+	
+	var start_hour = 9 # 9 AM
+	var minutes_per_tick = 8 # 8 hours (480 mins) / 60 ticks = 8 mins/tick
+	
+	var total_minutes = elapsed_ticks * minutes_per_tick
+	var current_hour = start_hour + (total_minutes / 60)
+	var current_minute = total_minutes % 60
+	
+	var am_pm = "AM" if current_hour < 12 else "PM"
+	var display_hour = current_hour
+	if display_hour > 12:
+		display_hour -= 12
+	elif display_hour == 0:
+		display_hour = 12
+		
+	return "%02d:%02d %s" % [display_hour, current_minute, am_pm]
+
 func get_money_reward(base_amount: int) -> int:
 	var bonus = 1.0
 	if SaveManager.unlocked_upgrades.get("graphics_upgrade", 0) > 0:
