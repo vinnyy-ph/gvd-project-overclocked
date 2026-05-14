@@ -311,7 +311,7 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
+[node name="OwnerWalkiing" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
 unique_name_in_owner = true
 process_mode = 3
 position = Vector2(770, -54.285645)
@@ -324,30 +324,6 @@ script = ExtResource("12_f7hrx")
 visible = false
 z_index = 37
 position = Vector2(-246.46431, 765.1974)
-scale = Vector2(0.6091899, 0.6091899)
-texture = ExtResource("10_jajnr")
-script = ExtResource("11_f7hrx")
-
-[node name="CustomerWaiting2" type="Sprite2D" parent="World/Background" unique_id=2095847906]
-visible = false
-z_index = 37
-position = Vector2(-186.4643, 793.76886)
-scale = Vector2(0.6091899, 0.6091899)
-texture = ExtResource("10_jajnr")
-script = ExtResource("11_f7hrx")
-
-[node name="CustomerWaiting3" type="Sprite2D" parent="World/Background" unique_id=827750058]
-visible = false
-z_index = 37
-position = Vector2(-133.60715, 822.3403)
-scale = Vector2(0.6091899, 0.6091899)
-texture = ExtResource("10_jajnr")
-script = ExtResource("11_f7hrx")
-
-[node name="CustomerWaiting4" type="Sprite2D" parent="World/Background" unique_id=694547871]
-visible = false
-z_index = 37
-position = Vector2(-84.28568, 847.1429)
 scale = Vector2(0.6091899, 0.6091899)
 texture = ExtResource("10_jajnr")
 script = ExtResource("11_f7hrx")

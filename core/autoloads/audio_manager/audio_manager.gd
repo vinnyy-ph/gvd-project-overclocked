@@ -14,7 +14,9 @@ var sfx_library = {
 	"success": preload("res://assets/audio/sfx/issue_complete.ogg"),
 	"fail": preload("res://assets/audio/sfx/issue_failed.ogg"),
 	"coin": preload("res://assets/audio/sfx/coin.wav"),
-	"day_start": preload("res://assets/audio/sfx/day_start.ogg")
+	"day_start": preload("res://assets/audio/sfx/day_start.ogg"),
+	"spawn": preload("res://assets/audio/sfx/button_click.wav"),
+	"assign": preload("res://assets/audio/sfx/coin.wav")
 }
 
 func _ready():

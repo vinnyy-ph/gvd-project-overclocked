@@ -157,6 +157,11 @@ func _input(event):
 					var size = texture.get_size()
 					var rect = Rect2(-size/2, size)
 					if rect.has_point(local_pos):
+						var shop = get_tree().current_scene
+						if shop.has_method("is_first_in_line") and not shop.is_first_in_line(self):
+							shop.show_queue_warning(global_position)
+							return
+							
 						is_dragging = true
 						_set_drag_visual(true)
 						drag_offset = get_global_mouse_position() - global_position
@@ -182,6 +187,11 @@ func _input(event):
 				var size = texture.get_size()
 				var rect = Rect2(-size/2, size)
 				if rect.has_point(local_pos):
+					var shop = get_tree().current_scene
+					if shop.has_method("is_first_in_line") and not shop.is_first_in_line(self):
+						shop.show_queue_warning(global_position)
+						return
+						
 					is_dragging = true
 					_set_drag_visual(true)
 					drag_offset = mouse_pos - global_position

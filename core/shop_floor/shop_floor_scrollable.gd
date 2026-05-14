@@ -6,7 +6,7 @@ extends Node2D
 @onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 
-@export var every_pc_unlocked: bool = true
+@export var every_pc_unlocked: bool = false
 
 @onready var issue_buttons: Array = []
 
@@ -29,6 +29,7 @@ var is_customer_dragging: bool = false
 # Map slots to their desk nodes and positions
 var seat_nodes: Array = []
 var seat_positions: Array = []
+var original_desk_scales: Array = []
 var issue_labels: Array = []
 
 # Texture constants
@@ -56,6 +57,7 @@ func _ready():
 
 	seat_nodes.resize(num_slots)
 	seat_positions.resize(num_slots)
+	original_desk_scales.resize(num_slots)
 	issue_labels.resize(num_slots)
 	issue_buttons.resize(num_slots)
 	base_positions.resize(num_slots)
@@ -71,6 +73,7 @@ func _ready():
 			desk_node.modulate = modulate_color
 			seat_nodes[slot_idx] = desk_node
 			seat_positions[slot_idx] = desk_node.global_position
+			original_desk_scales[slot_idx] = desk_node.scale
 			
 			if is_unlocked:
 				_setup_desk_click(desk_node, slot_idx)
@@ -109,6 +112,9 @@ func _update_desk_texture(slot_idx: int):
 		desk.texture = OCCUPIED_7 if is_occupied else EMPTY_7
 	else:
 		desk.texture = OCCUPIED_13 if is_occupied else EMPTY_13
+	
+	# Static opacity indication: 1.0 if busy, 0.8 if free
+	desk.modulate.a = 1.0 if is_occupied else 0.8
 
 func _setup_issue_label(slot_idx: int):
 	var label = Label.new()
@@ -173,6 +179,7 @@ func _on_desk_clicked(slot_idx: int, customer: Customer = null):
 			_connect_customer_signals(target_customer, slot_idx)
 			target_customer.assign_to_pc(slot_idx, target_pos, desk)
 			_show_station_assigned_feedback(slot_idx)
+			AudioManager.play_sfx("assign")
 			if target_customer == selected_customer:
 				_deselect_customer()
 		else:
@@ -329,6 +336,7 @@ func spawn_customer():
 	if waiting_area:
 		# Diagonal isometric offset (up and left)
 		customer.global_position = waiting_area.global_position + Vector2(waiting_count * -70, waiting_count * -50)
+		AudioManager.play_sfx("spawn")
 		
 		# Spawn animation: pop-in from scale 0
 		var final_scale = customer.scale
@@ -351,6 +359,38 @@ func _refresh_queue_positions():
 		if c.global_position != target_pos:
 			var tween = create_tween()
 			tween.tween_property(c, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func is_first_in_line(customer: Customer) -> bool:
+	var waiting_customers = []
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_customers.append(child)
+	
+	# Oldest is at the end of the container's children due to move_child(0)
+	if waiting_customers.size() > 0:
+		return waiting_customers[waiting_customers.size() - 1] == customer
+	return false
+
+func show_queue_warning(pos: Vector2):
+	var label = Label.new()
+	label.text = "WAIT YOUR TURN!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 35)
+	label.add_theme_color_override("font_color", Color(1, 0.8, 0.2)) # Yellow/Orange warning
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 8)
+	label.custom_minimum_size = Vector2(400, 0)
+	
+	$World/Background.add_child(label)
+	# Center the 400px wide label over the customer's position
+	label.global_position = pos + Vector2(-200, -180)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 40, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6).set_delay(0.2)
+	tween.finished.connect(label.queue_free)
 
 func _on_issue_clicked(pc_index: int):
 	var issue_path = GameManager.active_issues[pc_index]
