@@ -398,7 +398,6 @@ scale = Vector2(2, 2)
 size_flags_horizontal = 3
 icon = ExtResource("3_eyiyn")
 flat = true
-metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="World/Background/Desk10/Desk10IssueButton" unique_id=113393117]
 layout_mode = 0
@@ -428,7 +427,6 @@ scale = Vector2(2, 2)
 size_flags_horizontal = 3
 icon = ExtResource("3_eyiyn")
 flat = true
-metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="World/Background/Desk9/Desk9IssueButton" unique_id=1531007669]
 layout_mode = 0

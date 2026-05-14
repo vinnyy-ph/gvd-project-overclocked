@@ -89,9 +89,12 @@ func _ready():
 				btn.visible = GameManager.active_issues[slot_idx] != ""
 				if not btn.pressed.is_connected(_on_issue_clicked):
 					btn.pressed.connect(_on_issue_clicked.bind(slot_idx))
-		
-		# Setup issue labels
-		_setup_issue_label(slot_idx)
+				
+				# Use existing label child
+				var label = btn.get_node_or_null("Label")
+				if label:
+					issue_labels[slot_idx] = label
+					label.hide()
 		
 		# Initial visual state
 		_update_desk_texture(slot_idx)
@@ -122,23 +125,6 @@ func _update_desk_texture(slot_idx: int):
 	
 	# Static opacity indication: 1.0 if busy, 0.8 if free
 	desk.modulate.a = 1.0 if is_occupied else 0.8
-
-func _setup_issue_label(slot_idx: int):
-	var label = Label.new()
-	label.name = "IssueLabel_" + str(slot_idx)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	
-	# Load theme font
-	var font = load("res://assets/fonts/ThaleahFat.ttf")
-	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", 48)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 10)
-	
-	$World/Background.add_child(label)
-	label.hide()
-	issue_labels[slot_idx] = label
 
 func _restore_customers():
 	for data in GameManager.persisted_customers:
@@ -317,14 +303,13 @@ func _process(delta):
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
 			
 			var label = issue_labels[i]
-			label.show()
-			label.text = GameManager.get_issue_title(issue_path)
-			# Center the label relative to the button and move it closer
-			var label_x_offset = -150
-			label.global_position = btn.global_position + Vector2(label_x_offset, -45)
+			if label:
+				label.show()
+				label.text = GameManager.get_issue_title(issue_path).to_upper()
 		else:
 			btn.visible = false
-			if issue_labels[i]: issue_labels[i].hide()
+			var label = issue_labels[i]
+			if label: label.hide()
 			
 	handle_keyboard_scroll(delta)
 
