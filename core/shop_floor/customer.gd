@@ -22,8 +22,11 @@ signal drag_ended(customer, global_pos)
 var is_dragging = false
 var drag_offset = Vector2.ZERO
 var original_waiting_position = Vector2.ZERO
+var base_scale = Vector2.ONE
+var drag_tween: Tween = null
 
 func _ready():
+	base_scale = scale
 	if not revenue_timer.get_parent():
 		add_child(revenue_timer)
 		revenue_timer.wait_time = 2.0
@@ -155,6 +158,7 @@ func _input(event):
 					var rect = Rect2(-size/2, size)
 					if rect.has_point(local_pos):
 						is_dragging = true
+						_set_drag_visual(true)
 						drag_offset = get_global_mouse_position() - global_position
 						original_waiting_position = global_position
 						customer_selected.emit(self)
@@ -162,6 +166,7 @@ func _input(event):
 						get_viewport().set_input_as_handled()
 			elif is_dragging:
 				is_dragging = false
+				_set_drag_visual(false)
 				drag_ended.emit(self, global_position)
 				get_viewport().set_input_as_handled()
 	
@@ -178,6 +183,7 @@ func _input(event):
 				var rect = Rect2(-size/2, size)
 				if rect.has_point(local_pos):
 					is_dragging = true
+					_set_drag_visual(true)
 					drag_offset = mouse_pos - global_position
 					original_waiting_position = global_position
 					customer_selected.emit(self)
@@ -185,6 +191,7 @@ func _input(event):
 					get_viewport().set_input_as_handled()
 		elif is_dragging:
 			is_dragging = false
+			_set_drag_visual(false)
 			drag_ended.emit(self, global_position)
 			get_viewport().set_input_as_handled()
 	
@@ -207,6 +214,22 @@ func set_selection(selected: bool):
 	else:
 		# Reset visual cue
 		sprite.modulate = Color.WHITE
+
+func _set_drag_visual(dragging: bool):
+	if drag_tween:
+		drag_tween.kill()
+	drag_tween = create_tween().set_parallel(true)
+	
+	if dragging:
+		# Lift effect: scale up and slight transparency
+		drag_tween.tween_property(self, "scale", base_scale * 1.15, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		drag_tween.tween_property(self, "modulate:a", 0.7, 0.15)
+		z_index = 100 # Bring to very front while dragging
+	else:
+		# Drop back
+		drag_tween.tween_property(self, "scale", base_scale, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		drag_tween.tween_property(self, "modulate:a", 1.0, 0.15)
+		z_index = 37 # Return to normal customer z-index
 
 func _process(_delta):
 	pass

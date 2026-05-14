@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0ye6oiivhu16"]
 
-[ext_resource type="Script" path="res://core/autoloads/pause_menu_autoload.gd" id="1_2nc7s"]
+[ext_resource type="Script" uid="uid://dchcm7yub62o6" path="res://core/autoloads/pause_menu_autoload.gd" id="1_2nc7s"]
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="1_p81d2"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="2_2nc7s"]
 [ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="3_d3xb4"]
@@ -16,14 +16,16 @@ script = ExtResource("1_2nc7s")
 
 [node name="PauseButton" type="Button" parent="." unique_id=641646048]
 process_mode = 3
-offset_left = 1222.0
-offset_top = 23.0
-offset_right = 1271.0
-offset_bottom = 71.0
+offset_left = 1206.0
+offset_top = 21.0
+offset_right = 1255.0
+offset_bottom = 69.0
+scale = Vector2(1.5, 1.5)
 icon = ExtResource("6_d3xb4")
 flat = true
 
 [node name="DimOverlay" type="ColorRect" parent="." unique_id=1881492644]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

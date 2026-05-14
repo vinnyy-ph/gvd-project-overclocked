@@ -214,6 +214,7 @@ icon = ExtResource("3_eyiyn")
 flat = true
 
 [node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
+position = Vector2(0, 822.8571)
 
 [node name="Desk13" type="Sprite2D" parent="World/Background" unique_id=1047420753]
 position = Vector2(179.4354, -92.87397)
@@ -320,8 +321,33 @@ autoplay = "default"
 script = ExtResource("12_f7hrx")
 
 [node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=744454501]
+visible = false
 z_index = 37
-position = Vector2(-95.714264, 860)
+position = Vector2(-246.46431, 765.1974)
+scale = Vector2(0.6091899, 0.6091899)
+texture = ExtResource("10_jajnr")
+script = ExtResource("11_f7hrx")
+
+[node name="CustomerWaiting2" type="Sprite2D" parent="World/Background" unique_id=2095847906]
+visible = false
+z_index = 37
+position = Vector2(-186.4643, 793.76886)
+scale = Vector2(0.6091899, 0.6091899)
+texture = ExtResource("10_jajnr")
+script = ExtResource("11_f7hrx")
+
+[node name="CustomerWaiting3" type="Sprite2D" parent="World/Background" unique_id=827750058]
+visible = false
+z_index = 37
+position = Vector2(-133.60715, 822.3403)
+scale = Vector2(0.6091899, 0.6091899)
+texture = ExtResource("10_jajnr")
+script = ExtResource("11_f7hrx")
+
+[node name="CustomerWaiting4" type="Sprite2D" parent="World/Background" unique_id=694547871]
+visible = false
+z_index = 37
+position = Vector2(-84.28568, 847.1429)
 scale = Vector2(0.6091899, 0.6091899)
 texture = ExtResource("10_jajnr")
 script = ExtResource("11_f7hrx")
@@ -347,20 +373,20 @@ offset_bottom = 40.0
 [node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD" unique_id=1555646873]
 custom_minimum_size = Vector2(300, 24)
 layout_mode = 0
-offset_left = 475.0
-offset_top = 635.0
-offset_right = 776.0
-offset_bottom = 670.0
+offset_left = 25.0
+offset_top = 661.0
+offset_right = 326.0
+offset_bottom = 696.0
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 22
 value = 97.55
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD" unique_id=966002861]
 layout_mode = 0
-offset_left = 463.0
-offset_top = 597.0
-offset_right = 788.122
-offset_bottom = 683.0
+offset_left = 13.0
+offset_top = 623.0
+offset_right = 338.122
+offset_bottom = 709.0
 texture = ExtResource("9_i6wj4")
 expand_mode = 1
 

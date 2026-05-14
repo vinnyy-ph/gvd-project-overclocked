@@ -184,7 +184,7 @@ func _on_customer_drag_started(_customer: Customer):
 func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 	is_customer_dragging = false
 	
-	var best_dist = 400.0 # Increased threshold for easier dropping
+	var best_dist = 180.0 # Reduced threshold as requested
 	var best_slot = -1
 	
 	var drop_point = customer.global_position
@@ -204,6 +204,7 @@ func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 			
 	if best_slot != -1:
 		_on_desk_clicked(best_slot, customer)
+		_refresh_queue_positions()
 	else:
 		customer.return_to_waiting_position()
 
@@ -315,6 +316,9 @@ func spawn_customer():
 			
 	var customer = waiting_area.duplicate()
 	customer_container.add_child(customer)
+	# Newest at the bottom of tree so they are drawn behind older ones
+	customer_container.move_child(customer, 0)
+	
 	customer.process_mode = PROCESS_MODE_INHERIT
 	customer.visible = true
 	
@@ -323,8 +327,30 @@ func spawn_customer():
 	customer.drag_ended.connect(_on_customer_drag_ended)
 	
 	if waiting_area:
-		# First customer at exact position, others offset slightly
-		customer.global_position = waiting_area.global_position + Vector2(waiting_count * 80, 0)
+		# Diagonal isometric offset (up and left)
+		customer.global_position = waiting_area.global_position + Vector2(waiting_count * -70, waiting_count * -50)
+		
+		# Spawn animation: pop-in from scale 0
+		var final_scale = customer.scale
+		customer.scale = Vector2.ZERO
+		var tween = create_tween()
+		tween.tween_property(customer, "scale", final_scale, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+func _refresh_queue_positions():
+	var waiting_customers = []
+	for child in customer_container.get_children():
+		if child is Customer and child.current_state == Customer.State.WAITING:
+			waiting_customers.append(child)
+	
+	# Due to move_child(0), the oldest (front) is at the end of the array
+	waiting_customers.reverse()
+	
+	for i in range(waiting_customers.size()):
+		var c = waiting_customers[i]
+		var target_pos = waiting_area.global_position + Vector2(i * -70, i * -50)
+		if c.global_position != target_pos:
+			var tween = create_tween()
+			tween.tween_property(c, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _on_issue_clicked(pc_index: int):
 	var issue_path = GameManager.active_issues[pc_index]
