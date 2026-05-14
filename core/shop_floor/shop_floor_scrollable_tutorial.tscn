@@ -3,66 +3,17 @@
 [ext_resource type="Script" uid="uid://yealhs7v3e2v" path="res://core/shop_floor/shop_floor_scrollable_tutorial.gd" id="1_drvdj"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_tryt6"]
 [ext_resource type="Texture2D" uid="uid://c808q0igji7a7" path="res://assets/images/envinronment.png" id="3_owkhd"]
-[ext_resource type="Texture2D" uid="uid://ducobkdcx22em" path="res://assets/images/default_desk.png" id="4_aosc0"]
-[ext_resource type="Texture2D" uid="uid://c62rwn62yk8gr" path="res://assets/images/default_pc_front.png" id="5_c2hs7"]
+[ext_resource type="Texture2D" uid="uid://dncuf4bc67nf8" path="res://assets/images/shop_floor/empty_slot.png" id="4_nxgym"]
 [ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="7_6s41h"]
-[ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="8_a5a7q"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="8_xpdn8"]
 [ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="9_6j3qw"]
-[ext_resource type="Script" uid="uid://c157mbb0pqg2x" path="res://core/shop_floor/animated_sprite_2d.gd" id="9_7leac"]
 [ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="10_j1p5v"]
 [ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="10_nskys"]
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="11_lb4gu"]
 [ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="11_uniu6"]
 [ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_bdcp2"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_s65hm"]
-[ext_resource type="Texture2D" uid="uid://cu83syh5ymjmw" path="res://assets/images/shop_floor/person_placeholder_back.png" id="14_sitting_back"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_at4k0"]
-atlas = ExtResource("8_a5a7q")
-region = Rect2(0, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8oxpo"]
-atlas = ExtResource("8_a5a7q")
-region = Rect2(114, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_al1kq"]
-atlas = ExtResource("8_a5a7q")
-region = Rect2(228, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hsslq"]
-atlas = ExtResource("8_a5a7q")
-region = Rect2(342, 0, 114, 191)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jkvva"]
-atlas = ExtResource("8_a5a7q")
-region = Rect2(456, 0, 114, 191)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_f7hrx"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_at4k0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8oxpo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_al1kq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hsslq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jkvva")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jkvva")
-}],
-"loop": true,
-"name": &"default",
-"speed": 10.0
-}]
+[ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="16_04kbf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghd6s"]
 
@@ -98,48 +49,24 @@ scale = Vector2(0.7, 0.7)
 position = Vector2(-9.999999, 15.714285)
 texture = ExtResource("3_owkhd")
 
-[node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=806564770]
-position = Vector2(-300, 150)
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("4_aosc0")
+[node name="Desk1" type="Sprite2D" parent="World/Background/Sprite2D" unique_id=338153913]
+position = Vector2(-467.14294, -154.28569)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("4_nxgym")
 
-[node name="Desk2" type="Sprite2D" parent="World/Background" unique_id=133867853]
-position = Vector2(-290, 70)
-scale = Vector2(0.65, 0.65)
-texture = ExtResource("5_c2hs7")
-
-[node name="IssueButton2" type="Button" parent="World/Background" unique_id=1559353774]
-offset_left = -400.0
-offset_top = -100.0
-offset_right = -299.0
-offset_bottom = 127.0
+[node name="Desk1IssueButton" type="Button" parent="World/Background/Sprite2D/Desk1" unique_id=90065309]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
 icon = ExtResource("7_6s41h")
 flat = true
 
-[node name="ChairSlot0" type="TextureRect" parent="World/Background" unique_id=1328029831]
-offset_left = -380.0
-offset_top = 110.0
-offset_right = -160.0
-offset_bottom = 410.0
-texture = ExtResource("14_sitting_back")
-expand_mode = 1
-
-[node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=953350803]
-
-[node name="WaitingArea" type="Marker2D" parent="World/Background" unique_id=2034711380]
-position = Vector2(200, 300)
-
-[node name="ExitPoint" type="Marker2D" parent="World/Background" unique_id=152733795]
-position = Vector2(800, 400)
-
-[node name="OwnerWalkiing" type="AnimatedSprite2D" parent="World/Background" unique_id=2005719403]
-sprite_frames = SubResource("SpriteFrames_f7hrx")
-autoplay = "default"
-script = ExtResource("9_7leac")
-
 [node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=927695421]
 z_index = 37
-position = Vector2(200, 300)
+position = Vector2(-182.85715, 805.7143)
+scale = Vector2(0.42743346, 0.42743346)
 texture = ExtResource("10_j1p5v")
 script = ExtResource("11_uniu6")
 
@@ -160,35 +87,6 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="SatisfactionBarContainer" type="MarginContainer" parent="CanvasLayer/HUD" unique_id=1502325387]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 324.0
-offset_top = 625.0
-offset_right = 919.0
-offset_bottom = 674.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD/SatisfactionBarContainer" unique_id=1555646873]
-custom_minimum_size = Vector2(300, 24)
-layout_mode = 2
-value = 100.0
-
-[node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD/SatisfactionBarContainer" unique_id=1586168814]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 13
-theme_override_fonts/font = ExtResource("8_xpdn8")
-theme_override_font_sizes/font_size = 46
-text = "Satisfaction"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="TopBar" type="ColorRect" parent="CanvasLayer/HUD" unique_id=58088674]
 layout_mode = 1
@@ -239,6 +137,8 @@ offset_right = 88.0
 offset_bottom = 96.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 30
+text = "A"
 vertical_alignment = 1
 
 [node name="DimOverlay" type="ColorRect" parent="CanvasLayer/HUD" unique_id=1635064106]
@@ -309,7 +209,45 @@ layout_mode = 2
 icon = ExtResource("13_s65hm")
 flat = true
 
+[node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD" unique_id=266484055]
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 661.0
+offset_right = 326.0
+offset_bottom = 696.0
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 22
+value = 97.55
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD" unique_id=2135874085]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 623.0
+offset_right = 338.122
+offset_bottom = 709.0
+texture = ExtResource("16_04kbf")
+expand_mode = 1
+
+[node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1252429816]
+visible = false
+layout_mode = 0
+offset_left = 324.0
+offset_top = 664.0
+offset_right = 959.0
+offset_bottom = 707.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 13
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 46
+text = "Satisfaction"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="TutorialUI" type="Control" parent="CanvasLayer" unique_id=2010978555]
+visible = false
 z_index = 10
 layout_mode = 3
 anchors_preset = 15
@@ -319,7 +257,19 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="TutorialDim" type="ColorRect" parent="CanvasLayer/TutorialUI" unique_id=214000000]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.470588)
+
 [node name="TutorialBox" type="TextureRect" parent="CanvasLayer/TutorialUI" unique_id=417796571]
+z_index = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

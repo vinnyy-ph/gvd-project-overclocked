@@ -3,7 +3,7 @@ extends Node2D
 @onready var camera = $MainCamera
 @onready var day_label = $CanvasLayer/HUD/DayLabel
 @onready var money_label = $CanvasLayer/HUD/MoneyLabel
-@onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBarContainer/SatisfactionBar
+@onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 
 # --- TUTORIAL NODES ---
@@ -12,16 +12,7 @@ extends Node2D
 @onready var tutorial_label = $CanvasLayer/TutorialUI/TutorialBox/TutorialLabel
 @onready var tutorial_next_btn = $CanvasLayer/TutorialUI/TutorialBox/NextButton
 
-@onready var issue_buttons = [
-	get_node_or_null("World/Background/IssueButton2"), # Slot 0
-	get_node_or_null("World/Background/IssueButton3"), # Slot 1
-	get_node_or_null("World/Background/IssueButton4"), # Slot 2
-	get_node_or_null("World/Background/IssueButton1"), # Slot 3
-	get_node_or_null("World/Background/IssueButton6"), # Slot 4
-	get_node_or_null("World/Background/IssueButton7"), # Slot 5
-	get_node_or_null("World/Background/IssueButton8"), # Slot 6
-	get_node_or_null("World/Background/IssueButton5")  # Slot 7
-]
+@onready var issue_buttons: Array = []
 
 var scroll_speed: float = 900.0
 var dragging: bool = false
@@ -33,6 +24,12 @@ var float_time: float = 0.0
 
 enum TutorialStep { 
 	INTRO, 
+	HUD_TIME,
+	HUD_DAY,
+	HUD_MONEY,
+	HUD_SATISFACTION,
+	SHOP_DESK,
+	SHOP_WAITING,
 	CAMERA_MOVE, 
 	CUSTOMER_ARRIVE,
 	QUEUE_INFO,
@@ -46,8 +43,53 @@ enum TutorialStep {
 var current_tutorial_step: TutorialStep = TutorialStep.INTRO
 var initial_cam_pos: Vector2
 
-@onready var customer_container = $World/Background/CustomerContainer
+@onready var tutorial_dim = $CanvasLayer/TutorialUI/TutorialDim
+@onready var satisfaction_bar_rect = $CanvasLayer/HUD/TextureRect
+
+@onready var customer_container = $World/Background
 @onready var waiting_area = $World/Background/CustomerWaiting
+
+var highlighted_node: CanvasItem = null
+
+func _highlight_node(node: CanvasItem, enabled: bool):
+	if enabled:
+		highlighted_node = node
+		tutorial_dim.show()
+		_update_highlight_shader()
+	else:
+		highlighted_node = null
+		tutorial_dim.hide()
+
+func _get_node_screen_rect(node: CanvasItem) -> Rect2:
+	if not node: return Rect2()
+	var rect = Rect2()
+	var canvas_transform = node.get_global_transform_with_canvas()
+	if node is Control:
+		rect.position = canvas_transform.get_origin()
+		rect.size = node.size * canvas_transform.get_scale()
+	elif node is Sprite2D:
+		if node.texture:
+			var tex_size = node.texture.get_size()
+			rect.size = tex_size * canvas_transform.get_scale()
+			if node.centered:
+				rect.position = canvas_transform.get_origin() - (rect.size / 2.0)
+			else:
+				rect.position = canvas_transform.get_origin()
+	elif node is Button: # Sometimes identified as Button even if also Control
+		rect.position = canvas_transform.get_origin()
+		rect.size = node.size * canvas_transform.get_scale()
+	return rect
+
+func _update_highlight_shader():
+	if not highlighted_node or not tutorial_dim.material: return
+	
+	var rect = _get_node_screen_rect(highlighted_node)
+	# Add a small margin
+	rect = rect.grow(10.0)
+	
+	var mat = tutorial_dim.material as ShaderMaterial
+	mat.set_shader_parameter("hole_center", rect.get_center())
+	mat.set_shader_parameter("hole_size", rect.size)
 
 var selected_customer: Customer = null
 signal customer_selected(customer)
@@ -57,6 +99,13 @@ var is_customer_dragging: bool = false
 var seat_nodes: Array = []
 var seat_positions: Array = []
 var issue_labels: Array = []
+var original_issue_scales: Array = []
+
+# Texture constants
+const EMPTY_7 = preload("res://assets/images/shop_floor/empty_slot.png")
+const OCCUPIED_7 = preload("res://assets/images/shop_floor/occupied_slot.png")
+const EMPTY_13 = preload("res://assets/images/shop_floor/empty_slot_front.png")
+const OCCUPIED_13 = preload("res://assets/images/shop_floor/occupied_slot_front.png")
 
 func _ready():
 	AudioManager.play_bgm("shop")
@@ -72,54 +121,48 @@ func _ready():
 	satisfaction_bar.max_value = 100
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
+	
+	# Setup highlight shader
+	var shader = load("res://core/shop_floor/tutorial_mask.gdshader")
+	if shader:
+		var mat = ShaderMaterial.new()
+		mat.shader = shader
+		tutorial_dim.material = mat
 
 	var unlocked_slots = 1 # Force only one for the tutorial
 	
-	# Explicit mapping for tutorial desk setup
-	var slot_to_desks = { 0: [1, 2] }
-	var slot_to_chair_names = { 0: "ChairSlot0" }
-
-	seat_nodes.resize(8)
-	seat_positions.resize(8)
-	issue_labels.resize(8)
+	seat_nodes.resize(unlocked_slots)
+	seat_positions.resize(unlocked_slots)
+	issue_labels.resize(unlocked_slots)
+	issue_buttons.resize(unlocked_slots)
+	base_positions.resize(unlocked_slots)
+	original_issue_scales.resize(unlocked_slots)
 
 	# Setup Stations
-	for slot_idx in range(8):
-		var is_unlocked = slot_idx < unlocked_slots
+	for slot_idx in range(unlocked_slots):
+		var desk_num = slot_idx + 1
+		var is_unlocked = true # In tutorial, slot 0 is always unlocked
 		
-		# Desk visuals
-		var desks = slot_to_desks.get(slot_idx, [])
-		for desk_num in desks:
-			var desk_node = get_node_or_null("World/Background/Desk" + str(desk_num))
-			if desk_node:
-				desk_node.visible = is_unlocked
-				if is_unlocked:
-					seat_nodes[slot_idx] = desk_node # Reference for opacity/animations
-					_setup_desk_click(desk_node, slot_idx)
-		
-		# Position for arrival
-		var chair_name = slot_to_chair_names.get(slot_idx, "")
-		var chair_node = get_node_or_null("World/Background/" + chair_name) if chair_name != "" else null
-		if chair_node:
-			chair_node.visible = false
-			# Store the chair itself as the target node for assignment visuals
-			# But we'll use its position for the customer snap
-			seat_positions[slot_idx] = chair_node.global_position + (chair_node.size / 2.0)
+		# Desk visuals - Updated path to World/Background/Sprite2D/Desk1
+		var desk_node = get_node_or_null("World/Background/Sprite2D/Desk" + str(desk_num))
+		if desk_node:
+			desk_node.visible = is_unlocked
+			seat_nodes[slot_idx] = desk_node
+			seat_positions[slot_idx] = desk_node.global_position
+			_setup_desk_click(desk_node, slot_idx)
+			
+			var btn = desk_node.get_node_or_null("Desk" + str(desk_num) + "IssueButton")
+			if btn:
+				issue_buttons[slot_idx] = btn
+				base_positions[slot_idx] = btn.position
+				original_issue_scales[slot_idx] = btn.scale
+				btn.pivot_offset = btn.size / 2.0
+				btn.visible = GameManager.active_issues[slot_idx] != ""
+				if not btn.pressed.is_connected(_on_issue_clicked):
+					btn.pressed.connect(_on_issue_clicked.bind(slot_idx))
 		
 		_setup_issue_label(slot_idx)
-		_update_desk_visuals(slot_idx)
-
-	# Setup Issue Buttons
-	for i in range(issue_buttons.size()):
-		var btn = issue_buttons[i]
-		if btn:
-			base_positions.append(btn.position)
-			btn.pivot_offset = btn.size / 2.0
-			btn.visible = GameManager.active_issues[i] != ""
-			if not btn.pressed.is_connected(_on_issue_clicked):
-				btn.pressed.connect(_on_issue_clicked.bind(i))
-		else:
-			base_positions.append(Vector2.ZERO)
+		_update_desk_texture(slot_idx)
 
 	# --- HIDE TEMPLATE ---
 	if waiting_area:
@@ -142,13 +185,27 @@ func _ready():
 	else:
 		start_tutorial()
 
-func _update_desk_visuals(slot_idx: int):
+func _update_desk_texture(slot_idx: int):
 	var desk = seat_nodes[slot_idx]
 	if not desk: return
 	
+	var desk_num = slot_idx + 1
 	var is_occupied = GameManager.occupied_slots[slot_idx]
-	# Aesthetic rule: 1.0 if busy, 0.8 if free
+	
+	# Match main shop floor logic for desk texture swapping
+	if desk_num <= 7:
+		desk.texture = OCCUPIED_7 if is_occupied else EMPTY_7
+	else:
+		desk.texture = OCCUPIED_13 if is_occupied else EMPTY_13
+	
+	# Static opacity indication: 1.0 if busy, 0.8 if free
 	desk.modulate.a = 1.0 if is_occupied else 0.8
+
+func _connect_customer_signals(customer: Customer, slot_idx: int):
+	if not customer.arrived_at_pc.is_connected(_update_desk_texture):
+		customer.arrived_at_pc.connect(_update_desk_texture.bind(slot_idx))
+	if not customer.exited_pc.is_connected(_update_desk_texture):
+		customer.exited_pc.connect(_update_desk_texture.bind(slot_idx))
 
 func resume_minigame_sequence():
 	tutorial_ui.show()
@@ -187,10 +244,10 @@ func _restore_customers():
 			customer.global_position = data["pos"]
 		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
-			if idx < seat_positions.size():
-				var chair = get_node_or_null("World/Background/ChairSlot" + str(idx))
-				customer.assign_to_pc(idx, seat_positions[idx], chair, data)
-				_update_desk_visuals(idx)
+			if idx < seat_nodes.size():
+				_connect_customer_signals(customer, idx)
+				customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
+				_update_desk_texture(idx)
 	GameManager.persisted_customers.clear()
 
 func _save_customers_state():
@@ -213,19 +270,22 @@ func _on_desk_clicked(slot_idx: int, customer: Customer = null):
 	if target_customer != null:
 		if slot_idx < GameManager.occupied_slots.size() and not GameManager.occupied_slots[slot_idx]:
 			var target_pos = seat_positions[slot_idx]
-			var chair = get_node_or_null("World/Background/ChairSlot" + str(slot_idx))
+			var desk = seat_nodes[slot_idx]
 			
-			target_customer.assign_to_pc(slot_idx, target_pos, chair)
+			_connect_customer_signals(target_customer, slot_idx)
+			target_customer.assign_to_pc(slot_idx, target_pos, desk)
 			_show_station_assigned_feedback(slot_idx)
 			AudioManager.play_sfx("assign")
-			_update_desk_visuals(slot_idx)
+			# No need to manually update visuals, signals handle it
 			
+			if highlighted_node: _highlight_node(highlighted_node, false)
+
 			if target_customer == selected_customer:
 				_deselect_customer()
 			
 			if current_tutorial_step == TutorialStep.ASSIGN_CUSTOMER:
 				current_tutorial_step = TutorialStep.WAIT_FOR_ISSUE
-				tutorial_label.text = "Success! The customer is now generating money every 2 seconds.\nNotice the PC is now fully opaque. Let's wait for a technical issue..."
+				tutorial_label.text = "Success! The customer is now generating money every 2 seconds.\nNotice the PC is now fully opaque and the texture has changed. Let's wait for a technical issue..."
 				tutorial_next_btn.show()
 		else:
 			_show_station_occupied_feedback(slot_idx)
@@ -290,11 +350,10 @@ func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 	var best_slot = -1
 	var drop_point = customer.global_position
 	
-	# Only slot 0 is unlocked in tutorial
-	for i in range(1):
+	# Check all desks for proximity to trigger assignment OR occupancy feedback
+	for i in range(seat_nodes.size()):
 		var desk = seat_nodes[i]
 		if not desk: continue
-		if GameManager.occupied_slots[i]: continue
 		
 		var dist = drop_point.distance_to(desk.global_position)
 		if dist < best_dist:
@@ -323,18 +382,62 @@ func finish_tutorial_sequence():
 	tutorial_next_btn.show()
 
 func _on_tutorial_next_pressed():
+	# Clear previous highlights
+	if highlighted_node: _highlight_node(highlighted_node, false)
+
 	if current_tutorial_step == TutorialStep.INTRO:
+		current_tutorial_step = TutorialStep.HUD_TIME
+		_highlight_node(time_label, true)
+		tutorial_label.text = "This is the current TIME. Each day lasts for a limited duration. Manage your tasks efficiently!"
+		tutorial_next_btn.show()
+	elif current_tutorial_step == TutorialStep.HUD_TIME:
+		current_tutorial_step = TutorialStep.HUD_DAY
+		_highlight_node(day_label, true)
+		tutorial_label.text = "This shows the current DAY. As you progress, more customers will arrive and new challenges will appear."
+	elif current_tutorial_step == TutorialStep.HUD_DAY:
+		current_tutorial_step = TutorialStep.HUD_MONEY
+		_highlight_node(money_label, true)
+		tutorial_label.text = "This is your total MONEY. You earn money by serving customers and fixing their issues. Don't go broke!"
+	elif current_tutorial_step == TutorialStep.HUD_MONEY:
+		current_tutorial_step = TutorialStep.HUD_SATISFACTION
+		_highlight_node(satisfaction_bar, true)
+		tutorial_label.text = "This is the SATISFACTION bar. If it reaches zero, it's Game Over! Keep it high by fixing issues quickly."
+	elif current_tutorial_step == TutorialStep.HUD_SATISFACTION:
+		current_tutorial_step = TutorialStep.SHOP_DESK
+		_highlight_node(seat_nodes[0], true)
+		tutorial_label.text = "This is a COMPUTER STATION. You'll assign customers here. Unlocked stations appear bright, while locked ones are dark."
+	elif current_tutorial_step == TutorialStep.SHOP_DESK:
+		current_tutorial_step = TutorialStep.SHOP_WAITING
+		_highlight_node(waiting_area, true)
+		waiting_area.visible = true # Temporarily show to explain
+		tutorial_label.text = "This is the WAITING AREA. Customers will line up here. Only the customer at the front can be dragged!"
+	elif current_tutorial_step == TutorialStep.SHOP_WAITING:
+		waiting_area.visible = false # Hide back
 		current_tutorial_step = TutorialStep.CAMERA_MOVE
 		tutorial_label.text = "Swipe and drag the screen to look around your shop floor. Pinch to zoom in and out!"
 		tutorial_next_btn.hide()
 	elif current_tutorial_step == TutorialStep.CUSTOMER_ARRIVE:
 		spawn_customer()
+		spawn_customer()
+		spawn_customer()
 		current_tutorial_step = TutorialStep.QUEUE_INFO
-		tutorial_label.text = "A customer has arrived! Notice they wait at the front of the line.\nYou must manage the queue in order—only the first person in line can be dragged!"
+		tutorial_label.text = "A line of customers has arrived! Notice they wait at the front of the line.\nYou must manage the queue in order—only the first person in line can be dragged!"
 		tutorial_next_btn.show()
 	elif current_tutorial_step == TutorialStep.QUEUE_INFO:
 		current_tutorial_step = TutorialStep.DRAG_INFO
 		tutorial_label.text = "Drag the customer to the PC slot. While they use the computer, they'll generate P1 every 2 seconds automatically!"
+		tutorial_next_btn.show()
+	elif current_tutorial_step == TutorialStep.DRAG_INFO:
+		current_tutorial_step = TutorialStep.ASSIGN_CUSTOMER
+		# Highlight both the first customer and the desk
+		var waiting_customers = []
+		for child in customer_container.get_children():
+			if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
+				waiting_customers.append(child)
+		if waiting_customers.size() > 0:
+			_highlight_node(waiting_customers[waiting_customers.size()-1], true)
+		
+		tutorial_label.text = "Now try it! Drag the first customer in line to the PC slot."
 		tutorial_next_btn.hide()
 	elif current_tutorial_step == TutorialStep.WAIT_FOR_ISSUE:
 		tutorial_box.hide()
@@ -356,11 +459,15 @@ func force_tutorial_issue():
 	GameManager.active_issues[target_index] = issue_path
 	var btn = issue_buttons[target_index]
 	if btn:
+		var target_scale = original_issue_scales[target_index]
 		btn.visible = true
 		btn.scale = Vector2.ZERO
 		var tween = create_tween()
-		tween.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+		tween.tween_property(btn, "scale", target_scale * 1.2, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", target_scale, 0.1)
+		
+		# Highlight the issue button
+		_highlight_node(btn, true)
 	
 	tutorial_box.show()
 	tutorial_next_btn.hide()
@@ -370,12 +477,14 @@ func force_tutorial_issue():
 func spawn_customer():
 	var waiting_count = 0
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING:
+		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 			waiting_count += 1
 			
 	var customer = waiting_area.duplicate()
 	customer_container.add_child(customer)
-	customer_container.move_child(customer, 0)
+	# Insert newest customer at index 1 (after the environment sprite)
+	# This keeps them drawn behind older ones but in front of background
+	customer_container.move_child(customer, 1)
 	
 	customer.process_mode = PROCESS_MODE_INHERIT
 	customer.visible = true
@@ -395,8 +504,10 @@ func spawn_customer():
 func _refresh_queue_positions():
 	var waiting_customers = []
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING:
+		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 			waiting_customers.append(child)
+	# Order in children list is newest to oldest due to move_child(1)
+	# So reverse gives oldest to newest
 	waiting_customers.reverse()
 	for i in range(waiting_customers.size()):
 		var c = waiting_customers[i]
@@ -406,17 +517,25 @@ func _refresh_queue_positions():
 			tween.tween_property(c, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func is_first_in_line(customer: Customer) -> bool:
+	# Block dragging entirely if we haven't reached the assignment part of the tutorial
+	if current_tutorial_step < TutorialStep.ASSIGN_CUSTOMER:
+		return false
+		
 	var waiting_customers = []
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING:
+		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 			waiting_customers.append(child)
+	# Oldest (first in line) is at the end of the array due to move_child(1) logic
 	if waiting_customers.size() > 0:
 		return waiting_customers[waiting_customers.size() - 1] == customer
 	return false
 
 func show_queue_warning(pos: Vector2):
 	var label = Label.new()
-	label.text = "WAIT YOUR TURN!"
+	if current_tutorial_step < TutorialStep.ASSIGN_CUSTOMER:
+		label.text = "NOT YET!"
+	else:
+		label.text = "WAIT YOUR TURN!"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var font = load("res://assets/fonts/ThaleahFat.ttf")
 	label.add_theme_font_override("font", font)
@@ -433,6 +552,9 @@ func show_queue_warning(pos: Vector2):
 	tween.finished.connect(label.queue_free)
 
 func _on_issue_clicked(pc_index: int):
+	# Clear highlight if any
+	if highlighted_node: _highlight_node(highlighted_node, false)
+	
 	var issue_path = GameManager.active_issues[pc_index]
 	if issue_path == "": return
 	GameManager.active_issues[pc_index] = ""
@@ -444,7 +566,7 @@ func _on_issue_clicked(pc_index: int):
 
 func update_hud():
 	day_label.text = "Day: " + str(GameManager.day)
-	money_label.text = "Money: ₱" + str(GameManager.money)
+	money_label.text = "Money: P" + str(GameManager.money)
 	if GameManager.money <= 0:
 		money_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
 	else:
@@ -470,6 +592,10 @@ func _apply_bar_style():
 	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
 func _process(delta):
+	# Keep highlight tracking the node
+	if highlighted_node:
+		_update_highlight_shader()
+
 	float_time += delta
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
