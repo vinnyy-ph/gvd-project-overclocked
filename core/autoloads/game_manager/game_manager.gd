@@ -96,6 +96,8 @@ func trigger_game_over():
 	# We might want to clear active issues or other state
 	get_tree().change_scene_to_file("res://ui/game_over/game_over.tscn")
 
+signal money_earned_visual(amount: int, position: Vector2)
+
 var save_path: String = "user://savegame.json"
 var previous_scene: String = ""
 var last_money_change: int = 0
@@ -130,11 +132,44 @@ func get_formatted_time() -> String:
 		
 	return "%02d:%02d %s" % [display_hour, current_minute, am_pm]
 
+func get_satisfaction_multiplier() -> float:
+	if satisfaction >= 80:
+		return 1.2 # Tip bonus
+	elif satisfaction >= 40:
+		return 1.0 # Standard
+	else:
+		return 0.8 # Penalty
+
 func get_money_reward(base_amount: int) -> int:
-	var bonus = 1.0
+	var bonus = get_satisfaction_multiplier()
 	if SaveManager.unlocked_upgrades.get("graphics_upgrade", 0) > 0:
 		bonus += 0.10 # +10% payment
 	return int(base_amount * bonus)
+
+func get_passive_income_reward() -> int:
+	var base = 1
+	var multiplier = get_satisfaction_multiplier()
+	# Upgrades could increase base passive income here
+	return int(base * multiplier)
+
+func get_spawn_interval() -> float:
+	var unlocked = get_unlocked_slots()
+	# Base interval starts slower and gets faster as you have more slots
+	# 2 slots -> ~6.5s
+	# 13 slots -> ~3.5s
+	var base_interval = lerp(6.5, 3.5, float(unlocked - 2) / 11.0)
+	
+	# Day multiplier: gets slightly faster each day
+	# Day 1: 100%, Day 10: 73% (faster)
+	var day_mult = max(0.6, 1.0 - (day - 1) * 0.03)
+	
+	return base_interval * day_mult
+
+func get_max_waiting_customers() -> int:
+	var unlocked = get_unlocked_slots()
+	# 2 slots -> 2 waiting
+	# 13 slots -> 5 waiting
+	return int(lerp(2.0, 5.0, float(unlocked - 2) / 11.0))
 
 func get_issue_spawn_chance_modifier() -> float:
 	# Power strip and cable kit reduce overall issue frequency

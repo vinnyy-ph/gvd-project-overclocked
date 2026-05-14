@@ -85,22 +85,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_3cboq")
 
-[node name="Parallax2D" type="Parallax2D" parent="World" unique_id=289474377]
-repeat_size = Vector2(1843, 0)
-autoscroll = Vector2(50, 0)
-repeat_times = 4
-
-[node name="Sprite2D" type="Sprite2D" parent="World/Parallax2D" unique_id=943323864]
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("5_22yg1")
-centered = false
-
-[node name="Sprite2D2" type="Sprite2D" parent="World/Parallax2D" unique_id=344089834]
-position = Vector2(0, -1464)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("5_22yg1")
-centered = false
-
 [node name="Background" type="Node2D" parent="World" unique_id=142257243]
 z_index = 2
 position = Vector2(1532, 704)
@@ -124,6 +108,20 @@ scale = Vector2(2, 2)
 icon = ExtResource("3_eyiyn")
 flat = true
 
+[node name="Label" type="Label" parent="World/Background/Desk7/Desk7IssueButton" unique_id=317958110]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk6" type="Sprite2D" parent="World/Background" unique_id=1543486381]
 position = Vector2(-231.86768, -270.83533)
 scale = Vector2(0.51159185, 0.51159185)
@@ -137,7 +135,20 @@ offset_bottom = -461.90753
 scale = Vector2(2, 2)
 icon = ExtResource("3_eyiyn")
 flat = true
-metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk6/Desk6IssueButton" unique_id=1570668206]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
 
 [node name="Desk5" type="Sprite2D" parent="World/Background" unique_id=229852010]
 position = Vector2(-420.4391, -175.12103)
@@ -152,7 +163,20 @@ offset_bottom = -461.90753
 scale = Vector2(2, 2)
 icon = ExtResource("3_eyiyn")
 flat = true
-metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk5/Desk5IssueButton" unique_id=1577065751]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
 
 [node name="Desk4" type="Sprite2D" parent="World/Background" unique_id=1208692705]
 position = Vector2(-606.1533, -80.83533)
@@ -167,7 +191,20 @@ offset_bottom = -461.90753
 scale = Vector2(2, 2)
 icon = ExtResource("3_eyiyn")
 flat = true
-metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk4/Desk4IssueButton" unique_id=240094076]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
 
 [node name="Desk3" type="Sprite2D" parent="World/Background" unique_id=1983527224]
 position = Vector2(-794.72473, 14.878967)
@@ -184,6 +221,20 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
+[node name="Label" type="Label" parent="World/Background/Desk3/Desk3IssueButton" unique_id=993325121]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk2" type="Sprite2D" parent="World/Background" unique_id=113499335]
 position = Vector2(-979.50525, 111.010864)
 scale = Vector2(0.51159185, 0.51159185)
@@ -199,6 +250,20 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
+[node name="Label" type="Label" parent="World/Background/Desk2/Desk2IssueButton" unique_id=1258351798]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=805946840]
 position = Vector2(-1168.0767, 206.7252)
 scale = Vector2(0.51159185, 0.51159185)
@@ -213,11 +278,25 @@ scale = Vector2(2, 2)
 icon = ExtResource("3_eyiyn")
 flat = true
 
+[node name="Label" type="Label" parent="World/Background/Desk1/Desk1IssueButton" unique_id=1634305067]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
 position = Vector2(0, 822.8571)
 
 [node name="Desk13" type="Sprite2D" parent="World/Background" unique_id=1047420753]
-position = Vector2(179.4354, -92.87397)
+position = Vector2(273.7211, -44.345963)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("5_g1u6q")
 
@@ -232,8 +311,22 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
+[node name="Label" type="Label" parent="World/Background/Desk13/Desk13IssueButton" unique_id=2104574521]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk12" type="Sprite2D" parent="World/Background" unique_id=1834866764]
-position = Vector2(-10.5648575, 2.8403225)
+position = Vector2(83.72085, 51.368324)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("5_g1u6q")
 
@@ -248,8 +341,22 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
+[node name="Label" type="Label" parent="World/Background/Desk12/Desk12IssueButton" unique_id=1418934564]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk11" type="Sprite2D" parent="World/Background" unique_id=1528630727]
-position = Vector2(-202.4252, 98.57134)
+position = Vector2(-108.13949, 147.09935)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("5_g1u6q")
 
@@ -263,8 +370,22 @@ size_flags_horizontal = 3
 icon = ExtResource("3_eyiyn")
 flat = true
 
+[node name="Label" type="Label" parent="World/Background/Desk11/Desk11IssueButton" unique_id=1723158876]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk10" type="Sprite2D" parent="World/Background" unique_id=2100459152]
-position = Vector2(-392.4252, 192.857)
+position = Vector2(-298.1395, 241.38501)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("5_g1u6q")
 
@@ -279,8 +400,22 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
+[node name="Label" type="Label" parent="World/Background/Desk10/Desk10IssueButton" unique_id=113393117]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk9" type="Sprite2D" parent="World/Background" unique_id=174221913]
-position = Vector2(-580.99664, 288.57135)
+position = Vector2(-486.71094, 337.09937)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("5_g1u6q")
 
@@ -295,8 +430,22 @@ icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
 
+[node name="Label" type="Label" parent="World/Background/Desk9/Desk9IssueButton" unique_id=1531007669]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
 [node name="Desk8" type="Sprite2D" parent="World/Background" unique_id=1748538281]
-position = Vector2(-770.99664, 384.28546)
+position = Vector2(-676.71094, 432.81348)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("5_g1u6q")
 
@@ -310,6 +459,20 @@ size_flags_horizontal = 3
 icon = ExtResource("3_eyiyn")
 flat = true
 metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk8/Desk8IssueButton" unique_id=1262672687]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
 
 [node name="OwnerWalkiing" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
 unique_name_in_owner = true
@@ -504,6 +667,17 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 icon = ExtResource("13_3lx45")
 flat = true
+
+[node name="MultiplierLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2147239335]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 695.0
+offset_right = 326.0
+offset_bottom = 730.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 28
+text = "Tips: x1.0"
 
 [node name="DayTimer" type="Timer" parent="." unique_id=1041295534]
 autostart = true

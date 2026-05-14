@@ -5,6 +5,7 @@ extends Node2D
 @onready var money_label = $CanvasLayer/HUD/MoneyLabel
 @onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
+@onready var multiplier_label = $CanvasLayer/HUD/MultiplierLabel
 
 @export var every_pc_unlocked: bool = false
 
@@ -51,6 +52,8 @@ func _ready():
 	satisfaction_bar.max_value = 100
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
+	
+	GameManager.money_earned_visual.connect(spawn_floating_money)
 
 	var num_slots = 13
 	var unlocked_slots = num_slots if every_pc_unlocked else GameManager.get_unlocked_slots()
@@ -100,6 +103,10 @@ func _ready():
 		
 	_restore_customers()
 	update_hud()
+	
+	# Initialize spawn timer with dynamic interval
+	$SpawnTimer.wait_time = GameManager.get_spawn_interval()
+	$SpawnTimer.start()
 
 func _update_desk_texture(slot_idx: int):
 	var desk = seat_nodes[slot_idx]
@@ -336,8 +343,12 @@ func _on_spawn_timer_timeout():
 	for child in customer_container.get_children():
 		if child is Customer and child.current_state == Customer.State.WAITING:
 			waiting_count += 1
-	if waiting_count < 3:
+	if waiting_count < GameManager.get_max_waiting_customers():
 		spawn_customer()
+	
+	# Randomize next interval slightly for "fairness" (organic feel)
+	var base_interval = GameManager.get_spawn_interval()
+	$SpawnTimer.wait_time = randf_range(base_interval * 0.8, base_interval * 1.2)
 
 func spawn_customer():
 	var waiting_count = 0
@@ -457,6 +468,35 @@ func update_hud():
 	time_label.text = GameManager.get_formatted_time()
 	satisfaction_bar.value = GameManager.satisfaction
 	_apply_bar_style()
+	
+	# Update Multiplier Label
+	var mult = GameManager.get_satisfaction_multiplier()
+	multiplier_label.text = "Tips: x" + str(mult)
+	if mult > 1.0:
+		multiplier_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3)) # Green
+	elif mult < 1.0:
+		multiplier_label.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3)) # Red
+	else:
+		multiplier_label.add_theme_color_override("font_color", Color.WHITE)
+
+func spawn_floating_money(amount: int, start_pos: Vector2):
+	var label = Label.new()
+	label.text = "+P" + str(amount)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 45)
+	label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.2)) # Gold-ish
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.global_position = start_pos + Vector2(-50, -50)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 120, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.2).set_delay(0.4)
+	tween.finished.connect(label.queue_free)
 
 # --- CAMERA LOGIC ---
 

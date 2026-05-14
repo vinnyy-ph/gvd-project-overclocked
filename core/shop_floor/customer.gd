@@ -100,15 +100,20 @@ func _on_arrival():
 
 func _on_revenue_timeout():
 	if current_state == State.USING_PC and GameManager.active_issues[assigned_pc_index] == "":
-		GameManager.money += 1 # +1 money every 2 seconds
+		var amount = GameManager.get_passive_income_reward()
+		GameManager.money += amount
+		GameManager.money_earned_visual.emit(amount, global_position + Vector2(0, -100))
 
 func _on_session_timeout():
 	exit_shop()
 
 func _on_issue_timeout():
 	if current_state == State.USING_PC and GameManager.active_issues[assigned_pc_index] == "":
-		# Chance to trigger an issue
-		if randf() < 0.35: # 35% chance every check
+		# Chance to trigger an issue (scaled by upgrades)
+		var base_chance = 0.35
+		var modified_chance = base_chance * GameManager.get_issue_spawn_chance_modifier()
+		
+		if randf() < modified_chance:
 			GameManager.active_issues[assigned_pc_index] = GameManager.get_next_minigame()
 			AudioManager.play_sfx("alert")
 		else:
