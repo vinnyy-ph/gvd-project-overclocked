@@ -25,6 +25,12 @@ var original_waiting_position = Vector2.ZERO
 var base_scale = Vector2.ONE
 var drag_tween: Tween = null
 
+# Physics-related variables
+var last_mouse_pos: Vector2 = Vector2.ZERO
+var drag_velocity: float = 0.0
+var target_rotation: float = 0.0
+var rotation_speed: float = 8.0
+
 func _ready():
 	base_scale = scale
 	if not revenue_timer.get_parent():
@@ -168,6 +174,7 @@ func _input(event):
 							return
 							
 						is_dragging = true
+						last_mouse_pos = get_global_mouse_position()
 						_set_drag_visual(true)
 						drag_offset = get_global_mouse_position() - global_position
 						original_waiting_position = global_position
@@ -198,6 +205,7 @@ func _input(event):
 						return
 						
 					is_dragging = true
+					last_mouse_pos = mouse_pos
 					_set_drag_visual(true)
 					drag_offset = mouse_pos - global_position
 					original_waiting_position = global_position
@@ -246,5 +254,20 @@ func _set_drag_visual(dragging: bool):
 		drag_tween.tween_property(self, "modulate:a", 1.0, 0.15)
 		z_index = 37 # Return to normal customer z-index
 
-func _process(_delta):
-	pass
+func _process(delta):
+	if is_dragging:
+		var current_mouse_pos = get_global_mouse_position()
+		# Calculate horizontal velocity
+		var dx = current_mouse_pos.x - last_mouse_pos.x
+		
+		# Update target rotation based on horizontal movement (tilt)
+		# A little bit of sin time adds a "dangling" swing effect
+		var swing = sin(Time.get_ticks_msec() * 0.01) * 0.05
+		target_rotation = clamp(dx * 0.05, -0.4, 0.4) + swing
+		
+		last_mouse_pos = current_mouse_pos
+	else:
+		target_rotation = 0.0
+	
+	# Smoothly interpolate rotation
+	rotation = lerp_angle(rotation, target_rotation, rotation_speed * delta)
