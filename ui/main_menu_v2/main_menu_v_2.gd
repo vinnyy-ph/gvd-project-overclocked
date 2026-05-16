@@ -81,46 +81,9 @@ func _on_exit_button_pressed() -> void:
 	_show_exit_confirmation()
 
 func _show_exit_confirmation() -> void:
-	var dialog = ColorRect.new()
-	dialog.name = "ExitConfirmation"
-	dialog.color = Color(0, 0, 0, 0.8)
-	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(dialog)
-	
-	var panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(400, 200)
-	dialog.add_child(panel)
-	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	
-	var vbox = VBoxContainer.new()
-	vbox.set("theme_override_constants/separation", 30)
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	panel.add_child(vbox)
-	
-	var label = Label.new()
-	label.text = "ARE YOU SURE YOU WANT TO EXIT?"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(label)
-	
-	var hbox = HBoxContainer.new()
-	hbox.set("theme_override_constants/separation", 50)
-	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_child(hbox)
-	
-	var yes_btn = Button.new()
-	yes_btn.text = " YES "
-	yes_btn.pressed.connect(func(): get_tree().quit())
-	hbox.add_child(yes_btn)
-	
-	var no_btn = Button.new()
-	no_btn.text = " NO "
-	no_btn.pressed.connect(func(): dialog.queue_free())
-	hbox.add_child(no_btn)
-	
-	# Optional: Apply GameManager button effects if they exist
-	if GameManager.has_method("setup_button_effect"):
-		GameManager.setup_button_effect(yes_btn)
-		GameManager.setup_button_effect(no_btn)
+	var exit_prompt_scene = load("res://ui/pause/ExitPrompt.tscn")
+	var exit_prompt = exit_prompt_scene.instantiate()
+	add_child(exit_prompt)
 
 func _on_new_game_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://ui/profile_selection/profile_selection.tscn")

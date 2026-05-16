@@ -8,6 +8,8 @@ extends Node2D
 @onready var multiplier_label = $CanvasLayer/HUD/MultiplierLabel
 
 @export var every_pc_unlocked: bool = false
+@export var min_zoom: float = 0.3
+@export var max_zoom: float = 1.5
 
 @onready var issue_buttons: Array = []
 
@@ -504,17 +506,17 @@ func handle_drag_and_zoom(event):
 	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
-			camera.zoom = Vector2(min(camera.zoom.x + 0.1, 1.5), min(camera.zoom.y + 0.1, 1.5))
+			camera.zoom = Vector2(min(camera.zoom.x + 0.1, max_zoom), min(camera.zoom.y + 0.1, max_zoom))
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
-			camera.zoom = Vector2(max(camera.zoom.x - 0.1, 0.5), max(camera.zoom.y - 0.1, 0.5))
+			camera.zoom = Vector2(max(camera.zoom.x - 0.1, min_zoom), max(camera.zoom.y - 0.1, min_zoom))
 		elif event.button_index == MOUSE_BUTTON_LEFT:
 			dragging = event.pressed
 			if dragging: last_drag_position = event.position
 		clamp_camera()
 	elif event is InputEventMagnifyGesture:
 		var new_zoom = camera.zoom * event.factor
-		camera.zoom.x = clamp(new_zoom.x, 0.5, 1.5)
-		camera.zoom.y = clamp(new_zoom.y, 0.5, 1.5)
+		camera.zoom.x = clamp(new_zoom.x, min_zoom, max_zoom)
+		camera.zoom.y = clamp(new_zoom.y, min_zoom, max_zoom)
 		clamp_camera()
 	elif event is InputEventMouseMotion and dragging:
 		camera.position.x -= (event.position.x - last_drag_position.x) / camera.zoom.x
