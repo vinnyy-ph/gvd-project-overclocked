@@ -1,0 +1,298 @@
+[gd_scene format=3 uid="uid://dytextc8b2g26"]
+
+[ext_resource type="Script" uid="uid://bucrwdx637vjf" path="res://minigames/bsod_fix/bsod_fix_mini_game.gd" id="1_a773p"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_qwrp1"]
+[ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_sasls"]
+[ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="5_5aeuf"]
+[ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_7qnfh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_terminal"]
+bg_color = Color(0.02, 0.02, 0.03, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.25, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+bg_color = Color(0, 0, 0, 0.4)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 4
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 2
+border_width_top = 4
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+bg_color = Color(1, 1, 1, 0.2)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
+shadow_offset = Vector2(0, 4)
+
+[node name="DEBUGGINGFixMiniGame" type="Control" unique_id=1910507624]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a773p")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1107272190]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.02, 0.03, 1)
+
+[node name="BG_Texture" type="TextureRect" parent="Background" unique_id=1974333869]
+modulate = Color(1, 1, 1, 0.1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_sasls")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="TopPanel" type="TextureRect" parent="Background" unique_id=892305844]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 722.0
+grow_horizontal = 2
+texture = ExtResource("3_sasls")
+expand_mode = 1
+
+[node name="TimerIcon" type="TextureRect" parent="Background/TopPanel" unique_id=494703863]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 34.0
+offset_top = -334.0
+offset_right = 68.0
+offset_bottom = -298.0
+grow_vertical = 2
+texture = ExtResource("5_5aeuf")
+expand_mode = 1
+
+[node name="TimerLabel" type="Label" parent="Background/TopPanel" unique_id=1327118552]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 78.0
+offset_top = -334.0
+offset_right = 228.0
+offset_bottom = -298.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 32
+text = "TIME: 60"
+vertical_alignment = 1
+
+[node name="StepLabel" type="Label" parent="Background/TopPanel" unique_id=117395066]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -307.0
+offset_top = -335.0
+offset_right = -106.0
+offset_bottom = -299.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 32
+text = "FIXED: 0 / 3"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="InstructionsPanel" type="TextureRect" parent="Background" unique_id=1767577304]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.289
+anchor_top = 0.754
+anchor_right = 0.739
+anchor_bottom = 0.87600005
+offset_left = 0.07998657
+offset_top = 62.119995
+offset_right = -0.37164307
+offset_bottom = 62.27997
+texture = ExtResource("5_7qnfh")
+expand_mode = 1
+
+[node name="InstructionsLabel" type="Label" parent="Background/InstructionsPanel" unique_id=1374654129]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -207.5
+offset_top = -30.5
+offset_right = 207.5
+offset_bottom = 30.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 31
+text = "CHOOSE THE CORRECT TROUBLESHOOTING
+STEP TO RECOVER THE PC."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DEBUGGINGPanel" type="Panel" parent="." unique_id=1617632150]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.15
+anchor_right = 0.75
+anchor_bottom = 0.5
+offset_left = 54.0
+offset_top = 88.99999
+offset_right = -24.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_terminal")
+
+[node name="DEBUGGINGText" type="RichTextLabel" parent="DEBUGGINGPanel" unique_id=624708225]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0.1, 1, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_qwrp1")
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = ">>> INITIALIZING DEBUGGER...
+>>> SCANNING FOR SYNTAX ERRORS..."
+scroll_following = true
+
+[node name="ChoicesArea" type="Control" parent="." unique_id=291703720]
+layout_mode = 1
+anchor_left = 0.296
+anchor_top = 0.46800002
+anchor_right = 0.72700006
+anchor_bottom = 0.716
+offset_left = 0.11999512
+offset_top = 58.039978
+offset_right = 0.4399414
+offset_bottom = 58.159973
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChoiceButton1" type="Button" parent="ChoicesArea" unique_id=1376193339]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.19800001
+offset_bottom = -0.013637543
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+text = "Option 1"
+
+[node name="ChoiceButton2" type="Button" parent="ChoicesArea" unique_id=867630130]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.28
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -0.030399323
+offset_bottom = -3.9749908
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+text = "Option 2"
+
+[node name="ChoiceButton3" type="Button" parent="ChoicesArea" unique_id=1512655949]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.055999756
+offset_bottom = -0.31498718
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+text = "Option 3"
+
+[node name="ChoiceButton4" type="Button" parent="ChoicesArea" unique_id=216499740]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.54800004
+anchor_right = 1.0
+anchor_bottom = 0.74600005
+offset_top = 0.083358765
+offset_bottom = 0.06971741
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_qwrp1")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+text = "Option 4"
+
+[node name="GameTimer" type="Timer" parent="." unique_id=791224533]
+autostart = true
+
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]

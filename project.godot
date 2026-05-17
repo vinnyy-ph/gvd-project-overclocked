@@ -13,16 +13,34 @@ config_version=5
 config/name="Overclocked"
 config/description="Overclocked"
 config/version="1"
-run/main_scene="uid://buljirkfng5sa"
+run/main_scene="res://ui/main_menu_v2/MainMenuV2.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
-config/icon="uid://g14n5w5c4nq5"
+config/icon="res://icon.svg"
+
+[autoload]
+
+GameManager="*res://core/autoloads/game_manager/game_manager.gd"
+PauseMenu="*res://ui/pause_menu/pause_menu.tscn"
+AudioManager="*res://core/autoloads/audio_manager/audio_manager.tscn"
+SaveManager="*res://core/autoloads/save_manager/save_manager.gd"
+SettingsManager="*res://core/autoloads/settings_manager.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg")
+
+[input_devices]
+
+pointing/android/enable_long_press_as_right_click=true
+pointing/android/enable_pan_and_scale_gestures=true
+pointing/emulate_touch_from_mouse=true
 
 [physics]
 
@@ -30,6 +48,9 @@ window/stretch/aspect="expand"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+textures/decals/filter=0
+textures/light_projectors/filter=0

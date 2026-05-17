@@ -1,0 +1,780 @@
+[gd_scene format=3 uid="uid://6fse6yyfat1s"]
+
+[ext_resource type="Script" uid="uid://bkk6ks7wascwm" path="res://core/shop_floor/shop_floor_scrollable.gd" id="1_q7epe"]
+[ext_resource type="Texture2D" uid="uid://bqpj4a24d7vu0" path="res://assets/images/shop_floor_bg/1.png" id="2_kbbo8"]
+[ext_resource type="Texture2D" uid="uid://ddrbiww8xi3sa" path="res://assets/images/shop_floor/main.png" id="3_8jxs8"]
+[ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="3_eyiyn"]
+[ext_resource type="Texture2D" uid="uid://dwniqpsh0v68s" path="res://assets/images/decorations/floor1.png" id="4_f7hrx"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="4_ll02x"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="5_22yg1"]
+[ext_resource type="Texture2D" uid="uid://djr2l1hikhc0n" path="res://assets/images/decorations/wall1.png" id="5_f37gu"]
+[ext_resource type="Texture2D" uid="uid://bxq6b7x50y3jq" path="res://assets/images/shop_floor/empty_slot_front.png" id="5_g1u6q"]
+[ext_resource type="Texture2D" uid="uid://dncuf4bc67nf8" path="res://assets/images/shop_floor/empty_slot.png" id="6_g1u6q"]
+[ext_resource type="Texture2D" uid="uid://baygp2mgt43kp" path="res://assets/images/shop_floor/Group 148.png" id="6_kbbo8"]
+[ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="8_sru07"]
+[ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="9_i6wj4"]
+[ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="9_u2yt3"]
+[ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="10_jajnr"]
+[ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="11_8jxs8"]
+[ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="11_f7hrx"]
+[ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_am8fm"]
+[ext_resource type="Script" uid="uid://c157mbb0pqg2x" path="res://core/shop_floor/animated_sprite_2d.gd" id="12_f7hrx"]
+[ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="12_ghd6s"]
+[ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_3lx45"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_at4k0"]
+atlas = ExtResource("11_8jxs8")
+region = Rect2(0, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8oxpo"]
+atlas = ExtResource("11_8jxs8")
+region = Rect2(114, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_al1kq"]
+atlas = ExtResource("11_8jxs8")
+region = Rect2(228, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsslq"]
+atlas = ExtResource("11_8jxs8")
+region = Rect2(342, 0, 114, 191)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jkvva"]
+atlas = ExtResource("11_8jxs8")
+region = Rect2(456, 0, 114, 191)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f7hrx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_at4k0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8oxpo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_al1kq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hsslq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jkvva")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jkvva")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghd6s"]
+
+[node name="ShopFloorScrollable" type="Node2D" unique_id=104881244]
+script = ExtResource("1_q7epe")
+
+[node name="World" type="Node2D" parent="." unique_id=495853787]
+
+[node name="TextureRect" type="TextureRect" parent="World" unique_id=1934917274]
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_top = -627.0
+offset_right = 2904.392
+offset_bottom = 1817.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_kbbo8")
+expand_mode = 1
+
+[node name="Background" type="Node2D" parent="World" unique_id=142257243]
+z_index = 2
+position = Vector2(1532, 704)
+scale = Vector2(0.7, 0.7)
+
+[node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=1643221891]
+position = Vector2(-15.714285, -115.71427)
+texture = ExtResource("3_8jxs8")
+
+[node name="Floor" type="Sprite2D" parent="World/Background" unique_id=1022676469]
+visible = false
+position = Vector2(-15.714285, 175.71431)
+texture = ExtResource("4_f7hrx")
+
+[node name="Floor2" type="Sprite2D" parent="World/Background" unique_id=781659871]
+visible = false
+position = Vector2(-15.714288, -507.14285)
+texture = ExtResource("5_f37gu")
+
+[node name="Sprite2D2" type="Sprite2D" parent="World/Background" unique_id=1597999115]
+visible = false
+position = Vector2(-15.714355, -115.714294)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("6_kbbo8")
+
+[node name="Desk14" type="Sprite2D" parent="World/Background" unique_id=1930357807]
+visible = false
+position = Vector2(-101.428604, -581.4286)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk14IssueButton" type="Button" parent="World/Background/Desk14" unique_id=1662295187]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk14/Desk14IssueButton" unique_id=525164560]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk7" type="Sprite2D" parent="World/Background" unique_id=1730704254]
+position = Vector2(-289.50528, -484.70337)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk7IssueButton" type="Button" parent="World/Background/Desk7" unique_id=921647580]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk7/Desk7IssueButton" unique_id=317958110]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk6" type="Sprite2D" parent="World/Background" unique_id=1543486381]
+position = Vector2(-477.58194, -389.4068)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk6IssueButton" type="Button" parent="World/Background/Desk6" unique_id=341757718]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk6/Desk6IssueButton" unique_id=1570668206]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk5" type="Sprite2D" parent="World/Background" unique_id=229852010]
+position = Vector2(-666.1534, -293.6925)
+scale = Vector2(0.5115918, 0.5115918)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk5IssueButton" type="Button" parent="World/Background/Desk5" unique_id=1873499116]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk5/Desk5IssueButton" unique_id=1577065751]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk4" type="Sprite2D" parent="World/Background" unique_id=1208692705]
+position = Vector2(-851.8676, -199.4068)
+scale = Vector2(0.5115918, 0.5115918)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk4IssueButton" type="Button" parent="World/Background/Desk4" unique_id=2003987656]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk4/Desk4IssueButton" unique_id=240094076]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk3" type="Sprite2D" parent="World/Background" unique_id=1983527224]
+position = Vector2(-1040.439, -103.692505)
+scale = Vector2(0.5115918, 0.5115918)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk3IssueButton" type="Button" parent="World/Background/Desk3" unique_id=341931847]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk3/Desk3IssueButton" unique_id=993325121]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk2" type="Sprite2D" parent="World/Background" unique_id=113499335]
+position = Vector2(-1225.2195, -7.5606003)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk2IssueButton" type="Button" parent="World/Background/Desk2" unique_id=522174884]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk2/Desk2IssueButton" unique_id=1258351798]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=805946840]
+position = Vector2(-1413.7909, 88.15374)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("6_g1u6q")
+
+[node name="Desk1IssueButton" type="Button" parent="World/Background/Desk1" unique_id=1559353774]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk1/Desk1IssueButton" unique_id=1634305067]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
+position = Vector2(0, 822.8571)
+
+[node name="Desk15" type="Sprite2D" parent="World/Background" unique_id=763727967]
+visible = false
+position = Vector2(111.42867, -315.71432)
+scale = Vector2(0.5115917, 0.5115917)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk15IssueButton" type="Button" parent="World/Background/Desk15" unique_id=1324310733]
+offset_left = -50.26329
+offset_top = -608.71155
+offset_right = 50.73671
+offset_bottom = -381.71155
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk15/Desk15IssueButton" unique_id=745154782]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk13" type="Sprite2D" parent="World/Background" unique_id=1047420753]
+position = Vector2(-76.27882, -220.06026)
+scale = Vector2(0.51159173, 0.51159173)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk13IssueButton" type="Button" parent="World/Background/Desk13" unique_id=1812280120]
+offset_left = -50.26329
+offset_top = -608.71155
+offset_right = 50.73671
+offset_bottom = -381.71155
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk13/Desk13IssueButton" unique_id=2104574521]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk12" type="Sprite2D" parent="World/Background" unique_id=1834866764]
+position = Vector2(-266.27905, -124.34595)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk12IssueButton" type="Button" parent="World/Background/Desk12" unique_id=282233529]
+offset_left = -50.26329
+offset_top = -608.7115
+offset_right = 50.73671
+offset_bottom = -381.7115
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk12/Desk12IssueButton" unique_id=1418934564]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk11" type="Sprite2D" parent="World/Background" unique_id=1528630727]
+position = Vector2(-458.13943, -28.614943)
+scale = Vector2(0.51159173, 0.51159173)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk11IssueButton" type="Button" parent="World/Background/Desk11" unique_id=1632177063]
+offset_left = -50.26329
+offset_top = -608.71155
+offset_right = 50.73671
+offset_bottom = -381.71155
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk11/Desk11IssueButton" unique_id=1723158876]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk10" type="Sprite2D" parent="World/Background" unique_id=2100459152]
+position = Vector2(-648.1394, 65.67072)
+scale = Vector2(0.51159173, 0.51159173)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk10IssueButton" type="Button" parent="World/Background/Desk10" unique_id=25192469]
+offset_left = -50.26329
+offset_top = -608.71155
+offset_right = 50.73671
+offset_bottom = -381.71155
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk10/Desk10IssueButton" unique_id=113393117]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk9" type="Sprite2D" parent="World/Background" unique_id=174221913]
+position = Vector2(-836.7109, 161.38507)
+scale = Vector2(0.51159173, 0.51159173)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk9IssueButton" type="Button" parent="World/Background/Desk9" unique_id=1897549211]
+offset_left = -50.26329
+offset_top = -608.71155
+offset_right = 50.73671
+offset_bottom = -381.71155
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+
+[node name="Label" type="Label" parent="World/Background/Desk9/Desk9IssueButton" unique_id=1531007669]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="Desk8" type="Sprite2D" parent="World/Background" unique_id=1748538281]
+position = Vector2(-1026.7109, 257.09918)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("5_g1u6q")
+
+[node name="Desk8IssueButton" type="Button" parent="World/Background/Desk8" unique_id=1167117532]
+offset_left = -50.26329
+offset_top = -608.7115
+offset_right = 50.73671
+offset_bottom = -381.7115
+scale = Vector2(2, 2)
+size_flags_horizontal = 3
+icon = ExtResource("3_eyiyn")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="World/Background/Desk8/Desk8IssueButton" unique_id=1262672687]
+layout_mode = 0
+offset_left = -32.59626
+offset_top = -15.358224
+offset_right = 122.40374
+offset_bottom = 13.641776
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 31
+text = "ISSUE LABEL"
+
+[node name="OwnerWalkiing" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+position = Vector2(770, -54.285645)
+scale = Vector2(1.5902249, 1.5902249)
+sprite_frames = SubResource("SpriteFrames_f7hrx")
+autoplay = "default"
+script = ExtResource("12_f7hrx")
+
+[node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=744454501]
+visible = false
+z_index = 37
+position = Vector2(-246.46431, 765.1974)
+scale = Vector2(0.6091899, 0.6091899)
+texture = ExtResource("10_jajnr")
+script = ExtResource("11_f7hrx")
+
+[node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
+z_index = 155
+position = Vector2(640, 724)
+zoom = Vector2(0.5, 0.5)
+limit_left = 0
+limit_top = 0
+limit_right = 3064
+limit_bottom = 1408
+limit_smoothed = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1805051003]
+process_mode = 3
+
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=1197349872]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD" unique_id=1555646873]
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 661.0
+offset_right = 326.0
+offset_bottom = 696.0
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 22
+value = 97.55
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD" unique_id=966002861]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 623.0
+offset_right = 338.122
+offset_bottom = 709.0
+texture = ExtResource("9_i6wj4")
+expand_mode = 1
+
+[node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1586168814]
+visible = false
+layout_mode = 0
+offset_left = 324.0
+offset_top = 664.0
+offset_right = 959.0
+offset_bottom = 707.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 13
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 46
+text = "Satisfaction"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopBar" type="ColorRect" parent="CanvasLayer/HUD" unique_id=58088674]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 240.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HUD/TopBar" unique_id=2094469326]
+position = Vector2(182.5, 54)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_sru07")
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HUD/TopBar/Sprite2D" unique_id=2068315622]
+position = Vector2(-321.0198, -5.247525)
+texture = ExtResource("9_u2yt3")
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1512595669]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 9.0
+offset_right = 88.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 30
+text = "Time"
+vertical_alignment = 1
+
+[node name="DayLabel" type="Label" parent="CanvasLayer/HUD" unique_id=50256704]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 39.0
+offset_right = 88.0
+offset_bottom = 67.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 30
+text = "DAY"
+vertical_alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2032604772]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 68.0
+offset_right = 88.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 30
+text = "MONEY"
+vertical_alignment = 1
+
+[node name="DimOverlay" type="ColorRect" parent="CanvasLayer/HUD" unique_id=1635064106]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1240.0
+offset_bottom = 680.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.38431373)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/DimOverlay" unique_id=1888847035]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -221.0
+offset_right = 190.0
+offset_bottom = 154.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_ghd6s")
+
+[node name="PausePanel" type="PanelContainer" parent="CanvasLayer/HUD/DimOverlay" unique_id=106819600]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 169.5
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ghd6s")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/DimOverlay/PausePanel" unique_id=2056414442]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="PauseLabel" type="Label" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=2139130539]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ll02x")
+theme_override_font_sizes/font_size = 103
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ContinueButtonPause" type="Button" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=83546641]
+process_mode = 3
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+icon = ExtResource("12_am8fm")
+flat = true
+
+[node name="QuitButtonPause" type="Button" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=300283106]
+process_mode = 3
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+icon = ExtResource("13_3lx45")
+flat = true
+
+[node name="MultiplierLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2147239335]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 695.0
+offset_right = 326.0
+offset_bottom = 730.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 28
+text = "Tips: x1.0"
+
+[node name="DayTimer" type="Timer" parent="." unique_id=1041295534]
+autostart = true
+
+[node name="SpawnTimer" type="Timer" parent="." unique_id=894530770]
+wait_time = 4.0
+autostart = true
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=609604915]
+visible = false
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=1753274053]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("5_22yg1")
+centered = false
+
+[connection signal="timeout" from="DayTimer" to="." method="_on_day_timer_timeout"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

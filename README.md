@@ -25,7 +25,7 @@ This guide covers **full setup and installation** for both **Windows** and **mac
 ## Project Overview
 
 - Engine: **Godot 4.6.1**
-- Main entry scene: `main_menu.tscn`
+- Main entry scene: `ui/main_menu_v2/MainMenuV2.tscn`
 - Project config file: `project.godot`
 - Scripts are in `scripts/`
 - Scenes are in `scenes/`
@@ -195,18 +195,15 @@ If prompted, install export templates:
 ```text
 gvd-project/
 ├─ project.godot
-├─ main_menu.tscn
-├─ scenes/
-│  ├─ continue.tscn
-│  ├─ hi_score.tscn
-│  ├─ new_game.tscn
-│  └─ tutorial.tscn
-├─ scripts/
-│  ├─ main_menu.gd
-│  ├─ continue.gd
-│  ├─ hi_score.gd
-│  ├─ new_game.gd
-│  └─ tutorial.gd
+├─ ui/main_menu_v2/MainMenuV2.tscn
+├─ core/
+│  ├─ shop_floor/
+│  └─ autoloads/
+├─ ui/
+│  ├─ daily_summary/
+│  ├─ game_over/
+│  ├─ hi_score/
+│  └─ settings/
 └─ assets/
 	└─ images/
 ```

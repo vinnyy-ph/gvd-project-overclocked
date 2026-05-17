@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://l87aefkk3ct5"]
+
+[ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="1_waiting"]
+[ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="2_customer"]
+
+[node name="Customer" type="Control" unique_id=397887288]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -85.0
+offset_top = -250.0
+offset_right = 85.0
+offset_bottom = 35.0
+script = ExtResource("2_customer")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=265613417]
+z_index = 37
+position = Vector2(-70.00001, 27.999985)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("1_waiting")
