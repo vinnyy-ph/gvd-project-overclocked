@@ -17,7 +17,7 @@ func _ready():
 	var net = revenue - expenses
 	
 	stats_label.text = "Revenue: \u20B1" + str(revenue) + \
-					   "\nExpenses (Ops): -\u20B1" + str(expenses) + \
+					   "\nDaily Bill: -\u20B1" + str(expenses) + \
 					   "\nNet Profit: \u20B1" + str(net)
 					
 	shop_button.pressed.connect(_on_shop_pressed)

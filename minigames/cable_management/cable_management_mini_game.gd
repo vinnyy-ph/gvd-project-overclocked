@@ -47,7 +47,7 @@ extends Control
 @onready var ethernet_wire_visual = $CableArea/WireVisuals/Ethernet_WireVisual
 @onready var ethernet_wire_glow = $CableArea/WireGlows/Ethernet_WireGlow
 
-var time_left: int = 20
+var time_left: int = 30
 var dragging_node: Control = null 
 var game_active: bool = true
 
@@ -233,10 +233,10 @@ func check_win():
 		game_active = false
 		AudioManager.play_sfx("coin")
 		
-		GameManager.last_money_change = GameManager.get_money_reward(30)
-		GameManager.last_satisfaction_change = 10
+		GameManager.last_money_change = GameManager.get_minigame_reward("cable")
+		GameManager.last_satisfaction_change = GameManager.get_minigame_satisfaction_gain("cable")
 		GameManager.money += GameManager.last_money_change
-		GameManager.satisfaction += GameManager.last_satisfaction_change
+		GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 		GameManager.save_game()
 		
 		await get_tree().create_timer(1.0).timeout
@@ -250,7 +250,11 @@ func _on_game_timer_timeout():
 
 	if time_left == 0:
 		game_active = false
-		GameManager.last_money_change = 0
-		GameManager.apply_satisfaction_penalty(15)
+		
+		GameManager.last_money_change = -GameManager.get_minigame_deduction("cable")
+		GameManager.money += GameManager.last_money_change
+		
+		GameManager.last_satisfaction_change = -GameManager.get_minigame_satisfaction_loss("cable")
+		GameManager.satisfaction += GameManager.last_satisfaction_change
 		GameManager.save_game()
 		get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

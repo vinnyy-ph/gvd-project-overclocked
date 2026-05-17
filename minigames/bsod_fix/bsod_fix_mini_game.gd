@@ -145,6 +145,7 @@ var processing_input: bool = false
 func _ready():
 	AudioManager.play_bgm("minigame")
 	randomize()
+	time_left = GameManager.get_minigame_timer("bsod")
 	time_left += GameManager.get_hardware_time_bonus()
 	
 	# 1. Setup Timer
@@ -249,11 +250,10 @@ func win_game():
 	choice_button_3.disabled = true
 	choice_button_4.disabled = true
 	
-	GameManager.last_money_change = GameManager.get_money_reward(30)
-	GameManager.last_satisfaction_change = 12
+	GameManager.last_money_change = GameManager.get_minigame_reward("bsod")
+	GameManager.last_satisfaction_change = GameManager.get_minigame_satisfaction_gain("bsod")
 	GameManager.money += GameManager.last_money_change
-	GameManager.satisfaction += GameManager.last_satisfaction_change
-	if GameManager.satisfaction > 100: GameManager.satisfaction = 100
+	GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.5).timeout
@@ -269,8 +269,11 @@ func fail_game():
 	choice_button_3.disabled = true
 	choice_button_4.disabled = true
 	
-	GameManager.last_money_change = 0
-	GameManager.apply_satisfaction_penalty(15)
+	GameManager.last_money_change = -GameManager.get_minigame_deduction("bsod")
+	GameManager.money += GameManager.last_money_change
+	
+	GameManager.last_satisfaction_change = -GameManager.get_minigame_satisfaction_loss("bsod")
+	GameManager.satisfaction += GameManager.last_satisfaction_change
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.5).timeout

@@ -45,10 +45,19 @@ func get_unlocked_slots() -> int:
 	return clamp(2 + SaveManager.unlocked_upgrades.get("shop_space", 0), 2, 13)
 
 func end_day():
+	# Daily Bill Tiers:
+	# Days 1-9: 100
+	# Days 10-19: 550
+	# Days 20-29: 1050
+	# Day 30+: 1500
+	var day_index = clamp(int(day / 10.0), 0, 3)
+	var bill_tiers = [100, 550, 1050, 1500]
+	var tiered_bill = bill_tiers[day_index]
+	
 	var unlocked_slots = get_unlocked_slots()
-	var base_rent = 50
-	var electricity_per_slot = 15
-	last_day_expenses = base_rent + (unlocked_slots * electricity_per_slot)
+	var slot_fees = unlocked_slots * 15
+	
+	last_day_expenses = tiered_bill + slot_fees
 
 	if money < last_day_expenses:
 		money = 0
@@ -147,9 +156,18 @@ func get_money_reward(base_amount: int) -> int:
 	return int(base_amount * bonus)
 
 func get_passive_income_reward() -> int:
-	var base = 1
+	# Passive Income Tiers:
+	# Day 1-5: 1
+	# Day 6-10: 3
+	# Day 11-15: 5
+	# Day 16-20: 10
+	# Day 21-25: 15
+	# Day 26+: 20
+	var day_index = clamp(int((day - 1) / 5.0), 0, 5)
+	var passive_tiers = [1, 3, 5, 10, 15, 20]
+	var base = passive_tiers[day_index]
+	
 	var multiplier = get_satisfaction_multiplier()
-	# Upgrades could increase base passive income here
 	return int(base * multiplier)
 
 func get_spawn_interval() -> float:
@@ -191,6 +209,76 @@ func get_satisfaction_penalty(base_penalty: int) -> int:
 func apply_satisfaction_penalty(base_penalty: int):
 	last_satisfaction_change = -get_satisfaction_penalty(base_penalty)
 	satisfaction += last_satisfaction_change
+
+# --- MINIGAME CRITERIA ---
+const MINIGAME_DATA = {
+	"login": {
+		"timer": 20,
+		"success_satisfaction": 5,
+		"fail_satisfaction": 10,
+		"success_payment": [10.0, 20.0, 30.0, 40.0],
+		"fail_deduction": [5.0, 10.0, 15.0, 20.0]
+	},
+	"malware": {
+		"timer": 90,
+		"success_satisfaction": 25,
+		"fail_satisfaction": 30,
+		"success_payment": [30.0, 60.0, 90.0, 120.0],
+		"fail_deduction": [15.0, 30.0, 45.0, 60.0]
+	},
+	"motherboard": {
+		"timer": 15,
+		"success_satisfaction": 10,
+		"fail_satisfaction": 15,
+		"success_payment": [15.0, 30.0, 45.0, 60.0],
+		"fail_deduction": [12.50, 25.0, 37.50, 30.0]
+	},
+	"cable": {
+		"timer": 20,
+		"success_satisfaction": 20,
+		"fail_satisfaction": 25,
+		"success_payment": [25.0, 50.0, 75.0, 100.0],
+		"fail_deduction": [12.50, 25.0, 37.50, 50.0]
+	},
+	"bsod": {
+		"timer": 60,
+		"success_satisfaction": 20,
+		"fail_satisfaction": 25,
+		"success_payment": [25.0, 50.0, 75.0, 100.0],
+		"fail_deduction": [7.50, 15.0, 22.50, 50.0]
+	},
+	"network": {
+		"timer": 90,
+		"success_satisfaction": 30,
+		"fail_satisfaction": 35,
+		"success_payment": [35.0, 70.0, 105.0, 140.0],
+		"fail_deduction": [17.50, 35.0, 52.50, 70.0]
+	}
+}
+
+func get_minigame_reward(game_id: String) -> int:
+	if not MINIGAME_DATA.has(game_id): return 0
+	var data = MINIGAME_DATA[game_id]
+	var day_index = clamp(int(day / 10.0), 0, 3)
+	return int(data["success_payment"][day_index])
+
+func get_minigame_deduction(game_id: String) -> int:
+	if not MINIGAME_DATA.has(game_id): return 0
+	var data = MINIGAME_DATA[game_id]
+	var day_index = clamp(int(day / 10.0), 0, 3)
+	return int(data["fail_deduction"][day_index])
+
+func get_minigame_timer(game_id: String) -> int:
+	if not MINIGAME_DATA.has(game_id): return 20
+	return MINIGAME_DATA[game_id]["timer"]
+
+func get_minigame_satisfaction_gain(game_id: String) -> int:
+	if not MINIGAME_DATA.has(game_id): return 5
+	return MINIGAME_DATA[game_id]["success_satisfaction"]
+
+func get_minigame_satisfaction_loss(game_id: String) -> int:
+	if not MINIGAME_DATA.has(game_id): return 10
+	return MINIGAME_DATA[game_id]["fail_satisfaction"]
 
 # --- SHUFFLED DECK ---
 var minigame_deck: Array = []

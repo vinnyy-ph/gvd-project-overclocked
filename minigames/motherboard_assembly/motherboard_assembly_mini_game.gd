@@ -129,12 +129,11 @@ func win_game():
 	game_timer.stop()
 	AudioManager.play_sfx("coin")
 	
-	GameManager.last_money_change = GameManager.get_money_reward(25)
-	GameManager.last_satisfaction_change = 10
+	GameManager.last_money_change = GameManager.get_minigame_reward("motherboard")
+	GameManager.last_satisfaction_change = GameManager.get_minigame_satisfaction_gain("motherboard")
 	
 	GameManager.money += GameManager.last_money_change
-	GameManager.satisfaction += GameManager.last_satisfaction_change
-	if GameManager.satisfaction > 100: GameManager.satisfaction = 100
+	GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.0).timeout
@@ -144,8 +143,11 @@ func fail_game():
 	game_active = false
 	game_timer.stop()
 	
-	GameManager.last_money_change = 0
-	GameManager.apply_satisfaction_penalty(10)
+	GameManager.last_money_change = -GameManager.get_minigame_deduction("motherboard")
+	GameManager.money += GameManager.last_money_change
+	
+	GameManager.last_satisfaction_change = -GameManager.get_minigame_satisfaction_loss("motherboard")
+	GameManager.satisfaction += GameManager.last_satisfaction_change
 	GameManager.save_game()
 	
 	await get_tree().create_timer(1.5).timeout

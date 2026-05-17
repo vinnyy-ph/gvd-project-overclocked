@@ -296,8 +296,8 @@ func win_game():
 	status_label.text = "> ALL AUTHENTICATIONS VERIFIED. WELL DONE."
 	AudioManager.play_sfx("coin")
 
-	GameManager.last_money_change        = GameManager.get_money_reward(20)
-	GameManager.last_satisfaction_change = 10
+	GameManager.last_money_change        = GameManager.get_minigame_reward("login")
+	GameManager.last_satisfaction_change = GameManager.get_minigame_satisfaction_gain("login")
 	GameManager.money       += GameManager.last_money_change
 	GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 	GameManager.save_game()
@@ -313,8 +313,11 @@ func fail_game():
 	input_box.editable = false
 	status_label.text  = "> AUTHENTICATION TIMEOUT. ACCESS DENIED."
 
-	GameManager.last_money_change        = 0
-	GameManager.apply_satisfaction_penalty(10)
+	GameManager.last_money_change        = -GameManager.get_minigame_deduction("login")
+	GameManager.money += GameManager.last_money_change
+	
+	GameManager.last_satisfaction_change = -GameManager.get_minigame_satisfaction_loss("login")
+	GameManager.satisfaction += GameManager.last_satisfaction_change
 	GameManager.save_game()
 
 	await get_tree().create_timer(1.5).timeout
