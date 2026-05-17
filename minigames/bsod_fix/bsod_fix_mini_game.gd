@@ -3,7 +3,7 @@ extends Control
 @onready var timer_label = $Background/TopPanel/TimerLabel
 @onready var step_label = $Background/TopPanel/StepLabel
 @onready var status_label = $Background/InstructionsPanel/InstructionsLabel
-@onready var bsod_text = $BSODPanel/BSODText
+@onready var debugging_text = $DEBUGGINGPanel/DEBUGGINGText
 
 @onready var choice_button_1 = $ChoicesArea/ChoiceButton1
 @onready var choice_button_2 = $ChoicesArea/ChoiceButton2
@@ -11,51 +11,143 @@ extends Control
 @onready var choice_button_4 = $ChoicesArea/ChoiceButton4
 @onready var game_timer = $GameTimer
 
-var time_left: int = 30 # Increased slightly for reading time
+var time_left: int = 30
 var current_step: int = 0
 var game_active: bool = true
 
-# --- THE DIAGNOSTIC DATABASE ---
-# Each error has a specific Stop Code and a unique 3-step solution.
-var bsod_database = [
+# --- THE BUG HUNTER DATABASE ---
+var bug_database = [
 	{
-		"error_code": "STOP: 0x0000001A (MEMORY_MANAGEMENT)",
-		"desc": "A critical memory allocation failed. Physical RAM may be compromised.",
-		"steps": ["Boot into BIOS", "Run MemTest86", "Reseat RAM Sticks"]
+		"code": "def say_hello():\n    print(\"Hello World\")\n\nsay_hello",
+		"question": "The function isn't running. Why?",
+		"correct": "Missing () to call it",
+		"decoys": ["Missing a colon", "Incorrect indent", "Wrong function name"]
 	},
 	{
-		"error_code": "STOP: 0x116 (VIDEO_TDR_FAILURE)",
-		"desc": "The display driver failed to respond and did not recover in time.",
-		"steps": ["Boot in Safe Mode", "Use DDU to Wipe Drivers", "Install Clean GPU Driver"]
+		"code": "for i in range(5)\n    print(i)",
+		"question": "There is a Syntax Error here.",
+		"correct": "Missing : after range(5)",
+		"decoys": ["i is not defined", "Indent is too large", "Missing brackets"]
 	},
 	{
-		"error_code": "STOP: 0x0000007B (INACCESSIBLE_BOOT_DEVICE)",
-		"desc": "The OS lost access to the system partition during startup.",
-		"steps": ["Open Command Prompt", "Run chkdsk /f /r", "Rebuild BCD"]
+		"code": "score = 10\nif score = 10:\n    print(\"You win!\")",
+		"question": "This code won't run. What's wrong?",
+		"correct": "Use == for comparison",
+		"decoys": ["Missing quotes", "Score is a string", "If needs a semicolon"]
+	},
+	{
+		"code": "names = [\"Alice\", \"Bob\"]\nprint(names[2])",
+		"question": "This crashes with an Index Error.",
+		"correct": "Index 2 doesn't exist",
+		"decoys": ["Alice is missing", "List is not defined", "Use round brackets"]
+	},
+	{
+		"code": "x = \"5\"\ny = 10\nprint(x + y)",
+		"question": "This causes a TypeError.",
+		"correct": "Cannot add String + Int",
+		"decoys": ["Variables are hidden", "Missing print space", "x is too small"]
+	},
+	{
+		"code": "while True\n    print(\"Looping...\")",
+		"question": "The loop won't start. Why?",
+		"correct": "Missing : after True",
+		"decoys": ["While must be capitalized", "Infinite loops are illegal", "Indent is wrong"]
+	},
+	{
+		"code": "def add(a, b):\nreturn a + b",
+		"question": "This throws an IndentationError.",
+		"correct": "Return must be indented",
+		"decoys": ["a and b not defined", "Missing colon", "Cannot return math"]
+	},
+	{
+		"code": "items = [1, 2, 3]\nitems.append(4, 5)",
+		"question": "This code crashes. Why?",
+		"correct": "append() takes 1 argument",
+		"decoys": ["List is full", "4 and 5 are strings", "Use .add() instead"]
+	},
+	{
+		"code": "print(\"Hello world\"",
+		"question": "Simple syntax error detected.",
+		"correct": "Missing closing )",
+		"decoys": ["Missing quotes", "Print is not a function", "World is capitalized"]
+	},
+	{
+		"code": "x = 10\ny = 0\nresult = x / y",
+		"question": "The program crashed!",
+		"correct": "ZeroDivisionError",
+		"decoys": ["x is too large", "y is not a number", "Result is a keyword"]
+	},
+	{
+		"code": "import mathh\nprint(math.pi)",
+		"question": "The first line failed.",
+		"correct": "Module mathh not found",
+		"decoys": ["pi is not in math", "Import must be at bottom", "Math is a string"]
+	},
+	{
+		"code": "age = \"25\"\nif age > 18:\n    print(\"Adult\")",
+		"question": "This throws a TypeError.",
+		"correct": "Comparing String to Int",
+		"decoys": ["Age is too old", "Missing colon", "If must use brackets"]
+	},
+	{
+		"code": "user_data = {\"id\": 1}\nprint(user_data[\"name\"])",
+		"question": "The console shows a KeyError.",
+		"correct": "Key 'name' doesn't exist",
+		"decoys": ["Dictionary is empty", "id is not an integer", "Use square brackets"]
+	},
+	{
+		"code": "class Player\n    def __init__(self):",
+		"question": "Class definition failed.",
+		"correct": "Missing : after Player",
+		"decoys": ["Self is not defined", "Init is misspelled", "Class must be lowercase"]
+	},
+	{
+		"code": "x = 5\nprint(X)",
+		"question": "The console says NameError.",
+		"correct": "X is not defined (case)",
+		"decoys": ["x is private", "Print cannot see x", "X is a reserved word"]
+	},
+	{
+		"code": "def check():\n    pass\n  print(\"Done\")",
+		"question": "What is the error here?",
+		"correct": "Unindent doesn't match",
+		"decoys": ["Pass is a bug", "Check is not running", "Print is inside pass"]
+	},
+	{
+		"code": "val = int(\"abc\")",
+		"question": "This throws a ValueError.",
+		"correct": "abc is not a number",
+		"decoys": ["Int cannot take strings", "Quotes are wrong", "abc is too long"]
+	},
+	{
+		"code": "with open(\"data.txt\")\n    text = f.read()",
+		"question": "Why did this fail?",
+		"correct": "Missing : after open()",
+		"decoys": ["data.txt is missing", "text is a keyword", "Indent is too small"]
+	},
+	{
+		"code": "colors = (\"red\", \"blue\")\ncolors[0] = \"green\"",
+		"question": "This crashes with a TypeError.",
+		"correct": "Tuples cannot be changed",
+		"decoys": ["Green is not a color", "Index 0 is occupied", "Use curly brackets"]
+	},
+	{
+		"code": "result = 5 > \"3\"",
+		"question": "What is the problem?",
+		"correct": "Cannot compare Int and Str",
+		"decoys": ["5 is smaller than 3", "Result is not defined", "Quotes are required"]
 	}
 ]
 
-var active_bsod: Dictionary
-var current_correct_steps: Array
-
-# Random bad options to fill out the remaining buttons
-var decoy_pool = [
-	"Install random software update",
-	"Ignore the error",
-	"Unplug monitor",
-	"Delete System32",
-	"Smack the tower",
-	"Download more RAM",
-	"Restart the PC",
-	"Run antivirus scan"
-]
+var active_bug: Dictionary
+var processing_input: bool = false
 
 func _ready():
 	AudioManager.play_bgm("minigame")
 	randomize()
 	time_left += GameManager.get_hardware_time_bonus()
 	
-	# 1. Setup Timer correctly
+	# 1. Setup Timer
 	game_timer.wait_time = 1.0
 	game_timer.one_shot = false
 	if not game_timer.timeout.is_connected(_on_game_timer_timeout):
@@ -68,40 +160,27 @@ func _ready():
 	choice_button_3.pressed.connect(func(): check_answer(choice_button_3.text))
 	choice_button_4.pressed.connect(func(): check_answer(choice_button_4.text))
 
-	# 3. Pick a random BSOD for this session
-	active_bsod = bsod_database[randi() % bsod_database.size()]
-	current_correct_steps = active_bsod["steps"]
-	
-	# Display the scary blue screen text
-	bsod_text.text = ":(\n\nYour PC ran into a problem.\n\n" + active_bsod["error_code"] + "\n\n" + active_bsod["desc"]
-
+	# 3. Load First Bug
+	load_new_bug()
 	update_timer()
 	update_step_ui()
+
+func load_new_bug():
+	active_bug = bug_database[randi() % bug_database.size()]
+	
+	# Using BBCode for a cool modern debugger look
+	var code_text = "[color=#00ff44][b]>>> DEBUGGER CONSOLE[/b][/color]\n\n"
+	code_text += "[color=#ffffff][i]# Analysing snippet...[/i][/color]\n"
+	code_text += "[color=#00ff44]" + active_bug["code"] + "[/color]\n\n"
+	code_text += "[color=#ffff00][b]QUESTION:[/b] " + active_bug["question"] + "[/color]"
+	
+	debugging_text.text = code_text
+	status_label.text = "Select the correct fix to continue."
 	generate_choices()
-	status_label.text = "Analyze the Stop Code to begin repairs."
-
-func update_timer():
-	timer_label.text = "TIME: " + str(time_left)
-
-func update_step_ui():
-	step_label.text = "STEP " + str(current_step + 1) + " OF 3"
 
 func generate_choices():
-	if not game_active: return
-	
-	var current_correct = current_correct_steps[current_step]
-	var options: Array = [current_correct]
-
-	# Fill the rest with random decoys
-	var temp_decoys = decoy_pool.duplicate()
-	temp_decoys.shuffle()
-	
-	while options.size() < 4:
-		var random_choice = temp_decoys.pop_back()
-		if not options.has(random_choice):
-			options.append(random_choice)
-
-	# Shuffle the 4 options so the correct answer isn't always button 1
+	var options: Array = [active_bug["correct"]]
+	options.append_array(active_bug["decoys"])
 	options.shuffle()
 
 	choice_button_1.text = options[0]
@@ -109,47 +188,44 @@ func generate_choices():
 	choice_button_3.text = options[2]
 	choice_button_4.text = options[3]
 
-# --- INTERACTION LOGIC ---
-
 func check_answer(selected_text: String):
-	if not game_active: return
+	if not game_active or processing_input: return
 	
-	if selected_text == current_correct_steps[current_step]:
-		# SUCCESS! Advance to the next step
+	processing_input = true # LOCK input
+	
+	if selected_text == active_bug["correct"]:
 		current_step += 1
-
-		if current_step >= current_correct_steps.size():
+		status_label.text = "Bug Fixed! Loading next..."
+		
+		if current_step >= 3: # Win after fixing 3 bugs
 			win_game()
-			return
-
-		status_label.text = "> Step Applied. Continuing sequence..."
-		update_step_ui()
-		generate_choices()
-		
+		else:
+			update_step_ui()
+			load_new_bug()
+			processing_input = false # UNLOCK input for next bug
 	else:
-		# PENALTY: Failed the repair tree!
-		status_label.text = "> FATAL: WRONG FIX APPLIED! BOOT LOOPING..."
-		
-		# Time penalty
-		time_left -= 4 
+		# PENALTY: Failed the bug fix, but STAY on the same bug
+		status_label.text = "WRONG FIX! -5 SECONDS | Try again..."
+		time_left -= 5 
 		if time_left < 0: time_left = 0
 		update_timer()
 		
-		# Reset the entire sequence back to step 1
-		current_step = 0 
-		update_step_ui()
-		generate_choices()
-		
-		# Flash screen red for damage feedback
-		var original_color = bsod_text.modulate
-		bsod_text.modulate = Color(1, 0, 0, 1) # Flash text red
-		timer_label.modulate = Color(1, 0, 0, 1)
+		# Feedback: Flash the console red to show error
+		var original_color = debugging_text.modulate
+		debugging_text.modulate = Color(1, 0, 0, 1)
 		await get_tree().create_timer(0.4).timeout
-		bsod_text.modulate = original_color
-		timer_label.modulate = Color(1, 1, 1, 1)
+		debugging_text.modulate = original_color
+		
+		processing_input = false # UNLOCK input after animation
 		
 		if time_left <= 0:
 			fail_game()
+
+func update_timer():
+	timer_label.text = "TIME: " + str(time_left)
+
+func update_step_ui():
+	step_label.text = "FIXED: " + str(current_step) + " / 3"
 
 func _on_game_timer_timeout():
 	if not game_active: return
@@ -162,23 +238,19 @@ func _on_game_timer_timeout():
 	else:
 		update_timer()
 
-# --- WIN / LOSS INTEGRATED WITH GAME MANAGER ---
-
 func win_game():
 	game_active = false
 	game_timer.stop()
-	status_label.text = "> OS RECOVERED SUCCESSFULLY."
+	status_label.text = "ALL BUGS SQUASHED! SYSTEM STABLE."
 	AudioManager.play_sfx("coin")
 	
-	# Disable buttons so they can't spam click
 	choice_button_1.disabled = true
 	choice_button_2.disabled = true
 	choice_button_3.disabled = true
 	choice_button_4.disabled = true
 	
-	GameManager.last_money_change = GameManager.get_money_reward(25)
-	GameManager.last_satisfaction_change = 10
-	
+	GameManager.last_money_change = GameManager.get_money_reward(30)
+	GameManager.last_satisfaction_change = 12
 	GameManager.money += GameManager.last_money_change
 	GameManager.satisfaction += GameManager.last_satisfaction_change
 	if GameManager.satisfaction > 100: GameManager.satisfaction = 100
@@ -190,7 +262,7 @@ func win_game():
 func fail_game():
 	game_active = false
 	game_timer.stop()
-	status_label.text = "> SYSTEM BRICKED. REPAIR FAILED."
+	status_label.text = "CODE COLLAPSE. REPAIR FAILED."
 	
 	choice_button_1.disabled = true
 	choice_button_2.disabled = true

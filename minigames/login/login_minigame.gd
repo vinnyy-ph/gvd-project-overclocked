@@ -2,13 +2,13 @@ extends Control
 
 @onready var timer_label = $TopPanel/TimerLabel
 @onready var progress_label = $TopPanel/ProgressLabel
-@onready var status_label = $ScrollContainer/MainPanel/StatusLabel
-@onready var request_label = $ScrollContainer/MainPanel/RequestLabel
-@onready var input_box = $ScrollContainer/MainPanel/InputBox
-@onready var submit_button = $ScrollContainer/MainPanel/SubmitButton
-@onready var hint_button_1 = $ScrollContainer/MainPanel/HintButton1
-@onready var hint_button_2 = $ScrollContainer/MainPanel/HintButton2
-@onready var hint_button_3 = $ScrollContainer/MainPanel/HintButton3
+@onready var status_label = $UILayout/VBox/StatusLabel
+@onready var request_label = $UILayout/VBox/RequestLabel
+@onready var input_box = $UILayout/VBox/InputBox
+@onready var submit_button = $UILayout/VBox/SubmitButton
+@onready var hint_button_1 = $UILayout/VBox/HintContainer/HintButton1
+@onready var hint_button_2 = $UILayout/VBox/HintContainer/HintButton2
+@onready var hint_button_3 = $UILayout/VBox/HintContainer/HintButton3
 @onready var game_timer = $GameTimer
 
 # ── Tuning ────────────────────────────────────────────────────────────────────

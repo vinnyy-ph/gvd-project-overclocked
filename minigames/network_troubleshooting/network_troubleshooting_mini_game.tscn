@@ -1,13 +1,112 @@
 [gd_scene format=3 uid="uid://cym7lgacpxruv"]
 
-[ext_resource type="Script" path="res://minigames/network_troubleshooting/network_troubleshooting_mini_game.gd" id="1_55mgb"]
+[ext_resource type="Script" uid="uid://dot2ht3gt0h8k" path="res://minigames/network_troubleshooting/network_troubleshooting_mini_game.gd" id="1_55mgb"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_u26uq"]
 [ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_adyy5"]
 [ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="4_o04hb"]
 [ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_ui0ib"]
 [ext_resource type="Texture2D" uid="uid://yjbrmv4aav06" path="res://assets/images/networking/pc_icon.png" id="6_o04hb"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cosoy"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_monitor_frame"]
+bg_color = Color(0.05, 0.05, 0.07, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.15, 0.18, 0.25, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_size = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_terminal_bg"]
+bg_color = Color(0.02, 0.03, 0.05, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.5, 0.8, 0.4)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+bg_color = Color(0, 0, 0, 0.8)
+border_width_left = 2
+border_width_top = 4
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.2, 0.6, 1, 0.3)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.2, 0.8, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0.8, 1, 0.2)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint_normal"]
+bg_color = Color(0.2, 0.1, 0, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(1, 0.7, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint_pressed"]
+bg_color = Color(0.1, 0.05, 0, 0.8)
+border_width_left = 2
+border_width_top = 4
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.6, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hint_hover"]
+bg_color = Color(1, 0.7, 0.2, 0.3)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(1, 0.8, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(1, 0.7, 0.2, 0.2)
+shadow_size = 5
 
 [node name="NetworkTroubleshootingMiniGame" type="Control" unique_id=1061065799]
 layout_mode = 3
@@ -25,9 +124,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.07450981, 0.13725491, 0.23921569, 1)
+color = Color(0.02, 0.02, 0.03, 1)
 
 [node name="bg art" type="TextureRect" parent="Background" unique_id=1658324030]
+modulate = Color(1, 1, 1, 0.08)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,352 +136,469 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_adyy5")
 expand_mode = 1
+stretch_mode = 6
 
-[node name="TopPanel" type="TextureRect" parent="Background" unique_id=1702692256]
+[node name="TopPanel" type="Control" parent="." unique_id=1702692256]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 0.117000006
-offset_bottom = 14.7599945
+offset_bottom = 80.0
 grow_horizontal = 2
-expand_mode = 1
-stretch_mode = 2
 
-[node name="TitleLabel" type="Label" parent="Background/TopPanel" unique_id=249686628]
+[node name="TitleLabel" type="Label" parent="TopPanel" unique_id=249686628]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 35.0
+offset_left = 40.0
 offset_top = -22.0
-offset_right = 165.0
+offset_right = 440.0
 offset_bottom = 22.0
 grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
+theme_override_colors/font_color = Color(0, 0.8, 1, 1)
 theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 47
-text = "Network Troubleshooting"
-horizontal_alignment = 3
-vertical_alignment = 3
+theme_override_font_sizes/font_size = 42
+text = "NETWORK ENGINEER CONSOLE"
+vertical_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="Background/TopPanel" unique_id=955849647]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -234.0
-offset_top = -1.0
-offset_right = -93.0
-offset_bottom = 25.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 28
-text = "Target: Connect Router to PC-2"
-horizontal_alignment = 3
-vertical_alignment = 3
-
-[node name="Sprite2D" type="Sprite2D" parent="Background/TopPanel" unique_id=1042875757]
-position = Vector2(1071, 32)
-scale = Vector2(0.48181814, 0.4818182)
+[node name="TimerIcon" type="Sprite2D" parent="TopPanel" unique_id=1042875757]
+position = Vector2(1033.75, 42)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_o04hb")
 
-[node name="TimerLabel" type="Label" parent="Background/TopPanel" unique_id=1264921714]
+[node name="TimerLabel" type="Label" parent="TopPanel" unique_id=1264921714]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 4
 anchor_top = 0.5
-anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -183.0
-offset_top = -31.0
-offset_right = -93.0
-offset_bottom = -5.0
-grow_horizontal = 0
+offset_left = 1063.75
+offset_top = -13.0
+offset_right = 1203.75
+offset_bottom = 17.0
 grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_outline_size = 8
+theme_override_colors/font_color = Color(1, 0.9, 0, 1)
 theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 28
-text = "Time: 20"
-horizontal_alignment = 3
-vertical_alignment = 3
+theme_override_font_sizes/font_size = 32
+text = "TIME: 90"
+vertical_alignment = 1
 
-[node name="InstructionsPanel" type="TextureRect" parent="Background" unique_id=1020699131]
+[node name="InstructionsPanel" type="TextureRect" parent="." unique_id=1020699131]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.289
-anchor_top = 0.754
-anchor_right = 0.739
-anchor_bottom = 0.87600005
-offset_left = 0.07998657
-offset_top = 62.119995
-offset_right = -0.37164307
-offset_bottom = 62.27997
+anchor_left = 0.5
+anchor_top = 0.12
+anchor_right = 0.5
+anchor_bottom = 0.12
+offset_left = -331.0
+offset_top = -25.0
+offset_right = 300.0
+offset_bottom = 25.0
+grow_horizontal = 2
 texture = ExtResource("5_ui0ib")
 expand_mode = 1
 
-[node name="InstructionsLabel" type="Label" parent="Background/InstructionsPanel" unique_id=880871494]
+[node name="InstructionsLabel" type="Label" parent="InstructionsPanel" unique_id=880871494]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -207.5
-offset_top = -30.5
-offset_right = 207.5
-offset_bottom = 30.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 31
-text = "Activate the correct network links to
-restore connection from Router to PC-2."
+theme_override_font_sizes/font_size = 24
+text = "Perform Handshake sequence to restore protocol links."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="MonitorFrame" type="Panel" parent="." unique_id=200000000]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.2
+anchor_right = 0.9
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_monitor_frame")
+
+[node name="MonitorScreenArea" type="Control" parent="MonitorFrame" unique_id=1424615073]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NetworkCables" type="Node2D" parent="MonitorFrame/MonitorScreenArea" unique_id=4034464]
+
+[node name="NetworkDevices" type="Control" parent="MonitorFrame/MonitorScreenArea" unique_id=85212327]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CustomerPC" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=1993208230]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 128.0
+offset_bottom = 116.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/CustomerPC" unique_id=1688164831]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "CLIENT PC"
+horizontal_alignment = 1
+
+[node name="SwitchL2" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=1089624500]
+layout_mode = 0
+offset_left = 369.0
+offset_top = 140.0
+offset_right = 449.0
+offset_bottom = 220.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/SwitchL2" unique_id=156455303]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "SWITCH L2"
+horizontal_alignment = 1
+
+[node name="Router" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=721004568]
+layout_mode = 0
+offset_left = 539.0
+offset_top = 140.0
+offset_right = 619.0
+offset_bottom = 220.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/Router" unique_id=1273174672]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "CORE ROUTER"
+horizontal_alignment = 1
+
+[node name="Firewall" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=440188138]
+layout_mode = 0
+offset_left = 709.0
+offset_top = 140.0
+offset_right = 789.0
+offset_bottom = 220.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/Firewall" unique_id=1185300027]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "FIREWALL"
+horizontal_alignment = 1
+
+[node name="MainServer" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=689417462]
+layout_mode = 0
+offset_left = 870.0
+offset_top = 22.0
+offset_right = 950.0
+offset_bottom = 102.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/MainServer" unique_id=1468703218]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "WEB SERVER"
+horizontal_alignment = 1
+
+[node name="DatabaseServer" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=1071363641]
+layout_mode = 0
+offset_left = 874.0
+offset_top = 234.0
+offset_right = 954.0
+offset_bottom = 314.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/DatabaseServer" unique_id=1030657819]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "DATABASE"
+horizontal_alignment = 1
+
+[node name="GuestRouter" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=464078455]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 239.0
+offset_right = 126.0
+offset_bottom = 319.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/GuestRouter" unique_id=1139343091]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "GUEST GW"
+horizontal_alignment = 1
+
+[node name="OldHub" type="TextureButton" parent="MonitorFrame/MonitorScreenArea/NetworkDevices" unique_id=1935039020]
+layout_mode = 0
+offset_left = 205.0
+offset_top = 140.0
+offset_right = 285.0
+offset_bottom = 220.0
+texture_normal = ExtResource("6_o04hb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MonitorFrame/MonitorScreenArea/NetworkDevices/OldHub" unique_id=1289780062]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = 5.0
+offset_right = 60.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+text = "LEGACY HUB"
+horizontal_alignment = 1
+
+[node name="TerminalStatus" type="Panel" parent="MonitorFrame/MonitorScreenArea" unique_id=600096575]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_terminal_bg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MonitorFrame/MonitorScreenArea/TerminalStatus" unique_id=1627755977]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = -200.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="LinkStatusLabel" type="RichTextLabel" parent="MonitorFrame/MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=1587591927]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0, 1, 0.4, 1)
+theme_override_fonts/normal_font = ExtResource("1_u26uq")
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "> SYSTEM INITIALIZED..."
+
+[node name="ActionLabel" type="RichTextLabel" parent="MonitorFrame/MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=848244055]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.9, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_u26uq")
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "> Awaiting operator input..."
+fit_content = true
+
+[node name="RunDiagnosticBtn" type="Button" parent="MonitorFrame/MonitorScreenArea/TerminalStatus" unique_id=1435226331]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -55.0
+offset_right = -25.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "DIAGNOSTIC"
+
+[node name="HintBtn" type="Button" parent="MonitorFrame/MonitorScreenArea/TerminalStatus" unique_id=999999999]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -93.0
+offset_top = 107.0
+offset_right = -8.0
+offset_bottom = 132.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_hint_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hint_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hint_hover")
+text = "HINT (-5s)"
+
+[node name="ProtocolChoices" type="HBoxContainer" parent="MonitorFrame/MonitorScreenArea/TerminalStatus" unique_id=2133726967]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -45.0
+offset_right = -20.0
+offset_bottom = 5.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="ChoiceA" type="Button" parent="MonitorFrame/MonitorScreenArea/TerminalStatus/ProtocolChoices" unique_id=1318849376]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "PORT 80"
+
+[node name="ChoiceB" type="Button" parent="MonitorFrame/MonitorScreenArea/TerminalStatus/ProtocolChoices" unique_id=945000240]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "PORT 443"
+
+[node name="ChoiceC" type="Button" parent="MonitorFrame/MonitorScreenArea/TerminalStatus/ProtocolChoices" unique_id=298223357]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_u26uq")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "PORT 22"
 
 [node name="GameTimer" type="Timer" parent="." unique_id=600832120]
 autostart = true
 
-[node name="MonitorScreenArea" type="Control" parent="." unique_id=1424615073]
-anchors_preset = 0
-offset_left = 378.0
-offset_top = 199.0
-offset_right = 931.0
-offset_bottom = 576.0
-
-[node name="NetworkCables" type="Node2D" parent="MonitorScreenArea" unique_id=4034464]
-
-[node name="NetworkDevices" type="Control" parent="MonitorScreenArea" unique_id=85212327]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CustomerPC" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1993208230]
-layout_mode = 0
-offset_left = 134.0
-offset_top = 131.0
-offset_right = 201.0
-offset_bottom = 198.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/CustomerPC" unique_id=1688164831]
-layout_mode = 0
-offset_left = -19.0
-offset_top = 72.0
-offset_right = 92.0
-offset_bottom = 95.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "CUSTOMER PC"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SwitchL2" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1089624500]
-layout_mode = 0
-offset_left = 55.0
-offset_top = 12.0
-offset_right = 122.0
-offset_bottom = 79.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/SwitchL2" unique_id=156455303]
-layout_mode = 0
-offset_left = -8.0
-offset_top = 73.0
-offset_right = 75.0
-offset_bottom = 96.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "SWITCH L2"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Router" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=721004568]
-layout_mode = 0
-offset_left = 179.0
-offset_top = 13.0
-offset_right = 246.0
-offset_bottom = 80.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/Router" unique_id=1273174672]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 72.0
-offset_right = 63.0
-offset_bottom = 95.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "ROUTER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Firewall" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=440188138]
-layout_mode = 0
-offset_left = 408.0
-offset_top = 11.0
-offset_right = 475.0
-offset_bottom = 78.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/Firewall" unique_id=1185300027]
-layout_mode = 0
-offset_top = 73.0
-offset_right = 70.0
-offset_bottom = 96.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "FIREWALL"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MainServer" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=689417462]
-layout_mode = 0
-offset_left = 377.0
-offset_top = 144.0
-offset_right = 444.0
-offset_bottom = 211.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/MainServer" unique_id=1468703218]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 75.0
-offset_right = 62.0
-offset_bottom = 98.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "SERVER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="DatabaseServer" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1071363641]
-layout_mode = 0
-offset_left = 465.0
-offset_top = 142.0
-offset_right = 532.0
-offset_bottom = 209.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/DatabaseServer" unique_id=1030657819]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 79.0
-offset_right = 78.0
-offset_bottom = 102.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "DATABASE"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GuestRouter" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=464078455]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 161.0
-offset_right = 91.0
-offset_bottom = 228.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/GuestRouter" unique_id=1139343091]
-layout_mode = 0
-offset_left = -22.0
-offset_top = 72.0
-offset_right = 86.0
-offset_bottom = 95.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "GUEST ROUTER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="OldHub" type="TextureButton" parent="MonitorScreenArea/NetworkDevices" unique_id=1935039020]
-layout_mode = 0
-offset_left = 265.0
-offset_top = 136.0
-offset_right = 332.0
-offset_bottom = 203.0
-texture_normal = ExtResource("6_o04hb")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="MonitorScreenArea/NetworkDevices/OldHub" unique_id=1289780062]
-layout_mode = 0
-offset_left = -2.0
-offset_top = 72.0
-offset_right = 73.0
-offset_bottom = 95.0
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 19
-text = "OLDHUB"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TerminalStatus" type="PanelContainer" parent="MonitorScreenArea" unique_id=600096575]
-layout_mode = 0
-offset_left = 9.0
-offset_top = 265.0
-offset_right = 546.0
-offset_bottom = 365.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_cosoy")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MonitorScreenArea/TerminalStatus" unique_id=1627755977]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-
-[node name="TerminalHeader" type="Label" parent="MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=1286414391]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 15
-text = "Status Text:"
-
-[node name="LinkStatusLabel" type="Label" parent="MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=1587591927]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 15
-text = "> Link Status (PC to Switch): Down"
-
-[node name="ActionLabel" type="Label" parent="MonitorScreenArea/TerminalStatus/VBoxContainer" unique_id=848244055]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 15
-text = "> Action Required: Connect Cable"
-
-[node name="RunDiagnosticBtn" type="Button" parent="MonitorScreenArea/TerminalStatus" unique_id=1435226331]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_fonts/font = ExtResource("1_u26uq")
-theme_override_font_sizes/font_size = 14
-text = "RUN SYSTEM
-DIAGNOSTIC"
-
-[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_timer_timeout"]

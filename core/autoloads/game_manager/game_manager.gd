@@ -213,7 +213,7 @@ const MINIGAME_TITLES = {
 	"res://minigames/malware/malware_minigame.tscn": "Malware Removal",
 	"res://minigames/cable_management/cable_management_mini_game.tscn": "Cable Management",
 	"res://minigames/network_troubleshooting/network_troubleshooting_mini_game.tscn": "Network Issue",
-	"res://minigames/bsod_fix/bsod_fix_mini_game.tscn": "BSOD Repair",
+	"res://minigames/bsod_fix/bsod_fix_mini_game.tscn": "DEBUGGING Repair",
 	"res://minigames/motherboard_assembly/motherboard_assembly_mini_game.tscn": "Hardware Assembly"
 }
 

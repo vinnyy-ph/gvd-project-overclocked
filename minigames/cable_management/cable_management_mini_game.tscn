@@ -1,14 +1,46 @@
 [gd_scene format=3 uid="uid://d3jv16hg3lo4c"]
 
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="1_dcbi1"]
-[ext_resource type="Script" path="res://minigames/cable_management/cable_management_mini_game.gd" id="1_opao4"]
+[ext_resource type="Script" uid="uid://bcs85tduxhie8" path="res://minigames/cable_management/cable_management_mini_game.gd" id="1_opao4"]
 [ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_ptr8y"]
 [ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="4_qqyak"]
 [ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_t0n75"]
-[ext_resource type="Texture2D" uid="uid://cqhg1x88sonue" path="res://assets/images/port_game/red.png" id="7_p0cco"]
-[ext_resource type="Texture2D" uid="uid://dih6ituk0f3pa" path="res://assets/images/port_game/blue.png" id="8_st1f4"]
-[ext_resource type="Texture2D" uid="uid://bb3wxam5k43j3" path="res://assets/images/port_game/black.png" id="9_4ltpn"]
+[ext_resource type="Texture2D" uid="uid://cwqbdiddok00s" path="res://assets/images/hdmi.png" id="7_f20a1"]
+[ext_resource type="Texture2D" uid="uid://dygeu5m5iab3m" path="res://assets/images/mic.png" id="7_j1sfu"]
+[ext_resource type="Texture2D" uid="uid://fivyr51baaob" path="res://assets/images/port_game/vga.png" id="8_2h4xn"]
+[ext_resource type="Texture2D" uid="uid://bv72u30onvsls" path="res://assets/images/line-in.png" id="8_eyvhl"]
+[ext_resource type="Texture2D" uid="uid://dxtt722be5e63" path="res://assets/images/line-out.png" id="9_sb8kv"]
 [ext_resource type="Texture2D" uid="uid://bie1jhpa5oxk3" path="res://assets/images/port_game/ports.png" id="9_st1f4"]
+[ext_resource type="Texture2D" uid="uid://cl7n4pkvwcf65" path="res://assets/images/port_game/power.png" id="12_sb8kv"]
+[ext_resource type="Texture2D" uid="uid://cs0i0uu5e0gx4" path="res://assets/images/port_game/ethernet.png" id="13_yoan6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2h4xn"]
+atlas = ExtResource("7_f20a1")
+region = Rect2(38.774628, 268.6563, 500.38193, 574.59735)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvror"]
+atlas = ExtResource("8_2h4xn")
+region = Rect2(37.135986, 261.17398, 508.2, 594.802)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yoan6"]
+atlas = ExtResource("7_j1sfu")
+region = Rect2(113.87329, 702.5803, 1325.8909, 1504.5579)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c76xm"]
+atlas = ExtResource("8_eyvhl")
+region = Rect2(107.64758, 701.5943, 1337.1409, 1509.1621)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dc3jh"]
+atlas = ExtResource("9_sb8kv")
+region = Rect2(118.82837, 710.1145, 1327.4979, 1487.7205)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41k0k"]
+atlas = ExtResource("12_sb8kv")
+region = Rect2(596.96405, 206.86658, 1607.1404, 1186.0696)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ja4x"]
+atlas = ExtResource("13_yoan6")
+region = Rect2(106.14404, 701.0367, 1346.7836, 1510.7119)
 
 [node name="CableManagementMiniGame" type="Control" unique_id=1524385671]
 layout_mode = 3
@@ -89,7 +121,7 @@ theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("1_dcbi1")
 theme_override_font_sizes/font_size = 28
-text = "Connected : 0/3"
+text = "Connected : 0/7"
 horizontal_alignment = 3
 vertical_alignment = 3
 
@@ -117,7 +149,7 @@ theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 8
 theme_override_fonts/font = ExtResource("1_dcbi1")
 theme_override_font_sizes/font_size = 28
-text = "Time: 20"
+text = "Time: 50"
 horizontal_alignment = 3
 vertical_alignment = 3
 
@@ -151,8 +183,7 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_dcbi1")
 theme_override_font_sizes/font_size = 31
-text = "Drag each cable to the matching
-colored port before time runs out."
+text = "Drag the cable tips to the correct ports."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -169,83 +200,630 @@ grow_vertical = 2
 
 [node name="PCTower" type="TextureRect" parent="CableArea" unique_id=126448004]
 layout_mode = 0
-offset_left = 728.0
-offset_top = 139.0
-offset_right = 1185.1934
-offset_bottom = 523.0
+offset_left = 186.0
+offset_top = 94.0
+offset_right = 486.0
+offset_bottom = 587.0
 texture = ExtResource("9_st1f4")
 expand_mode = 1
 
-[node name="PortRed" type="Control" parent="CableArea" unique_id=2010742342]
+[node name="WireGlows" type="Control" parent="CableArea" unique_id=1640054912]
 anchors_preset = 0
-offset_left = 876.0
-offset_top = 327.0
-offset_right = 916.0
-offset_bottom = 367.0
 
-[node name="PortBlue" type="Control" parent="CableArea" unique_id=500038102]
+[node name="Ethernet_WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=838865179]
+width = 18.0
+default_color = Color(1, 1, 0, 0.15)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Power_WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=1189826654]
+width = 18.0
+default_color = Color(0.8, 0.8, 0.8, 0.15)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="LineOut_WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=535706838]
+width = 18.0
+default_color = Color(0.19092327, 0.37268975, 1, 0.14901961)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="LineIn_WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=1584210447]
+width = 18.0
+default_color = Color(0.13, 0.44, 0.13, 0.15)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Mic_WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=1394494102]
+width = 18.0
+default_color = Color(1, 0.4, 0.8, 0.15)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="VGA_WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=2111582551]
+width = 18.0
+default_color = Color(0.1, 0.4, 1, 0.15)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="WireGlow" type="Line2D" parent="CableArea/WireGlows" unique_id=1584868584]
+width = 18.0
+default_color = Color(0, 0.8, 1, 0.15)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="WireVisuals" type="Control" parent="CableArea" unique_id=667371088]
 anchors_preset = 0
-offset_left = 768.0
-offset_top = 176.0
-offset_right = 808.0
-offset_bottom = 216.0
 
-[node name="PortGreen" type="Control" parent="CableArea" unique_id=496677007]
+[node name="Ethernet_WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=309958889]
+width = 6.0
+default_color = Color(1, 1, 0, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Power_WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=693288375]
+width = 6.0
+default_color = Color(0.8, 0.8, 0.8, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="LineOut_WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=853714761]
+width = 6.0
+default_color = Color(0.17360592, 0.3757929, 1, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="LineIn_WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=1027907921]
+width = 6.0
+default_color = Color(0.13, 0.44, 0.13, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Mic_WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=640342013]
+width = 6.0
+default_color = Color(1, 0.4, 0.8, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="VGA_WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=537014835]
+width = 6.0
+default_color = Color(0.1, 0.4, 1, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="WireVisual" type="Line2D" parent="CableArea/WireVisuals" unique_id=201757842]
+width = 6.0
+default_color = Color(0, 0.9, 1, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="port_hdmi" type="Control" parent="CableArea" unique_id=1091517387]
 anchors_preset = 0
-offset_left = 765.0
-offset_top = 246.0
-offset_right = 805.0
-offset_bottom = 286.0
+offset_left = 250.0
+offset_top = 288.0
+offset_right = 263.0
+offset_bottom = 315.0
 
-[node name="CableRed" type="TextureRect" parent="CableArea" unique_id=251355738]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 111.0
-offset_top = 164.0
-offset_right = -884.0
-offset_bottom = -395.6875
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("7_p0cco")
+[node name="port_vga" type="Control" parent="CableArea" unique_id=372345333]
+anchors_preset = 0
+offset_left = 285.0
+offset_top = 362.0
+offset_right = 310.0
+offset_bottom = 398.0
+
+[node name="port_mic" type="Control" parent="CableArea" unique_id=840483208]
+anchors_preset = 0
+offset_left = 255.0
+offset_top = 431.0
+offset_right = 268.0
+offset_bottom = 444.0
+
+[node name="port_line_in" type="Control" parent="CableArea" unique_id=319796693]
+anchors_preset = 0
+offset_left = 274.0
+offset_top = 423.0
+offset_right = 287.0
+offset_bottom = 436.0
+
+[node name="port_line_out" type="Control" parent="CableArea" unique_id=1727664917]
+anchors_preset = 0
+offset_left = 293.0
+offset_top = 415.0
+offset_right = 306.0
+offset_bottom = 428.0
+
+[node name="port_power" type="Control" parent="CableArea" unique_id=200000000]
+anchors_preset = 0
+offset_left = 352.0
+offset_top = 121.0
+offset_right = 420.0
+offset_bottom = 184.0
+
+[node name="port_ethernet" type="Control" parent="CableArea" unique_id=200000001]
+anchors_preset = 0
+offset_left = 281.0
+offset_top = 311.0
+offset_right = 306.0
+offset_bottom = 341.0
+
+[node name="cable_hdmi" type="TextureRect" parent="CableArea" unique_id=1299720631]
+layout_mode = 0
+offset_left = 589.0
+offset_top = 99.0
+offset_right = 689.0
+offset_bottom = 199.0
+texture = SubResource("AtlasTexture_2h4xn")
 expand_mode = 1
 
-[node name="TipMarker" type="Marker2D" parent="CableArea/CableRed" unique_id=729861355]
-position = Vector2(255, 34)
-
-[node name="CableBlue" type="TextureRect" parent="CableArea" unique_id=1148904162]
+[node name="CableLabel" type="Label" parent="CableArea/cable_hdmi" unique_id=1373508031]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 212.0
-offset_top = 304.0
-offset_right = -849.3333
-offset_bottom = -293.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = 57.0
+offset_right = -27.0
+offset_bottom = 83.0
+grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("8_st1f4")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "HDMI"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="cable_vga" type="TextureRect" parent="CableArea" unique_id=1105434202]
+layout_mode = 0
+offset_left = 774.0
+offset_top = 103.0
+offset_right = 874.0
+offset_bottom = 203.0
+texture = SubResource("AtlasTexture_yvror")
 expand_mode = 1
 
-[node name="TipMarker" type="Marker2D" parent="CableArea/CableBlue" unique_id=1346914010]
-position = Vector2(192, 25)
-
-[node name="CableGreen" type="TextureRect" parent="CableArea" unique_id=1877302124]
+[node name="CableLabel" type="Label" parent="CableArea/cable_vga" unique_id=223464240]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 256.0
-offset_top = 434.0
-offset_right = -805.3333
-offset_bottom = -163.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -74.0
+offset_top = 56.0
+offset_right = -31.0
+offset_bottom = 82.0
+grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("9_4ltpn")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "VGA"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="cable_mic" type="TextureRect" parent="CableArea" unique_id=1380621675]
+layout_mode = 0
+offset_left = 586.0
+offset_top = 259.0
+offset_right = 686.0
+offset_bottom = 359.0
+texture = SubResource("AtlasTexture_yoan6")
 expand_mode = 1
 
-[node name="TipMarker" type="Marker2D" parent="CableArea/CableGreen" unique_id=2120305572]
-position = Vector2(186, 24)
+[node name="CableLabel" type="Label" parent="CableArea/cable_mic" unique_id=532469659]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = 51.0
+offset_right = 16.0
+offset_bottom = 77.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "MICROPHONE"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="cable_line_in" type="TextureRect" parent="CableArea" unique_id=104044156]
+layout_mode = 0
+offset_left = 775.0
+offset_top = 259.0
+offset_right = 875.0
+offset_bottom = 359.0
+texture = SubResource("AtlasTexture_c76xm")
+expand_mode = 1
+
+[node name="CableLabel" type="Label" parent="CableArea/cable_line_in" unique_id=1170504727]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = 49.0
+offset_right = -15.0
+offset_bottom = 75.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "LINE-IN"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="cable_line_out" type="TextureRect" parent="CableArea" unique_id=1105434203]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 257.0
+offset_right = 1060.0
+offset_bottom = 357.0
+texture = SubResource("AtlasTexture_dc3jh")
+expand_mode = 1
+
+[node name="CableLabel" type="Label" parent="CableArea/cable_line_out" unique_id=201314249]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -99.0
+offset_top = 49.0
+offset_right = -3.0
+offset_bottom = 75.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "LINE-OUT"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="cable_power" type="TextureRect" parent="CableArea" unique_id=200000002]
+layout_mode = 0
+offset_left = 589.0
+offset_top = 400.0
+offset_right = 689.0
+offset_bottom = 500.0
+texture = SubResource("AtlasTexture_41k0k")
+expand_mode = 1
+
+[node name="CableLabel" type="Label" parent="CableArea/cable_power" unique_id=189384091]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = 52.0
+offset_right = -18.0
+offset_bottom = 78.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "POWER"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="cable_ethernet" type="TextureRect" parent="CableArea" unique_id=200000003]
+layout_mode = 0
+offset_left = 774.0
+offset_top = 400.0
+offset_right = 874.0
+offset_bottom = 500.0
+texture = SubResource("AtlasTexture_6ja4x")
+expand_mode = 1
+
+[node name="CableLabel" type="Label" parent="CableArea/cable_ethernet" unique_id=105207851]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -101.0
+offset_top = 52.0
+offset_right = 8.0
+offset_bottom = 78.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("1_dcbi1")
+theme_override_font_sizes/font_size = 28
+text = "ETHERNET"
+horizontal_alignment = 3
+vertical_alignment = 3
+
+[node name="hdmi_head" type="Control" parent="CableArea" unique_id=130000000]
+anchors_preset = 0
+offset_left = 624.0
+offset_top = 126.0
+offset_right = 654.0
+offset_bottom = 156.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/hdmi_head" unique_id=1748673091]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.133
+anchor_right = 1.0
+anchor_bottom = 0.83300006
+offset_top = 0.00999999
+offset_bottom = 0.0099983215
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/hdmi_head/PlugBody" unique_id=1211950003]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(0, 1, 0.8, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/hdmi_head" unique_id=1025723058]
+position = Vector2(15, 15)
+
+[node name="vga_head" type="Control" parent="CableArea" unique_id=1818653115]
+anchors_preset = 0
+offset_left = 807.0
+offset_top = 130.0
+offset_right = 837.0
+offset_bottom = 160.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/vga_head" unique_id=1102156846]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.133
+anchor_right = 1.0
+anchor_bottom = 0.83300006
+offset_top = 0.00999999
+offset_bottom = 0.0099983215
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/vga_head/PlugBody" unique_id=403640008]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(0, 1, 0.8, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/vga_head" unique_id=1107672889]
+position = Vector2(15, 15)
+
+[node name="mic_head" type="Control" parent="CableArea" unique_id=130000004]
+anchors_preset = 0
+offset_left = 624.0
+offset_top = 286.0
+offset_right = 654.0
+offset_bottom = 316.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/mic_head" unique_id=1884112629]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.16700001
+anchor_right = 1.0
+anchor_bottom = 0.83300006
+offset_top = -0.010000229
+offset_bottom = 0.0099983215
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/mic_head/PlugBody" unique_id=1129683664]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(1, 0.4, 0.8, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/mic_head" unique_id=916819148]
+position = Vector2(15, 15)
+
+[node name="line_in_head" type="Control" parent="CableArea" unique_id=130000005]
+anchors_preset = 0
+offset_left = 813.0
+offset_top = 286.0
+offset_right = 843.0
+offset_bottom = 316.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/line_in_head" unique_id=1742698104]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.16700001
+anchor_right = 1.0
+anchor_bottom = 0.83300006
+offset_top = -0.010000229
+offset_bottom = 0.0099983215
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/line_in_head/PlugBody" unique_id=1774882012]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(0.13, 0.44, 0.13, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/line_in_head" unique_id=1072174730]
+position = Vector2(15, 15)
+
+[node name="line_out_head" type="Control" parent="CableArea" unique_id=130000006]
+anchors_preset = 0
+offset_left = 995.0
+offset_top = 284.0
+offset_right = 1025.0
+offset_bottom = 314.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/line_out_head" unique_id=1054369517]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.16700001
+anchor_right = 1.0
+anchor_bottom = 0.83300006
+offset_top = -0.010000229
+offset_bottom = 0.0099983215
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/line_out_head/PlugBody" unique_id=807538663]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(0, 0.44924122, 0.8534175, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/line_out_head" unique_id=1583904066]
+position = Vector2(15, 15)
+
+[node name="power_head" type="Control" parent="CableArea" unique_id=130000007]
+anchors_preset = 0
+offset_left = 624.0
+offset_top = 425.0
+offset_right = 654.0
+offset_bottom = 455.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/power_head" unique_id=1538343741]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/power_head/PlugBody" unique_id=881170239]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(0.8, 0.8, 0.8, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/power_head" unique_id=722447305]
+position = Vector2(15, 15)
+
+[node name="ethernet_head" type="Control" parent="CableArea" unique_id=130000008]
+anchors_preset = 0
+offset_left = 807.0
+offset_top = 425.0
+offset_right = 837.0
+offset_bottom = 455.0
+pivot_offset = Vector2(15, 15)
+
+[node name="PlugBody" type="ColorRect" parent="CableArea/ethernet_head" unique_id=1673029755]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.83300006
+offset_bottom = 0.0099983215
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="ActiveLight" type="ColorRect" parent="CableArea/ethernet_head/PlugBody" unique_id=1769908856]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 2.0
+grow_vertical = 2
+color = Color(1, 1, 0, 1)
+
+[node name="TipMarker" type="Marker2D" parent="CableArea/ethernet_head" unique_id=1402536301]
+position = Vector2(15, 15)
 
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
