@@ -12,7 +12,7 @@ extends Control
 @onready var game_timer = $GameTimer
 
 # ── Tuning ────────────────────────────────────────────────────────────────────
-const BASE_TIME: int         = 35
+const BASE_TIME: int         = 20
 const TOKENS_TO_WIN: int     = 3
 const SCRAMBLE_DURATION: float = 0.9   # seconds the token shows scrambled
 const SCRAMBLE_INTERVAL: float = 0.08  # how fast letters cycle during scramble

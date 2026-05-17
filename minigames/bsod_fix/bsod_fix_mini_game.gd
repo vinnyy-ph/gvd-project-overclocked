@@ -11,7 +11,7 @@ extends Control
 @onready var choice_button_4 = $ChoicesArea/ChoiceButton4
 @onready var game_timer = $GameTimer
 
-var time_left: int = 30
+var time_left: int = 60
 var current_step: int = 0
 var game_active: bool = true
 

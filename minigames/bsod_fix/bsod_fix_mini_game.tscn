@@ -123,7 +123,7 @@ offset_bottom = -298.0
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_qwrp1")
 theme_override_font_sizes/font_size = 32
-text = "TIME: 30"
+text = "TIME: 60"
 vertical_alignment = 1
 
 [node name="StepLabel" type="Label" parent="Background/TopPanel" unique_id=117395066]

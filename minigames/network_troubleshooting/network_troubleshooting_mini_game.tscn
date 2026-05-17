@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="4_o04hb"]
 [ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_ui0ib"]
 [ext_resource type="Texture2D" uid="uid://yjbrmv4aav06" path="res://assets/images/networking/pc_icon.png" id="6_o04hb"]
+[ext_resource type="Texture2D" uid="uid://bvwk8wey3m370" path="res://assets/images/networking/switch.png" id="7_jor0y"]
+[ext_resource type="Texture2D" uid="uid://cwjhlmwmdvwqc" path="res://assets/images/networking/router.png" id="8_k6qah"]
+[ext_resource type="Texture2D" uid="uid://dc373hxy0wa8e" path="res://assets/images/networking/firewall.png" id="9_cnww3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_monitor_frame"]
 bg_color = Color(0.05, 0.05, 0.07, 1)
@@ -19,6 +22,18 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 shadow_size = 30
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hpuwu"]
+atlas = ExtResource("7_jor0y")
+region = Rect2(88.08836, 226.87, 414.81592, 381.5067)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4pe6"]
+atlas = ExtResource("8_k6qah")
+region = Rect2(66.39172, 188.47438, 285.40457, 298.26044)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dxys"]
+atlas = ExtResource("9_cnww3")
+region = Rect2(28.564697, 76.91943, 328.77487, 378.05316)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_terminal_bg"]
 bg_color = Color(0.02, 0.03, 0.05, 0.9)
@@ -280,7 +295,7 @@ offset_left = 369.0
 offset_top = 140.0
 offset_right = 449.0
 offset_bottom = 220.0
-texture_normal = ExtResource("6_o04hb")
+texture_normal = SubResource("AtlasTexture_hpuwu")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -308,7 +323,7 @@ offset_left = 539.0
 offset_top = 140.0
 offset_right = 619.0
 offset_bottom = 220.0
-texture_normal = ExtResource("6_o04hb")
+texture_normal = SubResource("AtlasTexture_o4pe6")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -336,7 +351,7 @@ offset_left = 709.0
 offset_top = 140.0
 offset_right = 789.0
 offset_bottom = 220.0
-texture_normal = ExtResource("6_o04hb")
+texture_normal = SubResource("AtlasTexture_0dxys")
 ignore_texture_size = true
 stretch_mode = 5
 

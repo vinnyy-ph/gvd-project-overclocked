@@ -38,7 +38,7 @@ var scenarios = [
 		"fault": "Sales PC cannot reach the internal Database for reporting.",
 		"task": "Restore LAN access and Database Handshake.",
 		"steps": [
-			{"device": "ClientPC", "req": "DHCP Lease", "decoys": ["Static IP", "Loopback"]},
+			{"device": "CustomerPC", "req": "DHCP Lease", "decoys": ["Static IP", "Loopback"]},
 			{"device": "SwitchL2", "req": "VLAN 10 (Sales)", "decoys": ["VLAN 20 (Guest)", "Trunking"]},
 			{"device": "Router", "req": "Internal Gateway", "decoys": ["WAN Uplink", "VPN Tunnel"]},
 			{"device": "DatabaseServer", "req": "Port 3306 (SQL)", "decoys": ["Port 80 (HTTP)", "Port 25 (SMTP)"]}
@@ -66,7 +66,7 @@ var scenarios = [
 		"fault": "Administrator cannot remote into the core router.",
 		"task": "Secure Admin Access (SSH) through Perimeter.",
 		"steps": [
-			{"device": "ClientPC", "req": "SSH Client", "decoys": ["Telnet Client", "Web Browser"]},
+			{"device": "CustomerPC", "req": "SSH Client", "decoys": ["Telnet Client", "Web Browser"]},
 			{"device": "Firewall", "req": "Allow Port 22", "decoys": ["Allow Port 80", "Port 3389"]},
 			{"device": "Router", "req": "RSA Public Key", "decoys": ["Guest Login", "Cleartext Pass"]}
 		]
@@ -75,7 +75,7 @@ var scenarios = [
 		"fault": "Network is blind! DNS resolution is failing.",
 		"task": "Route DNS traffic to Name Server.",
 		"steps": [
-			{"device": "ClientPC", "req": "DNS 8.8.8.8", "decoys": ["IP 127.0.0.1", "Proxy 8080"]},
+			{"device": "CustomerPC", "req": "DNS 8.8.8.8", "decoys": ["IP 127.0.0.1", "Proxy 8080"]},
 			{"device": "SwitchL2", "req": "Spanning Tree", "decoys": ["VLAN 99", "Half Duplex"]},
 			{"device": "MainServer", "req": "Port 53 (DNS)", "decoys": ["Port 25 (SMTP)", "Port 110 (POP3)"]}
 		]

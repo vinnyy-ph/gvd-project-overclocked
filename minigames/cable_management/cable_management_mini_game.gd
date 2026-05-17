@@ -47,7 +47,7 @@ extends Control
 @onready var ethernet_wire_visual = $CableArea/WireVisuals/Ethernet_WireVisual
 @onready var ethernet_wire_glow = $CableArea/WireGlows/Ethernet_WireGlow
 
-var time_left: int = 50 
+var time_left: int = 20
 var dragging_node: Control = null 
 var game_active: bool = true
 
