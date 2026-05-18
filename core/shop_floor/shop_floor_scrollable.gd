@@ -137,29 +137,32 @@ func _setup_confetti():
 	if not confetti_particles: return
 	confetti_particles.emitting = false
 	confetti_particles.one_shot = true
-	confetti_particles.amount = 100
-	confetti_particles.explosiveness = 0.8
-	confetti_particles.position = Vector2(640, -50) # Top center
-	confetti_particles.direction = Vector2(0, 1)
-	confetti_particles.spread = 90
-	confetti_particles.gravity = Vector2(0, 400)
-	confetti_particles.initial_velocity_min = 400
-	confetti_particles.initial_velocity_max = 800
+	confetti_particles.amount = 150
+	confetti_particles.lifetime = 2.0
+	confetti_particles.explosiveness = 0.9
+	confetti_particles.lifetime_randomness = 0.5
+	confetti_particles.position = Vector2(640, 360) # Center of screen
+	confetti_particles.direction = Vector2(0, -1) # Upwards
+	confetti_particles.spread = 180
+	confetti_particles.gravity = Vector2(0, 600) # Strong gravity down
+	confetti_particles.initial_velocity_min = 300
+	confetti_particles.initial_velocity_max = 600
 	confetti_particles.scale_amount_min = 4
-	confetti_particles.scale_amount_max = 12
+	confetti_particles.scale_amount_max = 10
 	
-	# Color variations
-	var colors = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN]
+	# Create a colorful ramp for variety
 	var gradient = Gradient.new()
-	# Gradient doesn't have initial_ramp directly on CPUParticles2D via properties like this, 
-	# usually it's a Curve or ColorRamp resource.
-	# But I can set color to a random one in code or just use color_initial_ramp if it exists.
-	# Actually, for CPUParticles2D it's 'color' or 'color_ramp' (resource).
-	# I'll just use a random color for now or set it to white and use color_ramp if I can create one.
-	# Simpler: just set a few properties and let it be.
-	confetti_particles.color = Color.WHITE
-	confetti_particles.hue_variation_min = -1.0
-	confetti_particles.hue_variation_max = 1.0
+	gradient.set_color(0, Color.YELLOW)
+	gradient.add_point(0.2, Color.RED)
+	gradient.add_point(0.4, Color.MAGENTA)
+	gradient.add_point(0.6, Color.BLUE)
+	gradient.add_point(0.8, Color.GREEN)
+	gradient.set_color(gradient.get_point_count() - 1, Color.CYAN)
+	
+	confetti_particles.color_ramp = gradient
+	confetti_particles.color = Color.WHITE # Reset base color
+	confetti_particles.hue_variation_min = 0.0
+	confetti_particles.hue_variation_max = 0.0
 
 func _handle_minigame_result():
 	if not GameManager.minigame_just_finished:
