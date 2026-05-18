@@ -144,9 +144,11 @@ position = Vector2(1532, 812)
 scale = Vector2(0.7, 0.7)
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=1643221891]
-visible = false
 position = Vector2(-15.714285, -115.71427)
 texture = ExtResource("3_fhpww")
+
+[node name="DecorationsContainer" type="Node2D" parent="World/Background" unique_id=1022676470]
+z_index = 3
 
 [node name="Floor" type="Sprite2D" parent="World/Background" unique_id=1022676469]
 visible = false
@@ -820,3 +822,19 @@ limit_top = 0
 limit_right = 3064
 limit_bottom = 1408
 limit_smoothed = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1805051003]
+process_mode = 3
+
+[node name="ItemList" type="ItemList" parent="CanvasLayer" unique_id=695787279]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/h_separation = 120
+max_columns = 0
+icon_mode = 0
+icon_scale = 0.5
