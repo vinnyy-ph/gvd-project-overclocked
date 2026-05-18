@@ -150,15 +150,15 @@ texture = ExtResource("3_fhpww")
 
 [node name="SafeZoneShopFloor" type="Polygon2D" parent="World/Background" unique_id=1022676471]
 color = Color(0, 1, 1, 0.2509804)
-polygon = PackedVector2Array(-1585.7141, 152.85718, -12.857178, -629.99994, 1550, 152.85718, -15.714355, 942.85706, -1079.9999, 404.28577)
+polygon = PackedVector2Array(-1600, 150, -12.857178, -650, 1580, 150, -15.714355, 960, -1079.9999, 404.28577)
 
 [node name="SafeZoneShopFloor2" type="Polygon2D" parent="World/Background" unique_id=342876983]
 color = Color(0, 1, 1, 0.2509804)
-polygon = PackedVector2Array(-1587.1428, -385.71423, -14.285645, -1169.9999, -14.285645, -628.57135, -1582.857, 152.85718)
+polygon = PackedVector2Array(-1600, -385.71423, -14.285645, -1200, -14.285645, -600, -1600, 180)
 
 [node name="SafeZoneShopFloor3" type="Polygon2D" parent="World/Background" unique_id=1372300516]
 color = Color(0, 1, 1, 0.2509804)
-polygon = PackedVector2Array(-12.857178, -1171.4285, 1550, -387.14276, 1551.4285, 145.71436, -12.857178, -627.14276)
+polygon = PackedVector2Array(-12.857178, -1200, 1580, -387.14276, 1580, 180, -12.857178, -600)
 
 [node name="DecorationsContainer" type="Node2D" parent="World/Background" unique_id=1022676470]
 z_index = 3

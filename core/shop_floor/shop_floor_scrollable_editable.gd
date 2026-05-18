@@ -79,6 +79,7 @@ func _spawn_placed_decorations():
 		decoration.texture = load(actual_path)
 		decoration.decoration_data = {
 			"path": data["path"],
+			"icon": data["path"],
 			"actual": actual_path,
 			"category": data["category"],
 			"name": data["path"].get_file().replace(".png", "")
@@ -103,7 +104,9 @@ func _get_category_from_path(path: String) -> String:
 func populate_item_list() -> void:
 	item_list.clear()
 	for data in decorations_data:
-		var idx = item_list.add_icon_item(load(data["icon"]))
+		var icon_path = data.get("icon", data.get("path", ""))
+		if icon_path == "": continue
+		var idx = item_list.add_icon_item(load(icon_path))
 		item_list.set_item_metadata(idx, data)
 		item_list.set_item_tooltip(idx, data["name"])
 
