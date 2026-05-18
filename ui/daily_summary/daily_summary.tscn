@@ -142,6 +142,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 19.0
+offset_right = 8.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -169,29 +173,11 @@ horizontal_alignment = 1
 [node name="ButtonContainer" type="HBoxContainer" parent="Control/CenterContainer/VBoxContainer" unique_id=1433758979]
 layout_mode = 2
 theme_override_constants/separation = 30
+alignment = 1
 
-[node name="NextDayButton" type="Button" parent="Control" unique_id=1750100896]
-layout_mode = 0
-offset_left = 650.0
-offset_top = 496.0
-offset_right = 3133.0
-offset_bottom = 1126.0
-scale = Vector2(0.11, 0.11)
-size_flags_horizontal = 6
-size_flags_vertical = 4
-theme_override_fonts/font = ExtResource("2_eoiov")
-theme_override_font_sizes/font_size = 27
-icon = ExtResource("7_te63q")
-flat = true
-icon_alignment = 1
-
-[node name="ViewUpgradeShopButton" type="Button" parent="Control" unique_id=378285265]
-layout_mode = 0
-offset_left = 373.0
-offset_top = 496.0
-offset_right = 2856.0
-offset_bottom = 1126.0
-scale = Vector2(0.11, 0.11)
+[node name="ViewUpgradeShopButton" type="Button" parent="Control/CenterContainer/VBoxContainer/ButtonContainer" unique_id=378285265]
+custom_minimum_size = Vector2(273, 69)
+layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_eoiov")
@@ -199,3 +185,16 @@ theme_override_font_sizes/font_size = 27
 icon = ExtResource("8_yr2hp")
 flat = true
 icon_alignment = 1
+expand_icon = true
+
+[node name="NextDayButton" type="Button" parent="Control/CenterContainer/VBoxContainer/ButtonContainer" unique_id=1750100896]
+custom_minimum_size = Vector2(273, 69)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_eoiov")
+theme_override_font_sizes/font_size = 27
+icon = ExtResource("7_te63q")
+flat = true
+icon_alignment = 1
+expand_icon = true

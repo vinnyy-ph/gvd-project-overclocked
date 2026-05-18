@@ -2,8 +2,8 @@ extends Control
 
 @onready var title_label = $CenterContainer/VBoxContainer/TitleLabel
 @onready var stats_label = $CenterContainer/VBoxContainer/StatsLabel
-@onready var shop_button = $ViewUpgradeShopButton
-@onready var next_day_button = $NextDayButton
+@onready var shop_button = $CenterContainer/VBoxContainer/ButtonContainer/ViewUpgradeShopButton
+@onready var next_day_button = $CenterContainer/VBoxContainer/ButtonContainer/NextDayButton
 @onready var day_label = $Background2/TopPanel/TimerLabel
 
 func _ready():

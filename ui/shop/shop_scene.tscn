@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://b30fg5nf81omv" path="res://assets/images/upgrades/empty_bar.png" id="5_suxlw"]
 [ext_resource type="Texture2D" uid="uid://b5edpwnrrvryr" path="res://assets/images/moneyicon.png" id="6_2fiap"]
 [ext_resource type="Texture2D" uid="uid://c1427mot37cax" path="res://assets/images/upgrades/filterbtns/cashier.png" id="6_8mbbv"]
+[ext_resource type="Texture2D" uid="uid://dehkiur08njvw" path="res://assets/images/upgrades/editshopbtn.png" id="7_0t38k"]
 [ext_resource type="Texture2D" uid="uid://bxaakmpsfl3jl" path="res://assets/images/upgrades/filterbtns/pcunits.png" id="7_7i078"]
 [ext_resource type="Texture2D" uid="uid://bopttnhr5k46e" path="res://assets/images/upgrades/filterbtns/floors.png" id="8_ve7s5"]
 [ext_resource type="Texture2D" uid="uid://bxv6f1bxx7occ" path="res://assets/images/upgrades/filterbtns/walls.png" id="9_i73yq"]
@@ -95,6 +96,19 @@ theme_override_font_sizes/font_size = 69
 text = "P120,000"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="WallsFilterBtn" type="TextureButton" parent="ParallaxCheckeredBG" unique_id=1936072435]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 0
+offset_left = 735.0
+offset_top = 63.0
+offset_right = 889.87
+offset_bottom = 109.880005
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("7_0t38k")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="guide" type="TextureRect" parent="." unique_id=1308788591]
 visible = false
