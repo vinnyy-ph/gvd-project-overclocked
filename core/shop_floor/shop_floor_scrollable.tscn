@@ -23,6 +23,8 @@
 [ext_resource type="Script" uid="uid://c157mbb0pqg2x" path="res://core/shop_floor/animated_sprite_2d.gd" id="12_f7hrx"]
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="12_ghd6s"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_3lx45"]
+[ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="16_dmcqo"]
+[ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="17_y4wy1"]
 
 [sub_resource type="Gradient" id="Gradient_dmcqo"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -129,6 +131,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_kbbo8")
 expand_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="Day_NightEnvironment_Next" type="TextureRect" parent="World" unique_id=46992464]
 modulate = Color(1, 1, 1, 0)
@@ -143,6 +146,7 @@ offset_bottom = 1738.6875
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="Background" type="Node2D" parent="World" unique_id=142257243]
 z_index = 2
@@ -807,6 +811,15 @@ position = Vector2(-246.46431, 765.1974)
 scale = Vector2(0.6091899, 0.6091899)
 texture = ExtResource("10_jajnr")
 script = ExtResource("11_f7hrx")
+
+[node name="CashierPerson" type="Sprite2D" parent="World/Background" unique_id=1330561175]
+position = Vector2(-177.14293, 682.8571)
+scale = Vector2(0.99999994, 0.99999994)
+texture = ExtResource("17_y4wy1")
+
+[node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
+position = Vector2(-91.42862, 727.1428)
+texture = ExtResource("16_dmcqo")
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 z_index = 155

@@ -12,6 +12,10 @@
 [ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="9_8uhoi"]
 [ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="10_winn6"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ew8al"]
+shader = ExtResource("9_8uhoi")
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fayoa"]
 texture = ExtResource("3_fayoa")
 expand_margin_top = 21.0
@@ -31,10 +35,6 @@ expand_margin_top = 16.0
 expand_margin_bottom = 17.0
 axis_stretch_horizontal = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ew8al"]
-shader = ExtResource("9_8uhoi")
-shader_parameter/scroll_speed = Vector2(0.05, -0.05)
-
 [node name="Settings" type="Control" unique_id=456126450]
 layout_mode = 3
 anchors_preset = 15
@@ -43,6 +43,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_winn6")
+
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=744300309]
+z_index = -1
+material = SubResource("ShaderMaterial_ew8al")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_winn6")
 
 [node name="BackgroundPanel" type="TextureRect" parent="." unique_id=1061498683]
 layout_mode = 1
@@ -135,14 +146,3 @@ offset_right = 847.0
 offset_bottom = 480.0
 icon = ExtResource("8_h58ci")
 flat = true
-
-[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=744300309]
-z_index = -1
-material = SubResource("ShaderMaterial_ew8al")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("10_winn6")

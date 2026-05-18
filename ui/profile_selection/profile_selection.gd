@@ -76,7 +76,7 @@ func _on_return_pressed():
 
 func _on_settings_pressed():
 	GameManager.previous_scene = "res://ui/profile_selection/profile_selection.tscn"
-	get_tree().change_scene_to_file("res://ui/settings/settings_menu.tscn")
+	get_tree().change_scene_to_file("res://ui/settings/settings.tscn")
 
 func _on_exit_pressed():
 	_show_exit_confirmation()

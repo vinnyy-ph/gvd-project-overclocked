@@ -75,7 +75,7 @@ func _on_tutorial_button_pressed():
 
 func _on_settings_button_pressed() -> void:
 	GameManager.previous_scene = "res://ui/main_menu_v2/MainMenuV2.tscn"
-	get_tree().change_scene_to_file("res://ui/settings/settings_menu.tscn")
+	get_tree().change_scene_to_file("res://ui/settings/settings.tscn")
 
 func _on_exit_button_pressed() -> void:
 	_show_exit_confirmation()

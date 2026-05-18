@@ -33,7 +33,7 @@ func _on_return_pressed():
 
 func _on_settings_pressed():
 	GameManager.previous_scene = "res://ui/leaderboard/leaderboard.tscn"
-	get_tree().change_scene_to_file("res://ui/settings/settings_menu.tscn")
+	get_tree().change_scene_to_file("res://ui/settings/settings.tscn")
 
 func _on_exit_pressed():
 	var exit_prompt_scene = load("res://ui/pause/ExitPrompt.tscn")
