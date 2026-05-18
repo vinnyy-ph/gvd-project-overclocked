@@ -9,6 +9,7 @@
 custom_minimum_size = Vector2(1200, 175)
 offset_right = 1200.0
 offset_bottom = 175.0
+mouse_filter = 1
 texture_normal = ExtResource("1_1")
 script = ExtResource("4_4")
 
@@ -71,11 +72,13 @@ vertical_alignment = 1
 
 [node name="NameClipper" type="Control" parent="." unique_id=141816120]
 clip_contents = true
+layout_mode = 3
 anchors_preset = 0
 offset_left = 211.0
 offset_top = -4.0
 offset_right = 1032.0
 offset_bottom = 102.0
+mouse_filter = 1
 
 [node name="ProfileNameLabel" type="Label" parent="NameClipper" unique_id=678295377]
 clip_contents = true

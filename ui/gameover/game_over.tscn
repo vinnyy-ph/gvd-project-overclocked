@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://djjhmpvb54f6s"]
+[gd_scene format=3 uid="uid://djjhmpvb54f6s"]
 
-[ext_resource type="Script" path="res://ui/gameover/game_over.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c6f1f3o548xn8" path="res://ui/gameover/game_over.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://gxpuayshv6bs" path="res://assets/images/ui/game_over/gameover.png" id="1_xhg2v"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="2_ehkxf"]
 [ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="3_qa3gh"]
 [ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="4_f8vxi"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="5_f8vxi"]
+[ext_resource type="Texture2D" uid="uid://8y3ntf773ea3" path="res://assets/images/ui/game_over/tipgameover.png" id="7_ytng4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ukcgt"]
 shader = ExtResource("3_qa3gh")
@@ -39,9 +40,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -290.0066
-offset_top = -231.5
+offset_top = -274.0
 offset_right = 290.0066
-offset_bottom = 231.5
+offset_bottom = 189.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_xhg2v")
@@ -89,3 +90,39 @@ theme_override_fonts/font = ExtResource("5_f8vxi")
 theme_override_font_sizes/font_size = 48
 text = "30 days"
 vertical_alignment = 1
+
+[node name="DailyTip" type="TextureRect" parent="." unique_id=238936102]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 563.5
+offset_right = -56.0
+offset_bottom = -61.171326
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_ytng4")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="DailyTip" unique_id=1934395278]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="DailyTipText" type="Label" parent="DailyTip/MarginContainer" unique_id=953922798]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_f8vxi")
+theme_override_font_sizes/font_size = 25
+text = ">_ Gameplay tip !
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+autowrap_mode = 3
+metadata/_edit_use_anchors_ = true
