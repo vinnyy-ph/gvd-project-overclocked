@@ -65,7 +65,7 @@ func _load_owned_inventory():
 		decorations_data.append({
 			"path": path,
 			"icon": path,
-			"actual": path,
+			"actual": GameManager.get_actual_decoration_path(path),
 			"category": _get_category_from_path(path),
 			"name": path.get_file().replace(".png", "")
 		})
@@ -75,9 +75,11 @@ func _spawn_placed_decorations():
 	for data in SaveManager.placed_decorations:
 		var decoration = DECORATION_SCENE.instantiate()
 		decorations_container.add_child(decoration)
-		decoration.texture = load(data["path"])
+		var actual_path = GameManager.get_actual_decoration_path(data["path"])
+		decoration.texture = load(actual_path)
 		decoration.decoration_data = {
 			"path": data["path"],
+			"actual": actual_path,
 			"category": data["category"],
 			"name": data["path"].get_file().replace(".png", "")
 		}
@@ -122,6 +124,9 @@ func _save_placements():
 	SaveManager.placed_decorations = save_data
 	SaveManager.save_game()
 
+func save_state():
+	_save_placements()
+
 # --- INPUT HANDLING ---
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -144,7 +149,7 @@ func start_dragging_from_list(item_idx: int) -> void:
 	
 	var decoration = DECORATION_SCENE.instantiate()
 	decorations_container.add_child(decoration)
-	decoration.texture = load(data["path"])
+	decoration.texture = load(data["actual"])
 	decoration.decoration_data = data
 	decoration.update_touch_area() # Update size based on texture
 	decoration.global_position = get_global_mouse_position()

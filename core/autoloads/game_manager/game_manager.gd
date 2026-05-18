@@ -435,6 +435,26 @@ func _on_node_added(node: Node):
 # GLOBAL BUTTON EFFECTS
 # ==========================================
 
+func get_actual_decoration_path(preview_path: String) -> String:
+	var filename = preview_path.get_file()
+	var actual_path = ""
+	
+	if "cashier_decos" in preview_path:
+		actual_path = "res://assets/images/shop_decorations_actual/cashier_actual/" + filename
+	elif "chair_decos" in preview_path:
+		actual_path = "res://assets/images/shop_decorations_actual/chair_decos_actual/" + filename
+	elif "misc_decos" in preview_path:
+		actual_path = "res://assets/images/shop_decorations_actual/misc_decos/" + filename
+	elif "wall_decos" in preview_path:
+		actual_path = "res://assets/images/shop_decorations_actual/wall_decos/" + filename
+	else:
+		return preview_path # Fallback for floors, walls, pc_decos, etc.
+
+	if FileAccess.file_exists(actual_path) or ResourceLoader.exists(actual_path):
+		return actual_path
+	
+	return preview_path
+
 func setup_button_effect(button: BaseButton):
 	# Store the original scale to restore it later
 	if not button.has_meta("original_scale"):

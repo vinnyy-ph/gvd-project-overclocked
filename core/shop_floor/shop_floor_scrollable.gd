@@ -157,7 +157,8 @@ func _spawn_placed_decorations():
 	for data in SaveManager.placed_decorations:
 		var decoration = Sprite2D.new()
 		decorations_container.add_child(decoration)
-		decoration.texture = load(data["path"])
+		var actual_path = GameManager.get_actual_decoration_path(data["path"])
+		decoration.texture = load(actual_path)
 		decoration.global_position = str_to_var(data["pos"])
 		decoration.z_index = 3 # Match editable floor default
 
