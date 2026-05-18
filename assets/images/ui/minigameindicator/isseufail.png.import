@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://74g0jyq3em7f"
-path="res://.godot/imported/isseufai.png-ebe8a4fb3b0cc4e697be84ee4e5e986f.ctex"
+uid="uid://bkasy1tvkyyic"
+path="res://.godot/imported/isseufail.png-97f075c47196f86c1fe8c10489c33dec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/minigameindicator/isseufai.png"
-dest_files=["res://.godot/imported/isseufai.png-ebe8a4fb3b0cc4e697be84ee4e5e986f.ctex"]
+source_file="res://assets/images/ui/minigameindicator/isseufail.png"
+dest_files=["res://.godot/imported/isseufail.png-97f075c47196f86c1fe8c10489c33dec.ctex"]
 
 [params]
 
