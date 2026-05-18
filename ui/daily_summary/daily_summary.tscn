@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://ct1e7ts3o1rhm"]
 
 [ext_resource type="Script" uid="uid://cssqj6ybj0cue" path="res://ui/daily_summary/daily_summary.gd" id="1_01f6r"]
+[ext_resource type="Script" uid="uid://djl58snx3vyix" path="res://ui/prompts/buy_prompt.gd" id="1_r672r"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="2_eoiov"]
 [ext_resource type="Texture2D" uid="uid://ppgib2njyss5" path="res://assets/images/game_screen.png" id="3_n8fex"]
 [ext_resource type="Texture2D" uid="uid://b1ip68b47dbo4" path="res://assets/images/time_icon.png" id="4_r672r"]
 [ext_resource type="Texture2D" uid="uid://dhxg333v7vrf2" path="res://assets/images/game_screen_ui/instruction_panel.png" id="5_te63q"]
+[ext_resource type="Texture2D" uid="uid://dpcmxp3yljo36" path="res://assets/images/ui/summary/startnextday.png" id="7_te63q"]
+[ext_resource type="Texture2D" uid="uid://dl3r1t31ko8d2" path="res://assets/images/ui/summary/viewupgrade.png" id="8_yr2hp"]
 
 [node name="daily_summary" type="Control" unique_id=1724205805]
 layout_mode = 3
@@ -13,6 +16,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_r672r")
 
 [node name="Control" type="Control" parent="." unique_id=528537800]
 layout_mode = 1
@@ -168,18 +172,32 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="ShopButton" type="Button" parent="Control/CenterContainer/VBoxContainer/ButtonContainer" unique_id=505945657]
-layout_mode = 2
+[node name="NextDayButton" type="Button" parent="Control" unique_id=1750100896]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 496.0
+offset_right = 3133.0
+offset_bottom = 1126.0
+scale = Vector2(0.11, 0.11)
 size_flags_horizontal = 6
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_eoiov")
 theme_override_font_sizes/font_size = 27
-text = "Visit Upgrade Shop"
+icon = ExtResource("7_te63q")
+flat = true
+icon_alignment = 1
 
-[node name="NextDayButton" type="Button" parent="Control/CenterContainer/VBoxContainer/ButtonContainer" unique_id=1750100896]
-layout_mode = 2
+[node name="ViewUpgradeShopButton" type="Button" parent="Control" unique_id=378285265]
+layout_mode = 0
+offset_left = 373.0
+offset_top = 496.0
+offset_right = 2856.0
+offset_bottom = 1126.0
+scale = Vector2(0.11, 0.11)
 size_flags_horizontal = 6
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_eoiov")
 theme_override_font_sizes/font_size = 27
-text = "Start Next Day"
+icon = ExtResource("8_yr2hp")
+flat = true
+icon_alignment = 1

@@ -15,7 +15,6 @@ script = ExtResource("4_4")
 
 [node name="NameClipper" type="Control" parent="." unique_id=235490279]
 clip_contents = true
-layout_mode = 3
 anchors_preset = 0
 offset_left = 39.0
 offset_top = 46.0

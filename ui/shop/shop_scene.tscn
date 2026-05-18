@@ -1,6 +1,28 @@
 [gd_scene format=3 uid="uid://bmkx452d3kx7r"]
 
 [ext_resource type="Script" uid="uid://dc8x3egqie3pl" path="res://ui/shop/shop_scene.gd" id="1_di5lw"]
+[ext_resource type="Texture2D" uid="uid://dlad2s8o4e64b" path="res://assets/images/upgrades/guide.png" id="2_gen2g"]
+[ext_resource type="Texture2D" uid="uid://wi42y3a7qove" path="res://assets/images/upgrades/upgrades.png" id="3_gdycf"]
+[ext_resource type="Texture2D" uid="uid://yxl2y5xv0qnn" path="res://assets/images/upgrades/upgradebtn.png" id="4_kvlpm"]
+[ext_resource type="Texture2D" uid="uid://bp7jsf7a4wc4v" path="res://assets/images/main_menu/return.png" id="4_rl2u5"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="5_2fiap"]
+[ext_resource type="Texture2D" uid="uid://b30fg5nf81omv" path="res://assets/images/upgrades/empty_bar.png" id="5_suxlw"]
+[ext_resource type="Texture2D" uid="uid://b5edpwnrrvryr" path="res://assets/images/moneyicon.png" id="6_2fiap"]
+[ext_resource type="Texture2D" uid="uid://c1427mot37cax" path="res://assets/images/upgrades/filterbtns/cashier.png" id="6_8mbbv"]
+[ext_resource type="Texture2D" uid="uid://bxaakmpsfl3jl" path="res://assets/images/upgrades/filterbtns/pcunits.png" id="7_7i078"]
+[ext_resource type="Texture2D" uid="uid://bopttnhr5k46e" path="res://assets/images/upgrades/filterbtns/floors.png" id="8_ve7s5"]
+[ext_resource type="Texture2D" uid="uid://bxv6f1bxx7occ" path="res://assets/images/upgrades/filterbtns/walls.png" id="9_i73yq"]
+[ext_resource type="Texture2D" uid="uid://dxwwjnl0qp6xl" path="res://assets/images/upgrades/filterbtns/hanging.png" id="10_qwmot"]
+[ext_resource type="Texture2D" uid="uid://bsvgbdis038nr" path="res://assets/images/upgrades/filterbtns/All.png" id="10_rl2u5"]
+[ext_resource type="Texture2D" uid="uid://6bsnj8nk7ggt" path="res://assets/images/upgrades/filterbtns/misc.png" id="11_7i078"]
+[ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="13_qwmot"]
+[ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="14_8h7vk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rl2u5"]
+shader = ExtResource("13_qwmot")
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ve7s5"]
 
 [node name="ShopScene" type="Control" unique_id=1328006666]
 custom_minimum_size = Vector2(180.62, 168.85)
@@ -12,31 +34,268 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_di5lw")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1760182765]
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=291429690]
+z_index = -1
+material = SubResource("ShaderMaterial_rl2u5")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("14_8h7vk")
 
-[node name="MainVBox" type="MarginContainer" parent="." unique_id=1205300974]
+[node name="ReturnButton" type="TextureButton" parent="ParallaxCheckeredBG" unique_id=1704937811]
+custom_minimum_size = Vector2(71, 68)
 layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 720.0
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+offset_left = 40.0
+offset_top = 50.0
+offset_right = 111.0
+offset_bottom = 118.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("4_rl2u5")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="ShopScroll" type="ScrollContainer" parent="MainVBox" unique_id=1503023880]
-layout_mode = 2
-horizontal_scroll_mode = 0
+[node name="SelectProfileLabel" type="Label" parent="ParallaxCheckeredBG" unique_id=2012248641]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 40.0
+offset_right = 711.0
+offset_bottom = 132.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("5_2fiap")
+theme_override_font_sizes/font_size = 100
+text = "UPGRADE SHOP"
 
-[node name="GridContainer" type="GridContainer" parent="MainVBox/ShopScroll" unique_id=1796445575]
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxCheckeredBG" unique_id=383852072]
+position = Vector2(1204, 89)
+scale = Vector2(0.27583733, 0.27583733)
+texture = ExtResource("6_2fiap")
+
+[node name="TimerLabel" type="Label" parent="ParallaxCheckeredBG" unique_id=226635340]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -322.0
+offset_top = -296.0
+offset_right = -122.0
+offset_bottom = -243.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_2fiap")
+theme_override_font_sizes/font_size = 69
+text = "P120,000"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="guide" type="TextureRect" parent="." unique_id=1308788591]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gen2g")
+metadata/_edit_lock_ = true
+
+[node name="Upgrades" type="TextureRect" parent="." unique_id=785364379]
+layout_mode = 0
+offset_left = 731.0
+offset_top = 158.0
+offset_right = 1246.0
+offset_bottom = 680.96906
+scale = Vector2(0.98, 0.98)
+texture = ExtResource("3_gdycf")
+expand_mode = 1
+
+[node name="CPUUpgradeBar" type="TextureRect" parent="Upgrades" unique_id=2128328306]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 91.06195
+offset_right = 381.0
+offset_bottom = 131.06195
+texture = ExtResource("5_suxlw")
+
+[node name="CPUUpgradeBtn" type="Button" parent="Upgrades/CPUUpgradeBar" unique_id=547348307]
+layout_mode = 0
+offset_left = 389.0
+offset_top = 2.0
+offset_right = 430.0
+offset_bottom = 39.0
+icon = ExtResource("4_kvlpm")
+flat = true
+
+[node name="GPUUpgradeBar" type="TextureRect" parent="Upgrades" unique_id=1807159735]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 166.06195
+offset_right = 381.0
+offset_bottom = 206.06195
+texture = ExtResource("5_suxlw")
+
+[node name="GPUUpgradeBtn2" type="Button" parent="Upgrades/GPUUpgradeBar" unique_id=11090356]
+layout_mode = 0
+offset_left = 389.0
+offset_top = -1.0
+offset_right = 430.0
+offset_bottom = 36.0
+icon = ExtResource("4_kvlpm")
+flat = true
+
+[node name="MonitorUpgradeBar" type="TextureRect" parent="Upgrades" unique_id=1588605243]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 236.06195
+offset_right = 381.0
+offset_bottom = 276.06195
+texture = ExtResource("5_suxlw")
+
+[node name="MonitorUpgradeBtn" type="Button" parent="Upgrades/MonitorUpgradeBar" unique_id=1803885017]
+layout_mode = 0
+offset_left = 389.0
+offset_right = 430.0
+offset_bottom = 37.0
+icon = ExtResource("4_kvlpm")
+flat = true
+
+[node name="CableManagementUpgradeBar" type="TextureRect" parent="Upgrades" unique_id=1662075120]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 309.06195
+offset_right = 381.0
+offset_bottom = 349.06195
+texture = ExtResource("5_suxlw")
+
+[node name="CableManagementUpgradeBtn" type="Button" parent="Upgrades/CableManagementUpgradeBar" unique_id=632870040]
+layout_mode = 0
+offset_left = 389.0
+offset_top = -1.0
+offset_right = 430.0
+offset_bottom = 36.0
+icon = ExtResource("4_kvlpm")
+flat = true
+
+[node name="SpeedUpgradeBar" type="TextureRect" parent="Upgrades" unique_id=124594823]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 381.06195
+offset_right = 381.0
+offset_bottom = 421.06195
+texture = ExtResource("5_suxlw")
+
+[node name="SpeedUpgradeBtn" type="Button" parent="Upgrades/SpeedUpgradeBar" unique_id=454918483]
+layout_mode = 0
+offset_left = 389.0
+offset_top = -1.0
+offset_right = 430.0
+offset_bottom = 36.0
+icon = ExtResource("4_kvlpm")
+flat = true
+
+[node name="PCSlotUpgradeBar" type="TextureRect" parent="Upgrades" unique_id=1717956456]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 453.06195
+offset_right = 381.0
+offset_bottom = 493.06195
+texture = ExtResource("5_suxlw")
+
+[node name="PCSlotUpgradeBtn" type="Button" parent="Upgrades/PCSlotUpgradeBar" unique_id=1252494290]
+layout_mode = 0
+offset_left = 389.0
+offset_right = 430.0
+offset_bottom = 37.0
+icon = ExtResource("4_kvlpm")
+flat = true
+
+[node name="Buttons" type="VBoxContainer" parent="." unique_id=920725878]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 162.0
+offset_right = 196.0
+offset_bottom = 678.0
+theme_override_constants/separation = 20
+
+[node name="AllFilterBtn" type="TextureButton" parent="Buttons" unique_id=564226328]
+custom_minimum_size = Vector2(154.87, 46.88)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-columns = 5
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("10_rl2u5")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="CashierFilter" type="TextureButton" parent="Buttons" unique_id=1673037686]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("6_8mbbv")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PCUnitsFilter" type="TextureButton" parent="Buttons" unique_id=186022138]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("7_7i078")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="FloorsFilterBtn" type="TextureButton" parent="Buttons" unique_id=941512989]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("8_ve7s5")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="WallsFilterBtn" type="TextureButton" parent="Buttons" unique_id=156765306]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("9_i73yq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="HangingFilterBtn" type="TextureButton" parent="Buttons" unique_id=1107836108]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("10_qwmot")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MiscFilterBtn" type="TextureButton" parent="Buttons" unique_id=1435255569]
+custom_minimum_size = Vector2(154.87, 46.88)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("11_7i078")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ItemList" type="ItemList" parent="." unique_id=1690694562]
+layout_mode = 0
+offset_left = 230.0
+offset_top = 156.0
+offset_right = 703.0
+offset_bottom = 671.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ve7s5")
+auto_width = true
+max_columns = 3
+same_column_width = true
+icon_scale = 0.85
