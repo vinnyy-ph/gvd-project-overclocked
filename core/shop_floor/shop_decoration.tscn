@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b8y4v7w6p5j1y"]
+[gd_scene load_steps=3 format=3 uid="uid://b8y4v7w6p5j1y"]
 
 [ext_resource type="Script" path="res://core/shop_floor/shop_decoration.gd" id="1_fkw5l"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="2_gnybr"]
@@ -7,24 +7,41 @@
 z_index = 2
 script = ExtResource("1_fkw5l")
 
-[node name="UI" type="HBoxContainer" parent="."]
-offset_top = -100.0
-offset_right = 200.0
+[node name="UI" type="PanelContainer" parent="."]
+offset_top = -120.0
+offset_right = 350.0
 offset_bottom = -50.0
-theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="Buttons" type="HBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
 alignment = 1
 
-[node name="ConfirmButton" type="Button" parent="UI"]
+[node name="ConfirmButton" type="Button" parent="UI/MarginContainer/Buttons"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_gnybr")
 theme_override_font_sizes/font_size = 32
 text = "CONFIRM"
 
-[node name="CancelButton" type="Button" parent="UI"]
+[node name="CancelButton" type="Button" parent="UI/MarginContainer/Buttons"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_gnybr")
 theme_override_font_sizes/font_size = 32
 text = "CANCEL"
 
-[connection signal="pressed" from="UI/ConfirmButton" to="." method="_on_confirm_pressed"]
-[connection signal="pressed" from="UI/CancelButton" to="." method="_on_cancel_pressed"]
+[node name="InventoryButton" type="Button" parent="UI/MarginContainer/Buttons"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_gnybr")
+theme_override_font_sizes/font_size = 32
+text = "INVENTORY"
+
+[connection signal="pressed" from="UI/MarginContainer/Buttons/ConfirmButton" to="." method="_on_confirm_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/Buttons/CancelButton" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/Buttons/InventoryButton" to="." method="_on_inventory_pressed"]

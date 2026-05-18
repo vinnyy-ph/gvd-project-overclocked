@@ -3,6 +3,7 @@ extends Node2D
 @onready var camera: Camera2D = $MainCamera
 @onready var item_list: ItemList = $CanvasLayer/ItemList
 @onready var decorations_container: Node2D = $World/Background/DecorationsContainer
+@onready var safe_zone: Polygon2D = $World/Background/SafeZoneShopFloor
 
 # Constants for Camera
 const SCENE_SIZE = Vector2(3064.0, 1408.0)
@@ -18,6 +19,7 @@ const DECORATION_SCENE = preload("res://core/shop_floor/shop_decoration.tscn")
 var decorations_data: Array = []
 var active_decoration: Sprite2D = null
 var is_dragging_item: bool = false
+var placed_decorations: Array = []
 
 func _ready() -> void:
 	# Initial camera setup
@@ -27,7 +29,8 @@ func _ready() -> void:
 	camera.zoom = Vector2(max(min_zoom, 0.5), max(min_zoom, 0.5))
 	clamp_camera()
 
-	# Populate ItemList
+	# Initial scan of all decorations
+	decorations_data = get_all_decorations()
 	populate_item_list()
 	
 	# Connect ItemList signals
@@ -35,8 +38,6 @@ func _ready() -> void:
 
 func populate_item_list() -> void:
 	item_list.clear()
-	decorations_data = get_all_decorations()
-	
 	for data in decorations_data:
 		var idx = item_list.add_icon_item(load(data["icon"]))
 		item_list.set_item_metadata(idx, data)
@@ -44,7 +45,7 @@ func populate_item_list() -> void:
 
 func get_all_decorations() -> Array:
 	var list = []
-	var base_path = "res://assets/images/shop_decorations/"
+	var base_path = "res://assets/images/shop_decorations_actual/"
 	var dir = DirAccess.open(base_path)
 	if dir:
 		dir.list_dir_begin()
@@ -59,31 +60,14 @@ func get_all_decorations() -> Array:
 					while file_name != "":
 						if file_name.ends_with(".png") and not file_name.ends_with(".import"):
 							var icon_path = category_path + file_name
-							var actual_path = find_actual_sprite(category, file_name)
 							list.append({
 								"name": file_name.replace(".png", ""),
 								"icon": icon_path,
-								"actual": actual_path
+								"actual": icon_path
 							})
 						file_name = cat_dir.get_next()
 			category = dir.get_next()
 	return list
-
-func find_actual_sprite(category: String, file_name: String) -> String:
-	var actual_base = "res://assets/images/shop_decorations_actual/"
-	var cat_map = {
-		"cashier_decos": "cashier_actual",
-		"chair_decos": "chair_decos_actual",
-		"misc_decos": "misc_decos",
-		"wall_decos": "wall_decos"
-	}
-	
-	var mapped_cat = cat_map.get(category, category)
-	var path = actual_base + mapped_cat + "/" + file_name
-	if FileAccess.file_exists(path):
-		return path
-	
-	return "res://assets/images/shop_decorations/" + category + "/" + file_name
 
 # --- INPUT HANDLING ---
 
@@ -100,9 +84,15 @@ func _on_item_list_gui_input(event: InputEvent) -> void:
 
 func start_dragging_from_list(item_idx: int) -> void:
 	var data = item_list.get_item_metadata(item_idx)
+	
+	# Remove from available data
+	decorations_data.remove_at(item_idx)
+	populate_item_list()
+	
 	var decoration = DECORATION_SCENE.instantiate()
 	decorations_container.add_child(decoration)
 	decoration.texture = load(data["actual"])
+	decoration.decoration_data = data
 	decoration.update_touch_area() # Update size based on texture
 	decoration.global_position = get_global_mouse_position()
 	
@@ -116,33 +106,79 @@ func _setup_decoration_signals(decoration) -> void:
 		decoration.confirmed.connect(_on_decoration_confirmed)
 	if not decoration.cancelled.is_connected(_on_decoration_cancelled):
 		decoration.cancelled.connect(_on_decoration_cancelled)
+	if not decoration.returned_to_inventory.is_connected(_on_decoration_returned):
+		decoration.returned_to_inventory.connect(_on_decoration_returned)
 	if not decoration.drag_started.is_connected(_on_decoration_drag_started):
 		decoration.drag_started.connect(_on_decoration_drag_started)
 	if not decoration.drag_ended.is_connected(_on_decoration_drag_ended):
 		decoration.drag_ended.connect(_on_decoration_drag_ended)
 
 func _on_decoration_confirmed(decoration) -> void:
-	is_dragging_item = false
-	active_decoration = null
-	# Ensure the decoration is properly set up if it was a new one
-	_setup_decoration_signals(decoration)
+	# STRICT PLACEMENT CHECK
+	if not is_inside_safe_zone(decoration.global_position):
+		_show_error_feedback(decoration.global_position, "OUTSIDE SAFE ZONE!")
+		is_dragging_item = true
+		active_decoration = decoration
+		return
 
-func _on_decoration_cancelled(_decoration) -> void:
+	decoration.stop_editing()
 	is_dragging_item = false
 	active_decoration = null
+	safe_zone.hide()
+	if not decoration in placed_decorations:
+		placed_decorations.append(decoration)
+
+func _on_decoration_cancelled(decoration) -> void:
+	is_dragging_item = false
+	active_decoration = null
+	safe_zone.hide()
+	
+	# If it was never placed (newly dragged from list), return to inventory
+	if not decoration.was_placed:
+		_on_decoration_returned(decoration)
+
+func _on_decoration_returned(decoration) -> void:
+	is_dragging_item = false
+	active_decoration = null
+	safe_zone.hide()
+	if decoration in placed_decorations:
+		placed_decorations.erase(decoration)
+	
+	# Add back to available data
+	decorations_data.append(decoration.decoration_data)
+	populate_item_list()
+
+func is_inside_safe_zone(global_pos: Vector2) -> bool:
+	if not safe_zone: return true
+	# Convert global position to safe_zone local position
+	var local_pos = safe_zone.to_local(global_pos)
+	return Geometry2D.is_point_in_polygon(local_pos, safe_zone.polygon)
+
+func _show_error_feedback(pos: Vector2, text: String) -> void:
+	var label = Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 40)
+	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	add_child(label)
+	label.global_position = pos + Vector2(-150, -150)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 60, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.2).set_delay(0.4)
+	tween.finished.connect(label.queue_free)
 
 func _on_decoration_drag_started(decoration) -> void:
 	is_dragging_item = true
 	active_decoration = decoration
+	safe_zone.show()
 
 func _on_decoration_drag_ended(_decoration) -> void:
-	# Note: we don't set is_dragging_item = false here 
-	# because the user might still be in "editing mode" (confirm/cancel visible)
-	# and we might want to block camera movement during that.
-	# But if we want to allow camera movement between drags of the same item, 
-	# we could set it to false.
-	# The user said "Confirm will place that item ... while cancel will make the items return"
-	# So while Confirm/Cancel are visible, it's still "active".
 	pass
 
 # --- CAMERA LOGIC (COPIED FROM MAIN) ---

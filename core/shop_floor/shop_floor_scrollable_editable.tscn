@@ -147,6 +147,15 @@ scale = Vector2(0.7, 0.7)
 position = Vector2(-15.714285, -115.71427)
 texture = ExtResource("3_fhpww")
 
+[node name="SafeZoneShopFloor" type="Polygon2D" parent="World/Background" unique_id=1022676471]
+polygon = PackedVector2Array(-1585.7141, 152.85718, -12.857178, -629.99994, 1550, 152.85718, -15.714355, 942.85706, -1079.9999, 404.28577)
+
+[node name="SafeZoneShopFloor2" type="Polygon2D" parent="World/Background" unique_id=342876983]
+polygon = PackedVector2Array(-1587.1428, -385.71423, -14.285645, -1169.9999, -14.285645, -628.57135, -1582.857, 152.85718)
+
+[node name="SafeZoneShopFloor3" type="Polygon2D" parent="World/Background" unique_id=1372300516]
+polygon = PackedVector2Array(-12.857178, -1171.4285, 1550, -387.14276, 1551.4285, 145.71436, -12.857178, -627.14276)
+
 [node name="DecorationsContainer" type="Node2D" parent="World/Background" unique_id=1022676470]
 z_index = 3
 

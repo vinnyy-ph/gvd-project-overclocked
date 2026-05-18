@@ -2,15 +2,18 @@ extends Sprite2D
 
 signal confirmed(decoration)
 signal cancelled(decoration)
+signal returned_to_inventory(decoration)
 signal drag_started(decoration)
 signal drag_ended(decoration)
 
+var decoration_data: Dictionary = {}
 var is_dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 var is_placed: bool = false
 
-@onready var confirm_btn: Button = $UI/ConfirmButton
-@onready var cancel_btn: Button = $UI/CancelButton
+@onready var confirm_btn: Button = $UI/MarginContainer/Buttons/ConfirmButton
+@onready var cancel_btn: Button = $UI/MarginContainer/Buttons/CancelButton
+@onready var inventory_btn: Button = $UI/MarginContainer/Buttons/InventoryButton
 @onready var ui_container: Control = $UI
 
 func _ready() -> void:
@@ -33,7 +36,11 @@ func update_touch_area() -> void:
 	if area and texture:
 		area.size = texture.get_size()
 		area.position = -area.size / 2.0
-		# Also update UI position
+		call_deferred("update_ui_position")
+
+func update_ui_position() -> void:
+	ui_container.reset_size()
+	if texture:
 		ui_container.position = Vector2(-ui_container.size.x/2, -texture.get_size().y/2 - 100)
 
 var original_position: Vector2 = Vector2.ZERO
@@ -48,11 +55,15 @@ func start_editing() -> void:
 	was_placed = is_placed
 	if was_placed:
 		original_position = global_position
+		inventory_btn.show()
+	else:
+		inventory_btn.hide()
 	
 	is_placed = false
 	ui_container.show()
 	modulate.a = 0.7
 	z_index = 100 # Show on top while editing
+	call_deferred("update_ui_position")
 
 func stop_editing() -> void:
 	is_placed = true
@@ -76,11 +87,9 @@ func _on_touch_up() -> void:
 	# Show UI when dropped if not already confirmed
 	if not is_placed:
 		ui_container.show()
-		# Position UI above the item (local position relative to the sprite center)
-		ui_container.position = Vector2(-ui_container.size.x/2, -texture.get_size().y/2 - 100)
+		call_deferred("update_ui_position")
 
 func _on_confirm_pressed() -> void:
-	stop_editing()
 	confirmed.emit(self)
 
 func _on_cancel_pressed() -> void:
@@ -91,3 +100,7 @@ func _on_cancel_pressed() -> void:
 	else:
 		cancelled.emit(self)
 		queue_free()
+
+func _on_inventory_pressed() -> void:
+	returned_to_inventory.emit(self)
+	queue_free()
