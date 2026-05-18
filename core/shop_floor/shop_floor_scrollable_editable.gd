@@ -130,6 +130,32 @@ func _save_placements():
 func save_state():
 	_save_placements()
 
+func _finish_active_decoration():
+	if not is_dragging_item or not active_decoration: return
+	
+	var deco = active_decoration
+	deco.is_dragging = false # Ensure it stops following the mouse
+	
+	if is_inside_safe_zone(deco):
+		# Auto-confirm
+		deco.stop_editing()
+		if not deco in placed_decorations:
+			placed_decorations.append(deco)
+		_save_placements()
+	else:
+		# Auto-cancel if invalid spot
+		if deco.was_placed:
+			deco.global_position = deco.original_position
+			deco.stop_editing()
+			_on_decoration_cancelled(deco)
+		else:
+			_on_decoration_cancelled(deco)
+			deco.queue_free()
+	
+	is_dragging_item = false
+	active_decoration = null
+	hide_all_safe_zones()
+
 # --- INPUT HANDLING ---
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -137,12 +163,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	handle_camera_input(event)
 
 func _on_item_list_gui_input(event: InputEvent) -> void:
-	if is_dragging_item: return
-	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			var item_idx = item_list.get_item_at_position(event.position)
 			if item_idx != -1:
+				if is_dragging_item:
+					_finish_active_decoration()
 				start_dragging_from_list(item_idx)
 
 func start_dragging_from_list(item_idx: int) -> void:
@@ -259,10 +285,7 @@ func _show_error_feedback(pos: Vector2, text: String) -> void:
 
 func _on_decoration_drag_started(decoration) -> void:
 	if is_dragging_item and active_decoration != decoration:
-		decoration.is_dragging = false
-		if not decoration.is_placed and decoration.was_placed:
-			decoration.stop_editing()
-		return
+		_finish_active_decoration()
 		
 	is_dragging_item = true
 	active_decoration = decoration

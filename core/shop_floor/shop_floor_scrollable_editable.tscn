@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bwpa6sphwy38v" path="res://core/shop_floor/shop_floor_scrollable_editable.gd" id="1_fkw5l"]
 [ext_resource type="Texture2D" uid="uid://bqpj4a24d7vu0" path="res://assets/images/shop_floor_bg/1.png" id="2_agj3d"]
 [ext_resource type="Texture2D" uid="uid://ddrbiww8xi3sa" path="res://assets/images/shop_floor/main.png" id="3_fhpww"]
-[ext_resource type="Texture2D" uid="uid://dwniqpsh0v68s" path="res://assets/images/decorations/floor1.png" id="4_jflc3"]
-[ext_resource type="Texture2D" uid="uid://djr2l1hikhc0n" path="res://assets/images/decorations/wall1.png" id="5_k5d11"]
+[ext_resource type="Texture2D" path="res://assets/images/decorations/floor1.png" id="4_jflc3"]
+[ext_resource type="Texture2D" path="res://assets/images/decorations/wall1.png" id="5_k5d11"]
 [ext_resource type="Texture2D" uid="uid://baygp2mgt43kp" path="res://assets/images/shop_floor/Group 148.png" id="6_uj4p8"]
 [ext_resource type="Texture2D" uid="uid://dncuf4bc67nf8" path="res://assets/images/shop_floor/empty_slot.png" id="7_t4toi"]
 [ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="8_ohdlm"]
@@ -163,12 +163,12 @@ polygon = PackedVector2Array(-12.857178, -1200, 1580, -387.14276, 1580, 180, -12
 [node name="DecorationsContainer" type="Node2D" parent="World/Background" unique_id=1022676470]
 z_index = 3
 
-[node name="Floor" type="Sprite2D" parent="World/Background" unique_id=1022676469]
+[node name="FloorDeco" type="Sprite2D" parent="World/Background" unique_id=1022676469]
 visible = false
 position = Vector2(-15.714285, 175.71431)
 texture = ExtResource("4_jflc3")
 
-[node name="Floor2" type="Sprite2D" parent="World/Background" unique_id=781659871]
+[node name="WallsDeco" type="Sprite2D" parent="World/Background" unique_id=781659871]
 visible = false
 position = Vector2(-15.714288, -507.14285)
 texture = ExtResource("5_k5d11")
