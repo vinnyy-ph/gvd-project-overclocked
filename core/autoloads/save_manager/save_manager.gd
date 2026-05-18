@@ -99,9 +99,9 @@ func get_all_profiles() -> Array:
 		profiles.append(get_profile_data(i))
 	return profiles
 
-func create_new_profile(id: int, name: String):
+func create_new_profile(id: int, p_name: String):
 	active_profile_id = id
-	player_name = name
+	player_name = p_name
 	current_money = 100 # Starting money
 	lifetime_money = 0
 	max_days_survived = 0

@@ -110,7 +110,8 @@ func _on_revenue_timeout():
 		var amount = GameManager.get_passive_income_reward()
 		GameManager.money += amount
 		# Pass Vector2.ZERO or a known flag so the main scene spawns it at the cashier
-		GameManager.money_earned_visual.emit(amount, Vector2.ZERO)
+		if GameManager.has_method("emit_money_change"):
+			GameManager.emit_money_change(amount, Vector2.ZERO)
 
 func _on_session_timeout():
 	exit_shop()
@@ -161,7 +162,7 @@ func exit_shop():
 	
 	queue_free()
 
-signal customer_selected(customer)
+signal customer_selected_signal(customer)
 
 # Handle selection
 var is_selected = false
@@ -189,7 +190,7 @@ func _input(event):
 						_set_drag_visual(true)
 						drag_offset = get_global_mouse_position() - global_position
 						original_waiting_position = global_position
-						customer_selected.emit(self)
+						customer_selected_signal.emit(self)
 						drag_started.emit(self)
 						get_viewport().set_input_as_handled()
 			elif is_dragging:
@@ -220,7 +221,7 @@ func _input(event):
 					_set_drag_visual(true)
 					drag_offset = mouse_pos - global_position
 					original_waiting_position = global_position
-					customer_selected.emit(self)
+					customer_selected_signal.emit(self)
 					drag_started.emit(self)
 					get_viewport().set_input_as_handled()
 		elif is_dragging:

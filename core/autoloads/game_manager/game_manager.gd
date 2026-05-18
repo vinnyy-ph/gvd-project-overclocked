@@ -46,19 +46,15 @@ func get_unlocked_slots() -> int:
 	return clamp(2 + SaveManager.unlocked_upgrades.get("shop_space", 0), 2, 13)
 
 func end_day():
-	# Daily Bill Tiers:
+	# Daily Bill Tiers for Rent and Electricity:
 	# Days 1-9: 100
 	# Days 10-19: 550
 	# Days 20-29: 1050
 	# Day 30+: 1500
-	var day_index = clamp(int(day / 10.0), 0, 3)
 	var bill_tiers = [100, 550, 1050, 1500]
-	var tiered_bill = bill_tiers[day_index]
+	var day_index = clamp(int((day - 1) / 10.0), 0, 3)
 	
-	var unlocked_slots = get_unlocked_slots()
-	var slot_fees = unlocked_slots * 15
-	
-	last_day_expenses = tiered_bill + slot_fees
+	last_day_expenses = bill_tiers[day_index]
 
 	if money < last_day_expenses:
 		money_before_bankruptcy = money
@@ -107,7 +103,15 @@ func trigger_game_over():
 	# We might want to clear active issues or other state
 	get_tree().change_scene_to_file("res://ui/gameover/game_over.tscn")
 
-signal money_earned_visual(amount: int, position: Vector2)
+signal money_changed_visual(amount: int, position: Vector2)
+signal satisfaction_changed_visual(amount: int, position: Vector2)
+
+# Helper methods to emit visual signals from within the class (resolves UNUSED_SIGNAL warnings)
+func emit_money_change(amount: int, pos: Vector2):
+	money_changed_visual.emit(amount, pos)
+
+func emit_satisfaction_change(amount: int, pos: Vector2):
+	satisfaction_changed_visual.emit(amount, pos)
 
 var save_path: String = "user://savegame.json"
 var previous_scene: String = ""
@@ -134,7 +138,7 @@ func get_formatted_time() -> String:
 	var minutes_per_tick = 9 # 9 hours (540 mins) / 60 ticks = 9 mins/tick
 	
 	var total_minutes = elapsed_ticks * minutes_per_tick
-	var current_hour = start_hour + (total_minutes / 60)
+	var current_hour = start_hour + int(total_minutes / 60.0)
 	var current_minute = total_minutes % 60
 	
 	var am_pm = "AM" if current_hour < 12 else "PM"
@@ -170,7 +174,7 @@ func get_passive_income_reward() -> int:
 	# Day 26+: 20
 	var day_index = clamp(int((day - 1) / 5.0), 0, 5)
 	var passive_tiers = [1, 3, 5, 10, 15, 20]
-	var base = passive_tiers[day_index]
+	var base = float(passive_tiers[day_index])
 	
 	var multiplier = get_satisfaction_multiplier()
 	return int(base * multiplier)
@@ -199,7 +203,7 @@ func get_issue_spawn_chance_modifier() -> float:
 	var power_strip = SaveManager.unlocked_upgrades.get("premium_power_strip", 0)
 	var cable_kit = SaveManager.unlocked_upgrades.get("cable_management_kit", 0)
 	# Cap the reduction so it never reaches 0 (minimum 20% of base rate)
-	return max(0.2, 1.0 - (power_strip * 0.1) - (cable_kit * 0.05))
+	return max(0.2, 1.0 - (float(power_strip) * 0.1) - (float(cable_kit) * 0.05))
 
 func get_hardware_time_bonus() -> int:
 	# Each level of CPU upgrade adds 5 seconds to mini-games
@@ -264,13 +268,13 @@ const MINIGAME_DATA = {
 func get_minigame_reward(game_id: String) -> int:
 	if not MINIGAME_DATA.has(game_id): return 0
 	var data = MINIGAME_DATA[game_id]
-	var day_index = clamp(int(day / 10.0), 0, 3)
+	var day_index = clamp(int((day - 1) / 10.0), 0, 3)
 	return int(data["success_payment"][day_index])
 
 func get_minigame_deduction(game_id: String) -> int:
 	if not MINIGAME_DATA.has(game_id): return 0
 	var data = MINIGAME_DATA[game_id]
-	var day_index = clamp(int(day / 10.0), 0, 3)
+	var day_index = clamp(int((day - 1) / 10.0), 0, 3)
 	return int(data["fail_deduction"][day_index])
 
 func get_minigame_timer(game_id: String) -> int:

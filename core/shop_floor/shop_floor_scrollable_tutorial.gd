@@ -140,7 +140,8 @@ func _ready():
 	satisfaction_bar.value = GameManager.satisfaction
 	satisfaction_bar.custom_minimum_size = Vector2(300, 24)
 	
-	GameManager.money_earned_visual.connect(spawn_floating_money)
+	GameManager.money_changed_visual.connect(spawn_floating_money)
+	GameManager.satisfaction_changed_visual.connect(spawn_floating_satisfaction)
 	
 	# Setup highlight shader
 	var shader = load("res://core/shop_floor/tutorial_mask.gdshader")
@@ -264,7 +265,7 @@ func _restore_customers():
 		customer.process_mode = PROCESS_MODE_INHERIT
 		customer.visible = true
 		
-		customer.customer_selected.connect(_on_customer_selected)
+		customer.customer_selected_signal.connect(_on_customer_selected)
 		customer.drag_started.connect(_on_customer_drag_started)
 		customer.drag_ended.connect(_on_customer_drag_ended)
 		
@@ -280,7 +281,7 @@ func _restore_customers():
 		
 		if data["state"] == Customer.State.WAITING:
 			customer.global_position = pos
-		elif data["state"] == Customer.State.USING_PC:
+		elif data["state"] == State.USING_PC:
 			var idx = data["pc_index"]
 			if idx < seat_nodes.size():
 				_connect_customer_signals(customer, idx)
@@ -473,7 +474,7 @@ func _on_tutorial_next_pressed():
 		# Highlight both the first customer and the desk
 		var waiting_customers = []
 		for child in customer_container.get_children():
-			if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
+			if child is Customer and child.current_state == State.WAITING and child != waiting_area:
 				waiting_customers.append(child)
 		if waiting_customers.size() > 0:
 			_highlight_node(waiting_customers[waiting_customers.size()-1], true)
@@ -518,7 +519,7 @@ func force_tutorial_issue():
 func spawn_customer():
 	var waiting_count = 0
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
+		if child is Customer and child.current_state == State.WAITING and child != waiting_area:
 			waiting_count += 1
 			
 	var customer = waiting_area.duplicate()
@@ -530,7 +531,7 @@ func spawn_customer():
 	customer.process_mode = PROCESS_MODE_INHERIT
 	customer.visible = true
 	
-	customer.customer_selected.connect(_on_customer_selected)
+	customer.customer_selected_signal.connect(_on_customer_selected)
 	customer.drag_started.connect(_on_customer_drag_started)
 	customer.drag_ended.connect(_on_customer_drag_ended)
 	
@@ -545,7 +546,7 @@ func spawn_customer():
 func _refresh_queue_positions():
 	var waiting_customers = []
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
+		if child is Customer and child.current_state == State.WAITING and child != waiting_area:
 			waiting_customers.append(child)
 	# Order in children list is newest to oldest due to move_child(1)
 	# So reverse gives oldest to newest
@@ -564,7 +565,7 @@ func is_first_in_line(customer: Customer) -> bool:
 		
 	var waiting_customers = []
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
+		if child is Customer and child.current_state == State.WAITING and child != waiting_area:
 			waiting_customers.append(child)
 	# Oldest (first in line) is at the end of the array due to move_child(1) logic
 	if waiting_customers.size() > 0:
@@ -642,17 +643,50 @@ func spawn_floating_money(amount: int, start_pos: Vector2):
 			spawn_pos = camera.global_position # Fallback
 			
 	var label = Label.new()
-	label.text = "+P" + str(amount)
+	var text_prefix = "+" if amount > 0 else ""
+	label.text = text_prefix + "P" + str(amount)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var font = load("res://assets/fonts/ThaleahFat.ttf")
 	label.add_theme_font_override("font", font)
 	label.add_theme_font_size_override("font_size", 45)
-	label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.2)) # Gold-ish
+	
+	var color = Color(1.0, 0.9, 0.2) if amount > 0 else Color(1.0, 0.3, 0.3)
+	label.add_theme_color_override("font_color", color)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 10)
 	
 	$World/Background.add_child(label)
 	label.global_position = spawn_pos + Vector2(-50, -50)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 120, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.2).set_delay(0.4)
+	tween.finished.connect(label.queue_free)
+
+func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
+	var spawn_pos = start_pos
+	if start_pos == Vector2.ZERO:
+		var cashier = get_node_or_null("World/Background/CashierPerson")
+		if cashier:
+			spawn_pos = cashier.global_position + Vector2(0, -150)
+		else:
+			spawn_pos = camera.global_position # Fallback
+			
+	var label = Label.new()
+	var text_prefix = "+" if amount > 0 else ""
+	label.text = text_prefix + str(amount) + "%"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 45)
+	
+	var color = Color(0.3, 1.0, 0.3) if amount > 0 else Color(1.0, 0.3, 0.3)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	
+	$World/Background.add_child(label)
+	label.global_position = spawn_pos + Vector2(-50, -100) # Slightly offset from money
 	
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", label.position.y - 120, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

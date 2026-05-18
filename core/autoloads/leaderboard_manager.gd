@@ -31,9 +31,9 @@ func save_leaderboard():
 		file.store_string(json_string)
 		file.close()
 
-func add_entry(player_name: String, day: int, money: float, pc_slots: int):
+func add_entry(p_name: String, day: int, money: float, pc_slots: int):
 	var new_entry = {
-		"name": player_name,
+		"name": p_name,
 		"day": day,
 		"money": money,
 		"pc_slots": pc_slots,
@@ -63,9 +63,9 @@ func get_entries() -> Array:
 func _create_mock_data():
 	var mock_names = ["ApexTech", "ByteMaster", "CyberSurge", "DataDrift", "EchoNode", "FluxCore", "GridGuard", "HashHustle", "IonIntel", "JoltJoint"]
 	for i in range(15): # Create a few extra to see clipping
-		var name = mock_names[i % mock_names.size()] + str(i + 1)
+		var m_name = mock_names[i % mock_names.size()] + str(i + 1)
 		var day = randi_range(1, 50)
 		var money = randf_range(100, 20000)
 		var pc_slots = randi_range(2, 6)
-		add_entry(name, day, money, pc_slots)
+		add_entry(m_name, day, money, pc_slots)
 	save_leaderboard()
