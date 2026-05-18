@@ -103,7 +103,7 @@ func _process(delta):
 func trigger_game_over():
 	# Transition to game over scene
 	# We might want to clear active issues or other state
-	get_tree().change_scene_to_file("res://ui/game_over/game_over.tscn")
+	get_tree().change_scene_to_file("res://ui/gameover/game_over.tscn")
 
 signal money_earned_visual(amount: int, position: Vector2)
 

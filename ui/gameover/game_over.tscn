@@ -1,5 +1,6 @@
-[gd_scene format=3 uid="uid://djjhmpvb54f6s"]
+[gd_scene load_steps=7 format=3 uid="uid://djjhmpvb54f6s"]
 
+[ext_resource type="Script" path="res://ui/gameover/game_over.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://gxpuayshv6bs" path="res://assets/images/ui/game_over/gameover.png" id="1_xhg2v"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="2_ehkxf"]
 [ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="3_qa3gh"]
@@ -17,6 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
 
 [node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=1175028274]
 z_index = -1
@@ -77,7 +79,7 @@ theme_override_font_sizes/font_size = 48
 text = "P300,000"
 vertical_alignment = 1
 
-[node name="DaysSurivedLabel" type="Label" parent="TextureRect" unique_id=975529325]
+[node name="DaysSurvivedLabel" type="Label" parent="TextureRect" unique_id=975529325]
 layout_mode = 0
 offset_left = 339.0066
 offset_top = 252.5
