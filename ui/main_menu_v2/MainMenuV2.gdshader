@@ -2,7 +2,7 @@
 
 // Controls the direction and speed of the scroll
 // Positive X moves the texture left, Negative Y moves the texture down
-uniform vec2 scroll_speed = vec2(0.2, -0.2);
+uniform vec2 scroll_speed = vec2(0.05, -0.05);
 
 void fragment() {
     // fract() forces the math to loop perfectly between 0.0 and 1.0

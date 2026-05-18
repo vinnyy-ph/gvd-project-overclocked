@@ -15,7 +15,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wbfha"]
 shader = ExtResource("2_mogwd")
-shader_parameter/scroll_speed = Vector2(0.04, 0)
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
 
 [node name="MainMenuV2" type="Control" unique_id=984505949]
 layout_mode = 3
