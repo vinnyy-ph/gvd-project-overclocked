@@ -6,7 +6,7 @@ extends Node2D
 @onready var safe_zone: Polygon2D = $World/Background/SafeZoneShopFloor
 @onready var safe_zone_wall_left: Polygon2D = $World/Background/SafeZoneShopFloor2
 @onready var safe_zone_wall_right: Polygon2D = $World/Background/SafeZoneShopFloor3
-@onready var back_button: Button = $World/Background/Button
+@onready var back_button: Button = $CanvasLayer/Button
 
 # Constants for Camera
 const SCENE_SIZE = Vector2(3064.0, 1408.0)

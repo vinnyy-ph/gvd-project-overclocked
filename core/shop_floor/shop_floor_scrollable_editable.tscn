@@ -519,15 +519,6 @@ texture = ExtResource("16_uvl8u")
 position = Vector2(-91.42862, 727.1428)
 texture = ExtResource("17_2y1r7")
 
-[node name="Button" type="Button" parent="World/Background" unique_id=1100636000]
-offset_left = -1837.143
-offset_top = -1159.9999
-offset_right = -1412.143
-offset_bottom = -1045.9999
-scale = Vector2(1.59, 1.59)
-icon = ExtResource("18_yweq2")
-flat = true
-
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 z_index = 155
 position = Vector2(640, 724)
@@ -553,3 +544,12 @@ theme_override_constants/h_separation = 120
 max_columns = 0
 icon_mode = 0
 icon_scale = 0.5
+
+[node name="Button" type="Button" parent="CanvasLayer" unique_id=1100636000]
+offset_left = -5.0
+offset_top = 1.0
+offset_right = 420.0
+offset_bottom = 115.0
+scale = Vector2(0.555, 0.555)
+icon = ExtResource("18_yweq2")
+flat = true

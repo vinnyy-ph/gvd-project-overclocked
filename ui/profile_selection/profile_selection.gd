@@ -29,19 +29,23 @@ func update_profile_slots():
 	var dev_slot = profile_slot_scene.instantiate()
 	profile_list.add_child(dev_slot)
 	
-	dev_slot.set_data({
-		"player_name": "[DEV MODE]",
-		"current_day": 1,
-		"current_money": 9999999,
-		"unlocked_upgrades": {
-			"shop_space": 11,
-			"flat_monitors": 10,
-			"mid_range_cpu": 10,
-			"graphics_upgrade": 10,
-			"premium_power_strip": 10,
-			"cable_management_kit": 10
-		}
-	})
+	var dev_data = SaveManager.get_profile_data(999)
+	if dev_data:
+		dev_slot.set_data(dev_data)
+	else:
+		dev_slot.set_data({
+			"player_name": "[DEV MODE]",
+			"current_day": 30,
+			"current_money": 9999999,
+			"unlocked_upgrades": {
+				"shop_space": 0,
+				"flat_monitors": 0,
+				"mid_range_cpu": 0,
+				"graphics_upgrade": 0,
+				"premium_power_strip": 0,
+				"cable_management_kit": 0
+			}
+		})
 	dev_slot.pressed.connect(_on_dev_mode_pressed)
 		
 	var profiles = SaveManager.get_all_profiles()
@@ -60,41 +64,49 @@ func update_profile_slots():
 func _on_dev_mode_pressed():
 	GameManager.dev_mode = true
 	SaveManager.active_profile_id = 999
-	SaveManager.player_name = "[DEV MODE]"
-	SaveManager.current_money = 9999999
-	SaveManager.lifetime_money = 9999999
-	SaveManager.max_days_survived = 0
-	SaveManager.current_day = 1
-	SaveManager.saved_scene = ""
-	SaveManager.game_state = {}
-	SaveManager.owned_decorations = []
-	SaveManager.placed_decorations = []
-	SaveManager.unlocked_upgrades = {
-		"flat_monitors": 10,
-		"mid_range_cpu": 10,
-		"graphics_upgrade": 10,
-		"premium_power_strip": 10,
-		"cable_management_kit": 10,
-		"shop_space": 11
-	}
 	
-	GameManager.satisfaction = 100
-	GameManager.time_left = 60
-	GameManager.in_tutorial = false
-	GameManager.is_tutorial = false
-	GameManager.tutorial_minigame_index = 0
-	GameManager.tutorial_minigame_done = false
-	GameManager.last_money_change = 0
-	GameManager.last_satisfaction_change = 0
-	GameManager.active_issues = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
-	GameManager.occupied_slots = [false, false, false, false, false, false, false, false, false, false, false, false, false]
-	GameManager.persisted_customers = []
-	GameManager.minigame_deck = []
-	GameManager.last_minigame = ""
-	SaveManager.save_game()
+	if SaveManager.load_game():
+		GameManager.load_game()
+	else:
+				# First time dev mode - initialize with defaults
+		SaveManager.player_name = "[DEV MODE]"
+		SaveManager.current_money = 9999999
+		SaveManager.lifetime_money = 9999999
+		SaveManager.max_days_survived = 0
+		SaveManager.current_day = 30
+		SaveManager.saved_scene = ""
+		SaveManager.game_state = {}
+		SaveManager.owned_decorations = []
+		SaveManager.placed_decorations = []
+		SaveManager.unlocked_upgrades = {
+			"flat_monitors": 0,
+			"mid_range_cpu": 0,
+			"graphics_upgrade": 0,
+			"premium_power_strip": 0,
+			"cable_management_kit": 0,
+			"shop_space": 0
+		}
+		
+		GameManager.satisfaction = 100
+		GameManager.time_left = 60
+		GameManager.in_tutorial = false
+		GameManager.is_tutorial = false
+		GameManager.tutorial_minigame_index = 0
+		GameManager.tutorial_minigame_done = false
+		GameManager.last_money_change = 0
+		GameManager.last_satisfaction_change = 0
+		GameManager.active_issues = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
+		GameManager.occupied_slots = [false, false, false, false, false, false, false, false, false, false, false, false, false]
+		GameManager.persisted_customers = []
+		GameManager.minigame_deck = []
+		GameManager.last_minigame = ""
+		SaveManager.save_game()
 	
 	PauseMenu.pause_button.visible = true
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	if SaveManager.saved_scene != "":
+		get_tree().change_scene_to_file(SaveManager.saved_scene)
+	else:
+		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
 func _on_profile_pressed(slot_index: int):
 	GameManager.dev_mode = false
