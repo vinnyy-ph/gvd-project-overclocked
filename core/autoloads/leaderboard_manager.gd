@@ -1,7 +1,7 @@
 extends Node
 
 const LEADERBOARD_PATH = "user://leaderboard.json"
-const MAX_ENTRIES = 100
+const MAX_ENTRIES = 10
 
 var entries: Array = []
 
@@ -52,16 +52,18 @@ func add_entry(player_name: String, day: int, money: float, pc_slots: int):
 
 func sort_entries():
 	entries.sort_custom(func(a, b): return a["score"] > b["score"])
+	if entries.size() > MAX_ENTRIES:
+		entries.resize(MAX_ENTRIES)
 
 func get_entries() -> Array:
 	return entries
 
 func _create_mock_data():
-	var mock_names = ["ApexTech", "ByteMaster", "CyberSurge", "DataDrift", "EchoNode", "FluxCore", "GridGuard", "HashHustle", "IonIntel", "JoltJoint", "KiloKey", "LinkLayer", "MetaMicro", "NanoNet", "OrbitOps", "PulsePower", "QuarkQuant", "RayRoot", "SyncStack", "TeraTask"]
-	for i in range(100):
+	var mock_names = ["ApexTech", "ByteMaster", "CyberSurge", "DataDrift", "EchoNode", "FluxCore", "GridGuard", "HashHustle", "IonIntel", "JoltJoint"]
+	for i in range(15): # Create a few extra to see clipping
 		var name = mock_names[i % mock_names.size()] + str(i + 1)
-		var day = randi_range(1, 100)
-		var money = randf_range(100, 100000)
+		var day = randi_range(1, 50)
+		var money = randf_range(100, 20000)
 		var pc_slots = randi_range(2, 6)
 		add_entry(name, day, money, pc_slots)
 	save_leaderboard()

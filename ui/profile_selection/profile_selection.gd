@@ -1,16 +1,12 @@
 extends Control
 
-@onready var profile_containers: Array = [
-	$ProfileContainer,
-	$ProfileContainer2,
-	$ProfileContainer3
-]
-
+@onready var profile_list: VBoxContainer = $ScrollContainer/ProfileList
 @onready var name_input_dialog: Control = $NameInputDialog
 @onready var name_edit: LineEdit = $NameInputDialog/Panel/VBoxContainer/NameEdit
 @onready var confirm_name_button: Button = $NameInputDialog/Panel/VBoxContainer/HBoxContainer/ConfirmButton
 @onready var cancel_name_button: Button = $NameInputDialog/Panel/VBoxContainer/HBoxContainer/CancelButton
 
+var profile_slot_scene = preload("res://ui/profile_selection/profile_slot.tscn")
 var current_selecting_slot: int = -1
 
 func _ready() -> void:
@@ -21,37 +17,27 @@ func _ready() -> void:
 	$SettingsButton.pressed.connect(_on_settings_pressed)
 	$ExitButton.pressed.connect(_on_exit_pressed)
 	
-	for i in range(profile_containers.size()):
-		profile_containers[i].pressed.connect(_on_profile_pressed.bind(i))
-	
 	confirm_name_button.pressed.connect(_on_confirm_name_pressed)
 	cancel_name_button.pressed.connect(_on_cancel_name_pressed)
 	name_input_dialog.visible = false
 
 func update_profile_slots():
+	# Clear existing
+	for child in profile_list.get_children():
+		child.queue_free()
+		
 	var profiles = SaveManager.get_all_profiles()
-	for i in range(3):
-		var container = profile_containers[i]
+	for i in range(10):
+		var slot = profile_slot_scene.instantiate()
+		profile_list.add_child(slot)
+		
 		var data = profiles[i]
-		
-		var name_label = container.get_node("NameClipper/ProfileNameLabel")
-		var progress_label = container.get_node("ProgressLabel")
-		var money_label = container.get_node("MoneyLabel")
-		var slots_label = container.get_node("PCSlotsLabel")
-		
 		if data:
-			name_label.text = str(data.get("player_name", "EMPTY")).to_upper()
-			progress_label.text = "DAY " + str(int(data.get("current_day", 1)))
-			money_label.text = "P%.1f" % float(data.get("current_money", 0))
-			
-			var upgrades = data.get("unlocked_upgrades", {})
-			var slots = 2 + upgrades.get("shop_space", 0)
-			slots_label.text = str(int(slots)) + " UNITs"
+			slot.set_data(data)
 		else:
-			name_label.text = "EMPTY SLOT"
-			progress_label.text = ""
-			money_label.text = ""
-			slots_label.text = ""
+			slot.set_empty()
+			
+		slot.pressed.connect(_on_profile_pressed.bind(i))
 
 func _on_profile_pressed(slot_index: int):
 	var profiles = SaveManager.get_all_profiles()

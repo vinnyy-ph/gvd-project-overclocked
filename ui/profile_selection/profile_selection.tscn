@@ -3,19 +3,16 @@
 [ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="1_cramy"]
 [ext_resource type="Script" uid="uid://b1tkc44lgt4d" path="res://ui/profile_selection/profile_selection.gd" id="1_nfvkb"]
 [ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="2_6fn88"]
-[ext_resource type="FontFile" uid="uid://chbx10c0m00ge" path="res://assets/fonts/PixelifySans-VariableFont_wght.ttf" id="4_0bcho"]
 [ext_resource type="Texture2D" uid="uid://b8b23jdviklv7" path="res://assets/images/main_menu/settings.png" id="4_dq4ed"]
 [ext_resource type="Texture2D" uid="uid://b8eu4u3xpefqx" path="res://assets/images/main_menu/exit.png" id="5_b6bvm"]
 [ext_resource type="Texture2D" uid="uid://bp7jsf7a4wc4v" path="res://assets/images/main_menu/return.png" id="6_b6bvm"]
-[ext_resource type="Script" uid="uid://bhf4sj3havw2b" path="res://ui/components/marquee_label.gd" id="6_werro"]
-[ext_resource type="Texture2D" uid="uid://dccrovri3ygvg" path="res://assets/images/profile_selection/slot_container.png" id="7_va10m"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="8_0bcho"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_werro"]
 shader = ExtResource("1_cramy")
 shader_parameter/scroll_speed = Vector2(0.05, -0.05)
 
-[node name="ProfileSelection" type="Control" unique_id=1631714210]
+[node name="ProfileSelection" type="Control" unique_id=357181314]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nfvkb")
 
-[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=992561197]
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=1292233732]
 z_index = -1
 material = SubResource("ShaderMaterial_werro")
 layout_mode = 1
@@ -35,247 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_6fn88")
 
-[node name="ProfileContainer" type="TextureButton" parent="." unique_id=1484759921]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 136.0
-offset_right = 1240.0
-offset_bottom = 311.0
-texture_normal = ExtResource("7_va10m")
-
-[node name="ProgressLabel" type="Label" parent="ProfileContainer" unique_id=1810939525]
-layout_mode = 0
-offset_left = 283.0
-offset_top = 46.0
-offset_right = 485.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "DAY 1"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="MoneyLabel" type="Label" parent="ProfileContainer" unique_id=1350451339]
-layout_mode = 0
-offset_left = 497.0
-offset_top = 46.0
-offset_right = 717.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "P10000"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="PCSlotsLabel" type="Label" parent="ProfileContainer" unique_id=32035822]
-layout_mode = 0
-offset_left = 726.0
-offset_top = 46.0
-offset_right = 1037.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "6 UNITs"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="NameClipper" type="Control" parent="ProfileContainer" unique_id=990872637]
-clip_contents = true
-anchors_preset = 0
-offset_left = 39.0
-offset_top = 46.0
-offset_right = 272.0
-offset_bottom = 152.0
-
-[node name="ProfileNameLabel" type="Label" parent="ProfileContainer/NameClipper" unique_id=2128930615]
-clip_contents = true
-layout_mode = 0
-offset_right = 233.0
-offset_bottom = 106.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "VINCENT"
-vertical_alignment = 1
-text_overrun_behavior = 1
-script = ExtResource("6_werro")
-
-[node name="ProfileContainer2" type="TextureButton" parent="." unique_id=762433049]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 321.0
-offset_right = 1240.0
-offset_bottom = 496.0
-texture_normal = ExtResource("7_va10m")
-
-[node name="ProgressLabel" type="Label" parent="ProfileContainer2" unique_id=774469055]
-layout_mode = 0
-offset_left = 283.0
-offset_top = 46.0
-offset_right = 485.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "DAY 1"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="MoneyLabel" type="Label" parent="ProfileContainer2" unique_id=1643143568]
-layout_mode = 0
-offset_left = 497.0
-offset_top = 46.0
-offset_right = 717.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "P10000"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="PCSlotsLabel" type="Label" parent="ProfileContainer2" unique_id=2000266233]
-layout_mode = 0
-offset_left = 726.0
-offset_top = 46.0
-offset_right = 1037.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "6 UNITs"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="NameClipper" type="Control" parent="ProfileContainer2" unique_id=469753340]
-clip_contents = true
-anchors_preset = 0
-offset_left = 39.0
-offset_top = 46.0
-offset_right = 272.0
-offset_bottom = 152.0
-
-[node name="ProfileNameLabel" type="Label" parent="ProfileContainer2/NameClipper" unique_id=483383362]
-clip_contents = true
-layout_mode = 0
-offset_right = 233.0
-offset_bottom = 106.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "VINCENT"
-vertical_alignment = 1
-text_overrun_behavior = 1
-script = ExtResource("6_werro")
-
-[node name="ProfileContainer3" type="TextureButton" parent="." unique_id=176008057]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 506.0
-offset_right = 1240.0
-offset_bottom = 681.0
-texture_normal = ExtResource("7_va10m")
-
-[node name="ProgressLabel" type="Label" parent="ProfileContainer3" unique_id=640426643]
-layout_mode = 0
-offset_left = 283.0
-offset_top = 46.0
-offset_right = 485.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "DAY 1"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="MoneyLabel" type="Label" parent="ProfileContainer3" unique_id=230051921]
-layout_mode = 0
-offset_left = 497.0
-offset_top = 46.0
-offset_right = 717.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "P10000"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="PCSlotsLabel" type="Label" parent="ProfileContainer3" unique_id=57640595]
-layout_mode = 0
-offset_left = 726.0
-offset_top = 46.0
-offset_right = 1037.0
-offset_bottom = 152.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "6 UNITs"
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="NameClipper" type="Control" parent="ProfileContainer3" unique_id=363927353]
-clip_contents = true
-anchors_preset = 0
-offset_left = 39.0
-offset_top = 46.0
-offset_right = 272.0
-offset_bottom = 152.0
-
-[node name="ProfileNameLabel" type="Label" parent="ProfileContainer3/NameClipper" unique_id=1449856764]
-clip_contents = true
-layout_mode = 0
-offset_right = 233.0
-offset_bottom = 106.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
-theme_override_fonts/font = ExtResource("4_0bcho")
-theme_override_font_sizes/font_size = 51
-text = "VINCENT"
-vertical_alignment = 1
-text_overrun_behavior = 1
-script = ExtResource("6_werro")
-
-[node name="SettingsButton" type="TextureButton" parent="." unique_id=714176946]
+[node name="SettingsButton" type="TextureButton" parent="." unique_id=782430101]
 custom_minimum_size = Vector2(71, 68)
 layout_mode = 0
 offset_left = 1075.0
@@ -288,7 +45,7 @@ texture_normal = ExtResource("4_dq4ed")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ExitButton" type="TextureButton" parent="." unique_id=1836783226]
+[node name="ExitButton" type="TextureButton" parent="." unique_id=401154410]
 custom_minimum_size = Vector2(71, 68)
 layout_mode = 0
 offset_left = 1168.0
@@ -301,7 +58,7 @@ texture_normal = ExtResource("5_b6bvm")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ReturnButton" type="TextureButton" parent="." unique_id=2141282497]
+[node name="ReturnButton" type="TextureButton" parent="." unique_id=1198183002]
 custom_minimum_size = Vector2(71, 68)
 layout_mode = 0
 offset_left = 40.0
@@ -314,21 +71,31 @@ texture_normal = ExtResource("6_b6bvm")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="SelectProfileLabel" type="Label" parent="." unique_id=899084594]
+[node name="SelectProfileLabel" type="Label" parent="." unique_id=2000327975]
 layout_mode = 0
 offset_left = 130.0
 offset_top = 29.0
 offset_right = 941.0
 offset_bottom = 145.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_outline_size = 1
+theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("8_0bcho")
 theme_override_font_sizes/font_size = 126
 text = "Select Profile"
 
-[node name="NameInputDialog" type="ColorRect" parent="." unique_id=1912130495]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=300147126]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 136.0
+offset_right = 1260.0
+offset_bottom = 700.0
+horizontal_scroll_mode = 0
+
+[node name="ProfileList" type="VBoxContainer" parent="ScrollContainer" unique_id=1192448185]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameInputDialog" type="ColorRect" parent="." unique_id=1711709522]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -338,7 +105,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.7)
 
-[node name="Panel" type="PanelContainer" parent="NameInputDialog" unique_id=1777686030]
+[node name="Panel" type="PanelContainer" parent="NameInputDialog" unique_id=1629541212]
 custom_minimum_size = Vector2(400, 250)
 layout_mode = 1
 anchors_preset = -1
@@ -351,30 +118,30 @@ offset_top = -124.79999
 offset_right = 100.079956
 offset_bottom = 31.200012
 
-[node name="VBoxContainer" type="VBoxContainer" parent="NameInputDialog/Panel" unique_id=119258392]
+[node name="VBoxContainer" type="VBoxContainer" parent="NameInputDialog/Panel" unique_id=1593551766]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="@Label@195875" type="Label" parent="NameInputDialog/Panel/VBoxContainer" unique_id=412013431]
+[node name="Label" type="Label" parent="NameInputDialog/Panel/VBoxContainer" unique_id=1174634090]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "ENTER YOUR NAME"
 
-[node name="NameEdit" type="LineEdit" parent="NameInputDialog/Panel/VBoxContainer" unique_id=545156687]
+[node name="NameEdit" type="LineEdit" parent="NameInputDialog/Panel/VBoxContainer" unique_id=864748408]
 custom_minimum_size = Vector2(300, 40)
 layout_mode = 2
 placeholder_text = "Type here..."
 
-[node name="HBoxContainer" type="HBoxContainer" parent="NameInputDialog/Panel/VBoxContainer" unique_id=853213324]
+[node name="HBoxContainer" type="HBoxContainer" parent="NameInputDialog/Panel/VBoxContainer" unique_id=226565785]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="ConfirmButton" type="Button" parent="NameInputDialog/Panel/VBoxContainer/HBoxContainer" unique_id=2108220618]
+[node name="ConfirmButton" type="Button" parent="NameInputDialog/Panel/VBoxContainer/HBoxContainer" unique_id=1419031996]
 layout_mode = 2
 text = "CONFIRM"
 
-[node name="CancelButton" type="Button" parent="NameInputDialog/Panel/VBoxContainer/HBoxContainer" unique_id=1805912063]
+[node name="CancelButton" type="Button" parent="NameInputDialog/Panel/VBoxContainer/HBoxContainer" unique_id=780941993]
 layout_mode = 2
 text = "CANCEL"

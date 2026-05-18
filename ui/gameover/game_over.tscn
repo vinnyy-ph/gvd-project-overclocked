@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://djjhmpvb54f6s"]
+
+[ext_resource type="Texture2D" uid="uid://gxpuayshv6bs" path="res://assets/images/ui/game_over/gameover.png" id="1_xhg2v"]
+[ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="2_ehkxf"]
+[ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="3_qa3gh"]
+[ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="4_f8vxi"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="5_f8vxi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ukcgt"]
+shader = ExtResource("3_qa3gh")
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
+
+[node name="GameOver" type="Control" unique_id=1126807777]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=1175028274]
+z_index = -1
+material = SubResource("ShaderMaterial_ukcgt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_f8vxi")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=57657331]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -290.0066
+offset_top = -231.5
+offset_right = 290.0066
+offset_bottom = 231.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xhg2v")
+expand_mode = 1
+
+[node name="Yes" type="TextureButton" parent="TextureRect" unique_id=516888618]
+layout_mode = 0
+offset_left = 141.00659
+offset_top = 351.5
+offset_right = 439.0066
+offset_bottom = 426.25836
+texture_normal = ExtResource("2_ehkxf")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="DaySurvivedLabel" type="Label" parent="TextureRect" unique_id=1732491559]
+layout_mode = 0
+offset_left = 339.0066
+offset_top = 138.5
+offset_right = 441.0066
+offset_bottom = 182.5
+theme_override_fonts/font = ExtResource("5_f8vxi")
+theme_override_font_sizes/font_size = 48
+text = "DAY 1"
+vertical_alignment = 1
+
+[node name="MoneyEarnedLabel" type="Label" parent="TextureRect" unique_id=1641267298]
+layout_mode = 0
+offset_left = 339.0066
+offset_top = 197.5
+offset_right = 516.0066
+offset_bottom = 241.5
+theme_override_fonts/font = ExtResource("5_f8vxi")
+theme_override_font_sizes/font_size = 48
+text = "P300,000"
+vertical_alignment = 1
+
+[node name="DaysSurivedLabel" type="Label" parent="TextureRect" unique_id=975529325]
+layout_mode = 0
+offset_left = 339.0066
+offset_top = 252.5
+offset_right = 516.0066
+offset_bottom = 296.5
+theme_override_fonts/font = ExtResource("5_f8vxi")
+theme_override_font_sizes/font_size = 48
+text = "30 days"
+vertical_alignment = 1

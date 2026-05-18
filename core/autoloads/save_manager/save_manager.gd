@@ -89,7 +89,7 @@ func get_profile_data(id: int):
 
 func get_all_profiles() -> Array:
 	var profiles = []
-	for i in range(3):
+	for i in range(10):
 		profiles.append(get_profile_data(i))
 	return profiles
 
