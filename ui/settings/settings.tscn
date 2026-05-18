@@ -89,6 +89,9 @@ theme_override_icons/grabber_disabled = ExtResource("2_hrs25")
 theme_override_styles/slider = SubResource("StyleBoxTexture_fayoa")
 theme_override_styles/grabber_area = SubResource("StyleBoxTexture_gweul")
 theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_y7dpk")
+max_value = 1.0
+step = 0.01
+value = 0.8
 
 [node name="SFXSlider" type="HSlider" parent="." unique_id=348471257]
 custom_minimum_size = Vector2(20, 24)
@@ -109,6 +112,9 @@ theme_override_icons/grabber_disabled = ExtResource("2_hrs25")
 theme_override_styles/slider = SubResource("StyleBoxTexture_fayoa")
 theme_override_styles/grabber_area = SubResource("StyleBoxTexture_gweul")
 theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_y7dpk")
+max_value = 1.0
+step = 0.01
+value = 0.8
 
 [node name="Yes" type="TextureButton" parent="." unique_id=1271053677]
 layout_mode = 0

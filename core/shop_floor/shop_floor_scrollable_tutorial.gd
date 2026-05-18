@@ -18,6 +18,13 @@ var scroll_speed: float = 900.0
 var dragging: bool = false
 var last_drag_position: Vector2 = Vector2.ZERO
 
+# --- MOBILE CAMERA VARIABLES ---
+var touches: Dictionary = {}
+var last_pinch_distance: float = -1.0
+var min_zoom: float = 0.5
+var max_zoom: float = 1.5
+const SCENE_SIZE = Vector2(3064.0, 1408.0)
+
 # --- ANIMATION & TUTORIAL VARIABLES ---
 var base_positions: Array = []
 var float_time: float = 0.0
@@ -114,8 +121,16 @@ func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
 	randomize()
+	
+	# Initial camera setup
 	camera.position = Vector2(1532, 704)
 	initial_cam_pos = camera.position
+	
+	# Calculate dynamic min zoom to show the whole scene on any screen
+	var vs = get_viewport_rect().size
+	min_zoom = min(vs.x / SCENE_SIZE.x, vs.y / SCENE_SIZE.y)
+	camera.zoom = Vector2(max(min_zoom, 0.5), max(min_zoom, 0.5))
+	
 	clamp_camera()
 
 	customer_selected.connect(_on_customer_selected)
@@ -646,25 +661,82 @@ func _unhandled_input(event):
 func handle_drag_and_zoom(event):
 	if is_customer_dragging: return
 	
-	if event is InputEventScreenTouch or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT):
-		dragging = event.pressed
-		if dragging: last_drag_position = event.position
-	elif event is InputEventScreenDrag or (event is InputEventMouseMotion and dragging):
-		camera.position.x -= (event.position.x - last_drag_position.x) / camera.zoom.x
-		camera.position.y -= (event.position.y - last_drag_position.y) / camera.zoom.y
-		last_drag_position = event.position
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			touches[event.index] = event.position
+		else:
+			touches.erase(event.index)
+			last_pinch_distance = -1.0
+			
+	elif event is InputEventScreenDrag:
+		touches[event.index] = event.position
+		if touches.size() == 1:
+			# Single finger drag - move camera
+			camera.position -= event.relative / camera.zoom
+			clamp_camera()
+			last_pinch_distance = -1.0
+		elif touches.size() == 2:
+			# Two finger pinch - zoom camera
+			var keys = touches.keys()
+			var pos1 = touches[keys[0]]
+			var pos2 = touches[keys[1]]
+			var current_dist = pos1.distance_to(pos2)
+			var center_point = (pos1 + pos2) / 2.0
+			
+			if last_pinch_distance > 0:
+				var zoom_factor = current_dist / last_pinch_distance
+				_zoom_camera(zoom_factor, center_point)
+			last_pinch_distance = current_dist
+
+	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			_zoom_camera(1.1, event.position)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			_zoom_camera(0.9, event.position)
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = event.pressed
+			
+	elif event is InputEventMouseMotion and dragging:
+		camera.position -= event.relative / camera.zoom
 		clamp_camera()
+
 	elif event is InputEventMagnifyGesture:
-		var new_zoom = camera.zoom * event.factor
-		camera.zoom.x = clamp(new_zoom.x, 0.5, 1.5)
-		camera.zoom.y = clamp(new_zoom.y, 0.5, 1.5)
-		clamp_camera()
+		# Native gesture support (macOS/iOS)
+		_zoom_camera(event.factor, get_viewport().get_mouse_position())
+
+func _zoom_camera(factor: float, center_point: Vector2):
+	var old_zoom = camera.zoom
+	var new_zoom_val = clamp(old_zoom.x * factor, min_zoom, max_zoom)
+	var new_zoom = Vector2(new_zoom_val, new_zoom_val)
+	
+	if old_zoom == new_zoom:
+		return
+		
+	# Zoom towards the center point (cursor or pinch center)
+	var vs = get_viewport_rect().size
+	var center_offset = center_point - (vs / 2.0)
+	
+	var world_pos_before = camera.position + (center_offset / old_zoom)
+	camera.zoom = new_zoom
+	var world_pos_after = camera.position + (center_offset / new_zoom)
+	
+	camera.position += (world_pos_before - world_pos_after)
+	clamp_camera()
 
 func clamp_camera():
 	var vs = get_viewport_rect().size
-	var hw = (vs.x / camera.zoom.x) / 2.0
-	var hh = (vs.y / camera.zoom.y) / 2.0
-	if (vs.x / camera.zoom.x) > 3064.0: camera.position.x = 3064.0 / 2.0
-	else: camera.position.x = clamp(camera.position.x, hw, 3064.0 - hw)
-	if (vs.y / camera.zoom.y) > 1408.0: camera.position.y = 1408.0 / 2.0
-	else: camera.position.y = clamp(camera.position.y, hh, 1408.0 - hh)
+	# Effective size of viewport in world units
+	var view_size = vs / camera.zoom
+	
+	# Center if zoom is too far out
+	if view_size.x >= SCENE_SIZE.x:
+		camera.position.x = SCENE_SIZE.x / 2.0
+	else:
+		var margin_x = view_size.x / 2.0
+		camera.position.x = clamp(camera.position.x, margin_x, SCENE_SIZE.x - margin_x)
+		
+	if view_size.y >= SCENE_SIZE.y:
+		camera.position.y = SCENE_SIZE.y / 2.0
+	else:
+		var margin_y = view_size.y / 2.0
+		camera.position.y = clamp(camera.position.y, margin_y, SCENE_SIZE.y - margin_y)

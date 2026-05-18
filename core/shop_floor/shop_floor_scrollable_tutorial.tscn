@@ -6,8 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://dncuf4bc67nf8" path="res://assets/images/shop_floor/empty_slot.png" id="4_nxgym"]
 [ext_resource type="Texture2D" uid="uid://471gktlsd0dc" path="res://assets/images/shop_floor/emotions/happy.png" id="6_nxgym"]
 [ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="7_6s41h"]
+[ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="8_a5a7q"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="8_xpdn8"]
 [ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="9_6j3qw"]
+[ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="9_7leac"]
 [ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="10_j1p5v"]
 [ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="10_nskys"]
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="11_lb4gu"]
@@ -15,6 +17,10 @@
 [ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_bdcp2"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_s65hm"]
 [ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="16_04kbf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1p5v"]
+shader = ExtResource("8_a5a7q")
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
 
 [sub_resource type="Gradient" id="Gradient_04kbf"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -29,21 +35,19 @@ script = ExtResource("1_drvdj")
 
 [node name="World" type="Node2D" parent="." unique_id=495853787]
 
-[node name="Parallax2D" type="Parallax2D" parent="World" unique_id=289474377]
-repeat_size = Vector2(1843, 0)
-autoscroll = Vector2(50, 0)
-repeat_times = 4
-
-[node name="Sprite2D" type="Sprite2D" parent="World/Parallax2D" unique_id=943323864]
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("2_tryt6")
-centered = false
-
-[node name="Sprite2D2" type="Sprite2D" parent="World/Parallax2D" unique_id=344089834]
-position = Vector2(0, -1464)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("2_tryt6")
-centered = false
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="World" unique_id=1064387490]
+z_index = -1
+material = SubResource("ShaderMaterial_j1p5v")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -150.0
+offset_right = 3099.3333
+offset_bottom = 1626.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_7leac")
 
 [node name="Background" type="Node2D" parent="World" unique_id=142257243]
 position = Vector2(1532, 704)
