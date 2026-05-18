@@ -60,6 +60,7 @@ func end_day():
 	last_day_expenses = tiered_bill + slot_fees
 
 	if money < last_day_expenses:
+		money_before_bankruptcy = money
 		money = 0
 		trigger_game_over()
 		return
@@ -109,6 +110,7 @@ signal money_earned_visual(amount: int, position: Vector2)
 
 var save_path: String = "user://savegame.json"
 var previous_scene: String = ""
+var money_before_bankruptcy: int = 0
 var last_money_change: int = 0
 var last_satisfaction_change: int = 0
 var minigame_just_finished: bool = false

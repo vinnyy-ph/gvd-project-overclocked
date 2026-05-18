@@ -7,8 +7,6 @@ var entries: Array = []
 
 func _ready():
 	load_leaderboard()
-	if entries.is_empty():
-		_create_mock_data()
 
 func load_leaderboard():
 	if not FileAccess.file_exists(LEADERBOARD_PATH):
@@ -51,7 +49,11 @@ func add_entry(player_name: String, day: int, money: float, pc_slots: int):
 	save_leaderboard()
 
 func sort_entries():
-	entries.sort_custom(func(a, b): return a["score"] > b["score"])
+	entries.sort_custom(func(a, b): 
+		if a["day"] != b["day"]:
+			return a["day"] > b["day"]
+		return a["money"] > b["money"]
+	)
 	if entries.size() > MAX_ENTRIES:
 		entries.resize(MAX_ENTRIES)
 

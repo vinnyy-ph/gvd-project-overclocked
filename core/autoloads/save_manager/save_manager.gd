@@ -107,7 +107,7 @@ func create_new_profile(id: int, name: String):
 func delete_profile(id: int):
 	var path = get_save_path(id)
 	if FileAccess.file_exists(path):
-		OS.move_to_trash(ProjectSettings.globalize_path(path))
+		DirAccess.remove_absolute(path)
 
 func reset_run_data():
 	# Keep lifetime stats but reset current run and upgrades
