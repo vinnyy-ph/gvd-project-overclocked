@@ -7,8 +7,18 @@ extends Node2D
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 @onready var multiplier_label = $CanvasLayer/HUD/MultiplierLabel
 
+@onready var day_night_bg = $World/Day_NightEnvironment
+@onready var day_night_bg_next = $World/Day_NightEnvironment_Next
+
+var bg_textures = [
+	preload("res://assets/images/shop_floor_bg/1.png"),
+	preload("res://assets/images/shop_floor_bg/2.png"),
+	preload("res://assets/images/shop_floor_bg/3.png"),
+	preload("res://assets/images/shop_floor_bg/4.png")
+]
+
 @export var every_pc_unlocked: bool = false
-@export var min_zoom: float = 0.3
+@export var min_zoom: float = 0.35
 @export var max_zoom: float = 1.5
 
 @onready var issue_buttons: Array = []
@@ -294,6 +304,7 @@ func _deselect_customer():
 # --- ANIMATION LOGIC ---
 
 func _process(delta):
+	_update_day_night_cycle(delta)
 	float_time += delta
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]
@@ -500,6 +511,45 @@ func handle_keyboard_scroll(delta):
 		move_dir = move_dir.normalized()
 		camera.position += move_dir * scroll_speed * delta
 		clamp_camera()
+
+func _update_day_night_cycle(_delta):
+	if not day_night_bg or not day_night_bg_next: return
+	
+	var total_ticks = 60.0
+	var elapsed_ticks = (total_ticks - GameManager.time_left) + (1.0 - $DayTimer.time_left)
+	var progress = clamp(elapsed_ticks / total_ticks, 0.0, 1.0)
+	
+	# Mapping 9 AM to 6 PM (9 hours)
+	var elapsed_hours = progress * 9.0
+	
+	# Texture mapping thresholds (hours from 9 AM):
+	# 9 AM: T1 (0h)
+	# 3 PM: T2 (6h) - T1 to T2 takes 6 hours
+	# 4 PM: T3 (7h) - T2 to T3 takes 1 hour (Smooth transition)
+	# 6 PM: T4 (9h) - T3 to T4 takes 2 hours
+	var thresholds = [0.0, 6.0, 7.0, 9.0]
+	
+	var idx1 = 0
+	var idx2 = 0
+	var lerp_factor = 0.0
+	
+	for i in range(thresholds.size() - 1):
+		if elapsed_hours >= thresholds[i] and elapsed_hours <= thresholds[i+1]:
+			idx1 = i
+			idx2 = min(i + 1, bg_textures.size() - 1)
+			var segment_range = thresholds[i+1] - thresholds[i]
+			if segment_range > 0:
+				lerp_factor = (elapsed_hours - thresholds[i]) / segment_range
+			break
+
+	day_night_bg.texture = bg_textures[idx1]
+	if idx1 != idx2:
+		day_night_bg_next.visible = true
+		day_night_bg_next.texture = bg_textures[idx2]
+		day_night_bg_next.modulate.a = lerp_factor
+	else:
+		day_night_bg_next.modulate.a = 0.0
+		day_night_bg_next.visible = false
 
 func handle_drag_and_zoom(event):
 	if is_customer_dragging: return

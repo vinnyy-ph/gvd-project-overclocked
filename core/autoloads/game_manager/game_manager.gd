@@ -126,7 +126,7 @@ func get_formatted_time() -> String:
 	var elapsed_ticks = total_ticks - time_left
 	
 	var start_hour = 9 # 9 AM
-	var minutes_per_tick = 8 # 8 hours (480 mins) / 60 ticks = 8 mins/tick
+	var minutes_per_tick = 9 # 9 hours (540 mins) / 60 ticks = 9 mins/tick
 	
 	var total_minutes = elapsed_ticks * minutes_per_tick
 	var current_hour = start_hour + (total_minutes / 60)

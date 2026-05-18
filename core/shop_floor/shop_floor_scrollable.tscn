@@ -75,15 +75,15 @@ script = ExtResource("1_q7epe")
 
 [node name="World" type="Node2D" parent="." unique_id=495853787]
 
-[node name="TextureRect" type="TextureRect" parent="World" unique_id=1934917274]
+[node name="Day_NightEnvironment" type="TextureRect" parent="World" unique_id=1934917274]
 z_index = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -319.0
-offset_top = -443.0
+offset_top = -335.0
 offset_right = 3364.0
-offset_bottom = 1628.6875
+offset_bottom = 1736.6875
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_kbbo8")
@@ -91,7 +91,7 @@ expand_mode = 1
 
 [node name="Background" type="Node2D" parent="World" unique_id=142257243]
 z_index = 2
-position = Vector2(1532, 704)
+position = Vector2(1532, 812)
 scale = Vector2(0.7, 0.7)
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=1643221891]
@@ -569,6 +569,20 @@ position = Vector2(-246.46431, 765.1974)
 scale = Vector2(0.6091899, 0.6091899)
 texture = ExtResource("10_jajnr")
 script = ExtResource("11_f7hrx")
+
+[node name="Day_NightEnvironment_Next" type="TextureRect" parent="World" unique_id=46992464]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -319.0
+offset_top = -335.0
+offset_right = 3364.0
+offset_bottom = 1736.6875
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 z_index = 155
