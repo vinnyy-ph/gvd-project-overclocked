@@ -58,6 +58,9 @@ const OCCUPIED_7 = preload("res://assets/images/shop_floor/occupied_slot.png")
 const EMPTY_13 = preload("res://assets/images/shop_floor/empty_slot_front.png")
 const OCCUPIED_13 = preload("res://assets/images/shop_floor/occupied_slot_front.png")
 
+const ANGRY_TEX = preload("res://assets/images/shop_floor/emotions/angry.png")
+const HAPPY_TEX = preload("res://assets/images/shop_floor/emotions/happy.png")
+
 func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
@@ -239,18 +242,25 @@ func _animate_failure_overlay():
 func _update_desk_texture(slot_idx: int):
 	var desk = seat_nodes[slot_idx]
 	if not desk: return
-	
+
 	var desk_num = slot_idx + 1
 	var is_occupied = GameManager.occupied_slots[slot_idx]
-	
+
 	if desk_num <= 7:
 		desk.texture = OCCUPIED_7 if is_occupied else EMPTY_7
 	else:
 		desk.texture = OCCUPIED_13 if is_occupied else EMPTY_13
-	
+
 	# Static opacity indication: 1.0 if busy, 0.8 if free
 	desk.modulate.a = 1.0 if is_occupied else 0.8
 
+	# Handle Emotion Particles
+	var particles = desk.get_node_or_null("EmotionParticles")
+	if particles:
+		particles.emitting = is_occupied
+		if is_occupied:
+			var has_issue = GameManager.active_issues[slot_idx] != ""
+			particles.texture = ANGRY_TEX if has_issue else HAPPY_TEX
 func _restore_customers():
 	for data in GameManager.persisted_customers:
 		var customer = waiting_area.duplicate()
@@ -424,6 +434,9 @@ func _process(delta):
 		if not btn: continue
 		
 		var issue_path = GameManager.active_issues[i]
+		var desk = seat_nodes[i]
+		var particles = desk.get_node_or_null("EmotionParticles") if desk else null
+		
 		if issue_path != "":
 			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
@@ -432,10 +445,16 @@ func _process(delta):
 			if label:
 				label.show()
 				label.text = GameManager.get_issue_title(issue_path).to_upper()
+			
+			if particles:
+				particles.texture = ANGRY_TEX
 		else:
 			btn.visible = false
 			var label = issue_labels[i]
 			if label: label.hide()
+			
+			if particles and GameManager.occupied_slots[i]:
+				particles.texture = HAPPY_TEX
 			
 	handle_keyboard_scroll(delta)
 

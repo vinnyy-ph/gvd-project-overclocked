@@ -107,6 +107,9 @@ const OCCUPIED_7 = preload("res://assets/images/shop_floor/occupied_slot.png")
 const EMPTY_13 = preload("res://assets/images/shop_floor/empty_slot_front.png")
 const OCCUPIED_13 = preload("res://assets/images/shop_floor/occupied_slot_front.png")
 
+const ANGRY_TEX = preload("res://assets/images/shop_floor/emotions/angry.png")
+const HAPPY_TEX = preload("res://assets/images/shop_floor/emotions/happy.png")
+
 func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
@@ -200,6 +203,14 @@ func _update_desk_texture(slot_idx: int):
 	
 	# Static opacity indication: 1.0 if busy, 0.8 if free
 	desk.modulate.a = 1.0 if is_occupied else 0.8
+
+	# Handle Emotion Particles
+	var particles = desk.get_node_or_null("EmotionParticles")
+	if particles:
+		particles.emitting = is_occupied
+		if is_occupied:
+			var has_issue = GameManager.active_issues[slot_idx] != ""
+			particles.texture = ANGRY_TEX if has_issue else HAPPY_TEX
 
 func _connect_customer_signals(customer: Customer, slot_idx: int):
 	if not customer.arrived_at_pc.is_connected(_update_desk_texture):
@@ -602,6 +613,9 @@ func _process(delta):
 		if not btn: continue
 		
 		var issue_path = GameManager.active_issues[i]
+		var desk = seat_nodes[i]
+		var particles = desk.get_node_or_null("EmotionParticles") if desk else null
+		
 		if issue_path != "":
 			btn.visible = true
 			btn.position.y = base_positions[i].y + (sin(float_time * 4.0 + i) * 8.0)
@@ -610,9 +624,15 @@ func _process(delta):
 				label.show()
 				label.text = GameManager.get_issue_title(issue_path)
 				label.global_position = btn.global_position + Vector2(-150, -45)
+			
+			if particles:
+				particles.texture = ANGRY_TEX
 		else:
 			btn.visible = false
 			if issue_labels[i]: issue_labels[i].hide()
+			
+			if particles and GameManager.occupied_slots[i]:
+				particles.texture = HAPPY_TEX
 
 	if current_tutorial_step == TutorialStep.CAMERA_MOVE:
 		if camera.position.distance_to(initial_cam_pos) > 150:

@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="8_sru07"]
 [ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="9_i6wj4"]
 [ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="9_u2yt3"]
+[ext_resource type="Texture2D" uid="uid://471gktlsd0dc" path="res://assets/images/shop_floor/emotions/happy.png" id="10_f3dul"]
 [ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="10_jajnr"]
 [ext_resource type="Texture2D" uid="uid://cqlx8thi523as" path="res://assets/sprites/walking_person.png" id="11_8jxs8"]
 [ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="11_f7hrx"]
@@ -22,6 +23,45 @@
 [ext_resource type="Script" uid="uid://c157mbb0pqg2x" path="res://core/shop_floor/animated_sprite_2d.gd" id="12_f7hrx"]
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="12_ghd6s"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_3lx45"]
+
+[sub_resource type="Gradient" id="Gradient_dmcqo"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_y4wy1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_xmxb4"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_gdtld"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_vke2i"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_covo0"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_6q55r"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_r8cg4"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_urfo3"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_ef6ol"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_hjdrb"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_3oxsq"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_5xmmn"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_at4k0"]
 atlas = ExtResource("11_8jxs8")
@@ -96,9 +136,9 @@ z_index = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -445.0
+offset_left = -319.0
 offset_top = -333.0
-offset_right = 3238.0
+offset_right = 3364.0
 offset_bottom = 1738.6875
 grow_horizontal = 2
 grow_vertical = 2
@@ -187,6 +227,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk7" unique_id=1831414642]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_dmcqo")
+
 [node name="Desk6" type="Sprite2D" parent="World/Background" unique_id=1543486381]
 position = Vector2(-477.58194, -389.4068)
 scale = Vector2(0.51159185, 0.51159185)
@@ -214,6 +268,20 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk6" unique_id=1784524900]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_y4wy1")
 
 [node name="Desk5" type="Sprite2D" parent="World/Background" unique_id=229852010]
 position = Vector2(-666.1534, -293.6925)
@@ -243,6 +311,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk5" unique_id=151391324]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_xmxb4")
+
 [node name="Desk4" type="Sprite2D" parent="World/Background" unique_id=1208692705]
 position = Vector2(-851.8676, -199.4068)
 scale = Vector2(0.5115918, 0.5115918)
@@ -270,6 +352,20 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk4" unique_id=2064371651]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_gdtld")
 
 [node name="Desk3" type="Sprite2D" parent="World/Background" unique_id=1983527224]
 position = Vector2(-1040.439, -103.692505)
@@ -300,6 +396,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk3" unique_id=929439642]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_vke2i")
+
 [node name="Desk2" type="Sprite2D" parent="World/Background" unique_id=113499335]
 position = Vector2(-1225.2195, -7.5606003)
 scale = Vector2(0.51159185, 0.51159185)
@@ -329,6 +439,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk2" unique_id=2004395370]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_covo0")
+
 [node name="Desk1" type="Sprite2D" parent="World/Background" unique_id=805946840]
 position = Vector2(-1413.7909, 88.15374)
 scale = Vector2(0.51159185, 0.51159185)
@@ -356,6 +480,20 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk1" unique_id=1903256591]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_6q55r")
 
 [node name="CustomerContainer" type="Node2D" parent="World/Background" unique_id=1968303627]
 position = Vector2(0, 822.8571)
@@ -421,6 +559,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk13" unique_id=1976377536]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_r8cg4")
+
 [node name="Desk12" type="Sprite2D" parent="World/Background" unique_id=1834866764]
 position = Vector2(-266.27905, -124.34595)
 scale = Vector2(0.51159185, 0.51159185)
@@ -451,6 +603,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk12" unique_id=1504223942]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_urfo3")
+
 [node name="Desk11" type="Sprite2D" parent="World/Background" unique_id=1528630727]
 position = Vector2(-458.13943, -28.614943)
 scale = Vector2(0.51159173, 0.51159173)
@@ -479,6 +645,20 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk11" unique_id=1452939356]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_ef6ol")
 
 [node name="Desk10" type="Sprite2D" parent="World/Background" unique_id=2100459152]
 position = Vector2(-648.1394, 65.67072)
@@ -509,6 +689,20 @@ theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
 
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk10" unique_id=57303431]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_hjdrb")
+
 [node name="Desk9" type="Sprite2D" parent="World/Background" unique_id=174221913]
 position = Vector2(-836.7109, 161.38507)
 scale = Vector2(0.51159173, 0.51159173)
@@ -537,6 +731,20 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk9" unique_id=531221218]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_3oxsq")
 
 [node name="Desk8" type="Sprite2D" parent="World/Background" unique_id=1748538281]
 position = Vector2(-1026.7109, 257.09918)
@@ -567,6 +775,20 @@ theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 31
 text = "ISSUE LABEL"
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk8" unique_id=1092749260]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("10_f3dul")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_5xmmn")
 
 [node name="OwnerWalkiing" type="AnimatedSprite2D" parent="World/Background" unique_id=471915068]
 unique_name_in_owner = true
