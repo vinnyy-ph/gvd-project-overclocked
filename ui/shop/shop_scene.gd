@@ -135,19 +135,16 @@ func _load_items_from_directory(dir_path: String) -> void:
 					var img_path = dir_path + file_name
 					var tex = load(img_path)
 					if tex:
-						var idx = item_list.add_item("", tex)
+						var idx = item_list.add_icon_item(tex)
 						item_list.set_item_metadata(idx, {
 							"path": img_path,
 							"category": _get_category_from_path(dir_path),
 							"name": file_name.replace(".png", "")
 						})
 						
-						# Mark as owned if already in owned_decorations
+						# Mark as owned visually using icon modulation
 						if img_path in SaveManager.owned_decorations:
-							item_list.set_item_custom_fg_color(idx, Color(0, 1, 0, 0.5))
-							item_list.set_item_text(idx, "OWNED")
-						else:
-							item_list.set_item_text(idx, "P" + str(DECO_PRICE))
+							item_list.set_item_icon_modulate(idx, Color(0.5, 1, 0.5, 1.0)) # Green tint
 							
 			file_name = dir.get_next()
 
@@ -191,9 +188,8 @@ func _on_item_selected(index: int) -> void:
 			SaveManager.save_game()
 			_update_balance_label()
 			
-			# Update item in list
-			item_list.set_item_custom_fg_color(index, Color(0, 1, 0, 0.5))
-			item_list.set_item_text(index, "OWNED")
+			# Update item in list visually
+			item_list.set_item_icon_modulate(index, Color(0.5, 1, 0.5, 1.0)) # Green tint
 			AudioManager.play_sfx("coin")
 	)
 
