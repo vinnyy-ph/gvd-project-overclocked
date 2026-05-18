@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://ca6185n8ijfea"]
+[gd_scene format=3 uid="uid://c21rjsisqbfh0"]
 
-[ext_resource type="Script" uid="uid://c6bmp5hkl5y45" path="res://ui/settings/settings_menu.gd" id="1_jwxja"]
+[ext_resource type="Script" path="res://ui/settings/settings_menu.gd" id="1_jwxja"]
 
 [node name="settings_menu" type="Control" unique_id=1887114027]
 layout_mode = 3
@@ -34,6 +34,8 @@ offset_left = -110.5
 offset_top = -167.5
 offset_right = 110.5
 offset_bottom = 167.5
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="SettingsMenu/Content" unique_id=134379855]
