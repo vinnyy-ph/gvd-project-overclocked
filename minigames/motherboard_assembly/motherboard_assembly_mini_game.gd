@@ -19,7 +19,13 @@ var original_positions: Dictionary = {}
 
 func _ready():
 	AudioManager.play_bgm("minigame")
-	time_left += GameManager.get_hardware_time_bonus()
+	
+	var state = SaveManager.game_state
+	if state.has("mobo_time_left"):
+		time_left = state["mobo_time_left"]
+		placed_count = state["mobo_placed_count"]
+	else:
+		time_left += GameManager.get_hardware_time_bonus()
 	
 	# Dynamically set total parts based on the children in the Parts container
 	total_parts = parts_container.get_child_count()
@@ -39,9 +45,36 @@ func _ready():
 			# Store starting position so we can snap back if dropped wrong
 			original_positions[part] = part.position
 			
-			# Ensure parts process mouse input
-			part.mouse_filter = Control.MOUSE_FILTER_PASS 
-			part.gui_input.connect(_on_part_gui_input.bind(part))
+			# Restore placed status if any
+			if state.has("mobo_placed_" + part.name):
+				if state["mobo_placed_" + part.name]:
+					var expected_slot_name = part.name.replace("_Part", "_Slot")
+					var slot = slots_container.get_node_or_null(expected_slot_name)
+					if slot:
+						part.global_position = slot.global_position
+						part.mouse_filter = Control.MOUSE_FILTER_IGNORE
+						if slot is ColorRect:
+							slot.color = Color(0.1, 0.8, 0.1, 0.5) 
+			else:
+				# Ensure parts process mouse input
+				part.mouse_filter = Control.MOUSE_FILTER_PASS 
+				part.gui_input.connect(_on_part_gui_input.bind(part))
+
+func save_state():
+	var state = SaveManager.game_state
+	state["mobo_time_left"] = time_left
+	state["mobo_placed_count"] = placed_count
+	for part in parts_container.get_children():
+		if part is Control:
+			state["mobo_placed_" + part.name] = (part.mouse_filter == Control.MOUSE_FILTER_IGNORE)
+
+func clear_state():
+	var state = SaveManager.game_state
+	state.erase("mobo_time_left")
+	state.erase("mobo_placed_count")
+	for part in parts_container.get_children():
+		if part is Control:
+			state.erase("mobo_placed_" + part.name)
 
 func update_timer():
 	timer_label.text = "TIME: " + str(time_left)
@@ -150,5 +183,6 @@ func fail_game():
 	GameManager.satisfaction += GameManager.last_satisfaction_change
 	GameManager.save_game()
 	
+	clear_state()
 	await get_tree().create_timer(1.5).timeout
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

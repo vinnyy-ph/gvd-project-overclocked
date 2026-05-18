@@ -296,12 +296,9 @@ var color_selected = Color(0.2, 0.6, 1.0)
 
 func _ready():
 	AudioManager.play_bgm("minigame")
-	time_left = GameManager.get_minigame_timer("network")
-	time_left += GameManager.get_hardware_time_bonus()
 	
 	game_timer.wait_time = 1.0
 	game_timer.timeout.connect(_on_timer_timeout)
-	game_timer.start()
 	
 	btn_diagnostic.pressed.connect(_on_diagnostic_pressed)
 	btn_hint.pressed.connect(_on_hint_pressed)
@@ -315,11 +312,73 @@ func _ready():
 		if child is TextureButton:
 			child.pressed.connect(_on_device_pressed.bind(child))
 
-	randomize()
-	current_scenario = scenarios[randi() % scenarios.size()]
-	
-	link_status_label.text = "[color=#ff4444][b]>>> SYSTEM ALERT: SERVICE DISRUPTION[/b][/color]"
-	action_label.text = "> Action Required: Run Diagnostic to analyze network topology."
+	var state = SaveManager.game_state
+	if state.has("net_time_left"):
+		time_left = state["net_time_left"]
+		current_scenario = state["net_scenario"]
+		current_step_index = state["net_step_index"]
+		game_active = state["net_game_active"]
+		waiting_for_config = state["net_waiting"]
+		
+		# Restore cables
+		for i in range(current_step_index):
+			if i < current_scenario["steps"].size() - 1:
+				var node_a = devices_container.get_node(current_scenario["steps"][i]["device"])
+				var node_b = devices_container.get_node(current_scenario["steps"][i+1]["device"])
+				draw_cable(node_a, node_b, color_connected)
+				
+		if waiting_for_config:
+			btn_diagnostic.visible = false
+			btn_hint.visible = true
+			active_source_node = devices_container.get_node(current_scenario["steps"][current_step_index]["device"])
+			active_source_node.modulate = color_selected
+			
+			var step_data = current_scenario["steps"][current_step_index]
+			action_label.text = "> CONFIG REQ for [b]" + step_data["device"] + "[/b]: Select correct parameter."
+			link_status_label.text = "[color=#00ff44][b]FAULT:[/b] " + current_scenario["fault"] + "\n[b]TASK:[/b] " + current_scenario["task"] + "[/color]"
+			
+			protocol_choices.visible = true
+			# We don't save the randomized choices order, so we recreate it
+			var choices = [step_data["req"]] + step_data["decoys"]
+			choices.shuffle()
+			choice_a.text = choices[0]
+			choice_b.text = choices[1]
+			choice_c.text = choices[2]
+		elif game_active:
+			btn_diagnostic.visible = false
+			btn_hint.visible = true
+			var next_dev = current_scenario["steps"][current_step_index]["device"]
+			link_status_label.text = "[color=#00ff44][b]FAULT:[/b] " + current_scenario["fault"] + "\n[b]TASK:[/b] " + current_scenario["task"] + "[/color]"
+			action_label.text = "> Action Req: Select next device: [b]" + next_dev + "[/b]"
+		else:
+			link_status_label.text = "[color=#ff4444][b]>>> SYSTEM ALERT: SERVICE DISRUPTION[/b][/color]"
+			action_label.text = "> Action Required: Run Diagnostic to analyze network topology."
+			
+		game_timer.start()
+	else:
+		time_left = GameManager.get_minigame_timer("network")
+		time_left += GameManager.get_hardware_time_bonus()
+		randomize()
+		current_scenario = scenarios[randi() % scenarios.size()]
+		link_status_label.text = "[color=#ff4444][b]>>> SYSTEM ALERT: SERVICE DISRUPTION[/b][/color]"
+		action_label.text = "> Action Required: Run Diagnostic to analyze network topology."
+		game_timer.start()
+
+func save_state():
+	var state = SaveManager.game_state
+	state["net_time_left"] = time_left
+	state["net_scenario"] = current_scenario
+	state["net_step_index"] = current_step_index
+	state["net_game_active"] = game_active
+	state["net_waiting"] = waiting_for_config
+
+func clear_state():
+	var state = SaveManager.game_state
+	state.erase("net_time_left")
+	state.erase("net_scenario")
+	state.erase("net_step_index")
+	state.erase("net_game_active")
+	state.erase("net_waiting")
 
 func _on_diagnostic_pressed():
 	btn_diagnostic.visible = false
@@ -473,6 +532,7 @@ func win_game():
 	GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 	GameManager.save_game()
 	
+	clear_state()
 	await get_tree().create_timer(2.0).timeout
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
 

@@ -266,8 +266,18 @@ func _restore_customers():
 		customer.drag_started.connect(_on_customer_drag_started)
 		customer.drag_ended.connect(_on_customer_drag_ended)
 		
+		var pos = Vector2.ZERO
+		if data.has("pos_x") and data.has("pos_y"):
+			pos = Vector2(data["pos_x"], data["pos_y"])
+		elif data.has("pos") and typeof(data["pos"]) == TYPE_STRING:
+			var parts = data["pos"].replace("(", "").replace(")", "").split(",")
+			if parts.size() == 2:
+				pos = Vector2(parts[0].to_float(), parts[1].to_float())
+		elif data.has("pos") and typeof(data["pos"]) == TYPE_VECTOR2:
+			pos = data["pos"]
+		
 		if data["state"] == Customer.State.WAITING:
-			customer.global_position = data["pos"]
+			customer.global_position = pos
 		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
 			if idx < seat_nodes.size():
@@ -275,6 +285,9 @@ func _restore_customers():
 				customer.assign_to_pc(idx, seat_positions[idx], seat_nodes[idx], data)
 				_update_desk_texture(idx)
 	GameManager.persisted_customers.clear()
+
+func save_state():
+	_save_customers_state()
 
 func _save_customers_state():
 	GameManager.persisted_customers.clear()

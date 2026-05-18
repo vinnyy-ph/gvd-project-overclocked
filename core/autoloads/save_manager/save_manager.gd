@@ -8,6 +8,8 @@ var current_money: int = 0
 var lifetime_money: int = 0
 var max_days_survived: int = 0
 var current_day: int = 1
+var saved_scene: String = ""
+var game_state: Dictionary = {}
 var unlocked_upgrades: Dictionary = {
 	"flat_monitors": 0,
 	"mid_range_cpu": 0,
@@ -30,7 +32,9 @@ func save_game():
 		"lifetime_money": lifetime_money,
 		"max_days_survived": max_days_survived,
 		"current_day": current_day,
-		"unlocked_upgrades": unlocked_upgrades
+		"unlocked_upgrades": unlocked_upgrades,
+		"saved_scene": saved_scene,
+		"game_state": game_state
 	}
 	
 	var json_string = JSON.stringify(data)
@@ -64,6 +68,8 @@ func load_game(id: int = -1):
 				lifetime_money = int(data.get("lifetime_money", 0))
 				max_days_survived = int(data.get("max_days_survived", 0))
 				current_day = int(data.get("current_day", 1))
+				saved_scene = data.get("saved_scene", "")
+				game_state = data.get("game_state", {})
 				
 				var saved_upgrades = data.get("unlocked_upgrades", {})
 				if typeof(saved_upgrades) == TYPE_DICTIONARY:
@@ -100,6 +106,8 @@ func create_new_profile(id: int, name: String):
 	lifetime_money = 0
 	max_days_survived = 0
 	current_day = 1
+	saved_scene = ""
+	game_state = {}
 	for key in unlocked_upgrades:
 		unlocked_upgrades[key] = 0
 	save_game()
@@ -113,6 +121,8 @@ func reset_run_data():
 	# Keep lifetime stats but reset current run and upgrades
 	current_money = 100
 	current_day = 1
+	saved_scene = ""
+	game_state = {}
 	for key in unlocked_upgrades:
 		unlocked_upgrades[key] = 0
 	save_game()

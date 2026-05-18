@@ -53,7 +53,10 @@ func _on_profile_pressed(slot_index: int):
 		if SaveManager.load_game():
 			GameManager.load_game()
 			PauseMenu.pause_button.visible = true
-			get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+			if SaveManager.saved_scene != "":
+				get_tree().change_scene_to_file(SaveManager.saved_scene)
+			else:
+				get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
 func _on_confirm_name_pressed():
 	var player_name = name_edit.text.strip_edges()

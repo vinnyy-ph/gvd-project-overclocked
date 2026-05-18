@@ -64,7 +64,12 @@ var cable_data = {
 
 func _ready():
 	AudioManager.play_bgm("minigame")
-	time_left += GameManager.get_hardware_time_bonus()
+	
+	var state = SaveManager.game_state
+	if state.has("cable_time_left"):
+		time_left = state["cable_time_left"]
+	else:
+		time_left += GameManager.get_hardware_time_bonus()
 	
 	# Link All nodes to dictionary
 	cable_data["hdmi"]["source"] = hdmi_source
@@ -114,9 +119,27 @@ func _ready():
 		var data = cable_data[key]
 		data["source_center"] = data["source"].position + (data["source"].size / 2.0)
 		data["head_start_pos"] = data["head"].position
+		
+		# Restore connection status if it exists in state
+		if state.has("cable_" + key + "_connected"):
+			data["connected"] = state["cable_" + key + "_connected"]
+			if data["connected"]:
+				data["head"].position = data["port"].position + (data["port"].size / 2.0) - data["head"].get_node("TipMarker").position
 	
 	update_timer()
 	update_status()
+
+func save_state():
+	var state = SaveManager.game_state
+	state["cable_time_left"] = time_left
+	for key in cable_data.keys():
+		state["cable_" + key + "_connected"] = cable_data[key]["connected"]
+
+func clear_state():
+	var state = SaveManager.game_state
+	state.erase("cable_time_left")
+	for key in cable_data.keys():
+		state.erase("cable_" + key + "_connected")
 
 func _process(_delta):
 	if not game_active: return
@@ -239,6 +262,7 @@ func check_win():
 		GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 		GameManager.save_game()
 		
+		clear_state()
 		await get_tree().create_timer(1.0).timeout
 		get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
 
@@ -257,4 +281,5 @@ func _on_game_timer_timeout():
 		GameManager.last_satisfaction_change = -GameManager.get_minigame_satisfaction_loss("cable")
 		GameManager.satisfaction += GameManager.last_satisfaction_change
 		GameManager.save_game()
+		clear_state()
 		get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

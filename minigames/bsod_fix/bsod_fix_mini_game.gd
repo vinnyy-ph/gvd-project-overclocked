@@ -145,8 +145,17 @@ var processing_input: bool = false
 func _ready():
 	AudioManager.play_bgm("minigame")
 	randomize()
-	time_left = GameManager.get_minigame_timer("bsod")
-	time_left += GameManager.get_hardware_time_bonus()
+	
+	# Load State if exists
+	var state = SaveManager.game_state
+	if state.has("bsod_time_left"):
+		time_left = state["bsod_time_left"]
+		current_step = state["bsod_current_step"]
+		active_bug = state["bsod_active_bug"]
+	else:
+		time_left = GameManager.get_minigame_timer("bsod")
+		time_left += GameManager.get_hardware_time_bonus()
+		load_new_bug()
 	
 	# 1. Setup Timer
 	game_timer.wait_time = 1.0
@@ -161,15 +170,14 @@ func _ready():
 	choice_button_3.pressed.connect(func(): check_answer(choice_button_3.text))
 	choice_button_4.pressed.connect(func(): check_answer(choice_button_4.text))
 
-	# 3. Load First Bug
-	load_new_bug()
+	# 3. Apply state visually
+	if state.has("bsod_active_bug"):
+		_display_current_bug()
+	
 	update_timer()
 	update_step_ui()
 
-func load_new_bug():
-	active_bug = bug_database[randi() % bug_database.size()]
-	
-	# Using BBCode for a cool modern debugger look
+func _display_current_bug():
 	var code_text = "[color=#00ff44][b]>>> DEBUGGER CONSOLE[/b][/color]\n\n"
 	code_text += "[color=#ffffff][i]# Analysing snippet...[/i][/color]\n"
 	code_text += "[color=#00ff44]" + active_bug["code"] + "[/color]\n\n"
@@ -178,6 +186,22 @@ func load_new_bug():
 	debugging_text.text = code_text
 	status_label.text = "Select the correct fix to continue."
 	generate_choices()
+
+func load_new_bug():
+	active_bug = bug_database[randi() % bug_database.size()]
+	_display_current_bug()
+
+func save_state():
+	var state = SaveManager.game_state
+	state["bsod_time_left"] = time_left
+	state["bsod_current_step"] = current_step
+	state["bsod_active_bug"] = active_bug
+
+func clear_state():
+	var state = SaveManager.game_state
+	state.erase("bsod_time_left")
+	state.erase("bsod_current_step")
+	state.erase("bsod_active_bug")
 
 func generate_choices():
 	var options: Array = [active_bug["correct"]]
@@ -256,6 +280,7 @@ func win_game():
 	GameManager.satisfaction = min(GameManager.satisfaction + GameManager.last_satisfaction_change, 100)
 	GameManager.save_game()
 	
+	clear_state()
 	await get_tree().create_timer(1.5).timeout
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
 
@@ -276,5 +301,6 @@ func fail_game():
 	GameManager.satisfaction += GameManager.last_satisfaction_change
 	GameManager.save_game()
 	
+	clear_state()
 	await get_tree().create_timer(1.5).timeout
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

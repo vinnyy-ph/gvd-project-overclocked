@@ -805,6 +805,7 @@ autoplay = "default"
 script = ExtResource("12_f7hrx")
 
 [node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=744454501]
+visible = false
 z_index = 37
 position = Vector2(-255.71428, 810)
 scale = Vector2(0.45, 0.45)

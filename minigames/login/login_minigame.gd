@@ -44,7 +44,24 @@ var _scramble_tween: Tween = null
 func _ready():
 	AudioManager.play_bgm("minigame")
 	randomize()
-	time_left += GameManager.get_hardware_time_bonus()
+	
+	var state = SaveManager.game_state
+	if state.has("login_time_left"):
+		time_left = state["login_time_left"]
+		solved_count = state["login_solved_count"]
+		lives = state["login_lives"]
+		current_code = state["login_current_code"]
+		reversed_code = state["login_reversed_code"]
+		display_code = state["login_display_code"]
+		wrong_streak = state["login_wrong_streak"]
+		
+		# Set UI based on loaded state
+		status_label.text = "> SECURITY: ENTER TOKEN BACKWARDS."
+		request_label.text = "TOKEN: " + display_code
+	else:
+		time_left += GameManager.get_hardware_time_bonus()
+		generate_new_code()
+	
 	original_y = position.y
 
 	game_timer.wait_time = 1.0
@@ -66,9 +83,28 @@ func _ready():
 	hint_button_3.text = "SKIP TOKEN (-2s)"
 
 	_refresh_lives_display()
-	generate_new_code()
 	update_timer()
 	update_progress()
+
+func save_state():
+	var state = SaveManager.game_state
+	state["login_time_left"] = time_left
+	state["login_solved_count"] = solved_count
+	state["login_lives"] = lives
+	state["login_current_code"] = current_code
+	state["login_reversed_code"] = reversed_code
+	state["login_display_code"] = display_code
+	state["login_wrong_streak"] = wrong_streak
+
+func clear_state():
+	var state = SaveManager.game_state
+	state.erase("login_time_left")
+	state.erase("login_solved_count")
+	state.erase("login_lives")
+	state.erase("login_current_code")
+	state.erase("login_reversed_code")
+	state.erase("login_display_code")
+	state.erase("login_wrong_streak")
 
 # ── Process (drives scramble animation) ──────────────────────────────────────
 func _process(delta: float):
@@ -320,5 +356,6 @@ func fail_game():
 	GameManager.satisfaction += GameManager.last_satisfaction_change
 	GameManager.save_game()
 
+	clear_state()
 	await get_tree().create_timer(1.5).timeout
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")

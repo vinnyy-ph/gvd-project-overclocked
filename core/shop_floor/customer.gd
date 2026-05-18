@@ -87,7 +87,8 @@ func get_data() -> Dictionary:
 	return {
 		"state": current_state,
 		"pc_index": assigned_pc_index,
-		"pos": global_position,
+		"pos_x": global_position.x,
+		"pos_y": global_position.y,
 		"session_time": session_timer.time_left if current_state == State.USING_PC else session_timer.wait_time,
 		"issue_time": issue_timer.time_left if current_state == State.USING_PC else issue_timer.wait_time
 	}

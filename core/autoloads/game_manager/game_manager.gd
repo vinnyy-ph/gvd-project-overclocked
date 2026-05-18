@@ -23,6 +23,7 @@ var money: int:
 			
 		if diff > 0:
 			last_day_revenue += diff
+			SaveManager.lifetime_money += diff
 		
 		SaveManager.current_money = new_money
 		SaveManager.save_game()
@@ -354,9 +355,60 @@ func new_game():
 func save_game():
 	SaveManager.save_game()
 
+func capture_and_save_state():
+	if get_tree().current_scene:
+		var path = get_tree().current_scene.scene_file_path
+		if path in ["res://ui/main_menu_v2/MainMenuV2.tscn", "res://ui/profile_selection/profile_selection.tscn", "res://ui/leaderboard/leaderboard.tscn"]:
+			return # Do not save state when in menus
+			
+		if get_tree().current_scene.has_method("save_state"):
+			get_tree().current_scene.save_state()
+		SaveManager.saved_scene = path
+		
+	var state = SaveManager.game_state
+	state["time_left"] = time_left
+	state["satisfaction"] = satisfaction
+	state["active_issues"] = active_issues.duplicate()
+	state["occupied_slots"] = occupied_slots.duplicate()
+	state["minigame_deck"] = minigame_deck.duplicate()
+	state["last_minigame"] = last_minigame
+	state["persisted_customers"] = persisted_customers.duplicate()
+	state["is_tutorial"] = is_tutorial
+	state["tutorial_minigame_index"] = tutorial_minigame_index
+	state["tutorial_minigame_done"] = tutorial_minigame_done
+	state["last_money_change"] = last_money_change
+	state["last_satisfaction_change"] = last_satisfaction_change
+	state["last_day_revenue"] = last_day_revenue
+	state["last_day_expenses"] = last_day_expenses
+	
+	SaveManager.save_game()
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if not SaveManager.player_name.is_empty(): # only if in a profile
+			capture_and_save_state()
+
 func load_game():
 	SaveManager.load_game()
-	satisfaction = 100 # Reset satisfaction for new load or keep it?
+	
+	var state = SaveManager.game_state
+	if not state.is_empty():
+		time_left = state.get("time_left", 60)
+		satisfaction = state.get("satisfaction", 100)
+		active_issues = state.get("active_issues", ["", "", "", "", "", "", "", "", "", "", "", "", ""])
+		occupied_slots = state.get("occupied_slots", [false, false, false, false, false, false, false, false, false, false, false, false, false])
+		minigame_deck = state.get("minigame_deck", [])
+		last_minigame = state.get("last_minigame", "")
+		persisted_customers = state.get("persisted_customers", [])
+		is_tutorial = state.get("is_tutorial", false)
+		tutorial_minigame_index = state.get("tutorial_minigame_index", 0)
+		tutorial_minigame_done = state.get("tutorial_minigame_done", false)
+		last_money_change = state.get("last_money_change", 0)
+		last_satisfaction_change = state.get("last_satisfaction_change", 0)
+		last_day_revenue = state.get("last_day_revenue", 0)
+		last_day_expenses = state.get("last_day_expenses", 0)
+	else:
+		satisfaction = 100 # Reset satisfaction for new load or keep it?
 	return true
 
 func _ready():
