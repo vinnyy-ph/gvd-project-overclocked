@@ -1,6 +1,9 @@
 extends Control
 
 @onready var item_list = $ItemList
+@onready var balance_label = $ParallaxCheckeredBG/TimerLabel
+@onready var return_btn = $ParallaxCheckeredBG/ReturnButton
+@onready var edit_shop_btn = %EditShopBtn
 
 # Upgrade bars and buttons
 @onready var cpu_bar = $Upgrades/CPUUpgradeBar
@@ -50,14 +53,25 @@ var item_categories = {
 	"misc": ["res://assets/images/shop_decorations/misc_decos/"]
 }
 
-var upgrades_level = {
-	"cpu": 0,
-	"gpu": 0,
-	"monitor": 0,
-	"cable": 0,
-	"speed": 0,
-	"pc_slot": 0
+const UPGRADE_MAPPING = {
+	"cpu": "mid_range_cpu",
+	"gpu": "graphics_upgrade",
+	"monitor": "flat_monitors",
+	"cable": "cable_management_kit",
+	"speed": "premium_power_strip",
+	"pc_slot": "shop_space"
 }
+
+const UPGRADE_COSTS = {
+	"cpu": 1500,
+	"gpu": 2000,
+	"monitor": 1000,
+	"cable": 1200,
+	"speed": 800,
+	"pc_slot": 2500
+}
+
+const DECO_PRICE = 500
 
 func _ready() -> void:
 	# Enable mobile-friendly scrolling behavior for ItemList
@@ -87,11 +101,22 @@ func _ready() -> void:
 	# Connect item list selection
 	item_list.item_selected.connect(_on_item_selected)
 	
+	# Connect utility buttons
+	return_btn.pressed.connect(_on_return_pressed)
+	edit_shop_btn.pressed.connect(_on_edit_shop_pressed)
+	
 	# Initialize list with "All" category first as requested
 	_on_filter_pressed("all")
 	
 	# Initialize upgrade bars visually
 	_update_all_upgrade_bars()
+	_update_balance_label()
+
+func _update_balance_label():
+	if GameManager.dev_mode:
+		balance_label.text = "P UNLIMITED"
+	else:
+		balance_label.text = "P" + str(GameManager.money)
 
 func _on_filter_pressed(category: String) -> void:
 	item_list.clear()
@@ -106,24 +131,70 @@ func _load_items_from_directory(dir_path: String) -> void:
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir():
-				if file_name.ends_with(".png.import"):
-					var img_path = dir_path + file_name.replace(".import", "")
+				if file_name.ends_with(".png") and not file_name.ends_with(".import"):
+					var img_path = dir_path + file_name
 					var tex = load(img_path)
 					if tex:
-						item_list.add_item("", tex)
+						var idx = item_list.add_item("", tex)
+						item_list.set_item_metadata(idx, {
+							"path": img_path,
+							"category": _get_category_from_path(dir_path),
+							"name": file_name.replace(".png", "")
+						})
+						
+						# Mark as owned if already in owned_decorations
+						if img_path in SaveManager.owned_decorations:
+							item_list.set_item_custom_fg_color(idx, Color(0, 1, 0, 0.5))
+							item_list.set_item_text(idx, "OWNED")
+						else:
+							item_list.set_item_text(idx, "P" + str(DECO_PRICE))
+							
 			file_name = dir.get_next()
 
+func _get_category_from_path(path: String) -> String:
+	if "cashier_decos" in path: return "cashier_decos"
+	if "pc_decos" in path: return "pc_decos"
+	if "chair_decos" in path: return "chair_decos_actual"
+	if "floors" in path: return "floors"
+	if "walls" in path: return "walls"
+	if "wall_decos" in path: return "wall_decos"
+	if "misc_decos" in path: return "misc_decos"
+	return "misc_decos"
+
 func _on_upgrade_pressed(upgrade_id: String, bar_rect: TextureRect) -> void:
-	if upgrades_level[upgrade_id] < 10:
-		_show_buy_prompt("p1,000", func(): 
-			upgrades_level[upgrade_id] += 1
-			_update_upgrade_bar(upgrade_id, bar_rect)
+	var save_key = UPGRADE_MAPPING[upgrade_id]
+	var current_level = SaveManager.unlocked_upgrades.get(save_key, 0)
+	
+	if current_level < 10:
+		var cost = UPGRADE_COSTS[upgrade_id] * (current_level + 1)
+		_show_buy_prompt("p" + str(cost), func(): 
+			if GameManager.money >= cost or GameManager.dev_mode:
+				GameManager.money -= cost
+				SaveManager.unlocked_upgrades[save_key] = current_level + 1
+				SaveManager.save_game()
+				_update_upgrade_bar(upgrade_id, bar_rect)
+				_update_balance_label()
+				AudioManager.play_sfx("coin")
 		)
 
 func _on_item_selected(index: int) -> void:
-	_show_buy_prompt("p500", func():
-		print("Bought item at index: ", index)
-		# Future logic for applying the decoration goes here
+	var data = item_list.get_item_metadata(index)
+	var img_path = data["path"]
+	
+	if img_path in SaveManager.owned_decorations:
+		return # Already owned
+		
+	_show_buy_prompt("p" + str(DECO_PRICE), func():
+		if GameManager.money >= DECO_PRICE or GameManager.dev_mode:
+			GameManager.money -= DECO_PRICE
+			SaveManager.owned_decorations.append(img_path)
+			SaveManager.save_game()
+			_update_balance_label()
+			
+			# Update item in list
+			item_list.set_item_custom_fg_color(index, Color(0, 1, 0, 0.5))
+			item_list.set_item_text(index, "OWNED")
+			AudioManager.play_sfx("coin")
 	)
 
 func _show_buy_prompt(price: String, on_confirm: Callable) -> void:
@@ -141,7 +212,9 @@ func _update_all_upgrade_bars() -> void:
 	_update_upgrade_bar("pc_slot", pc_slot_bar)
 
 func _update_upgrade_bar(upgrade_id: String, bar_rect: TextureRect) -> void:
-	var level = upgrades_level[upgrade_id]
+	var save_key = UPGRADE_MAPPING[upgrade_id]
+	var level = SaveManager.unlocked_upgrades.get(save_key, 0)
+	
 	if level == 0:
 		bar_rect.texture = load("res://assets/images/upgrades/empty_bar.png")
 	else:
@@ -150,3 +223,12 @@ func _update_upgrade_bar(upgrade_id: String, bar_rect: TextureRect) -> void:
 			var tex = load(tex_path)
 			if tex:
 				bar_rect.texture = tex
+
+func _on_return_pressed():
+	if GameManager.previous_scene != "":
+		get_tree().change_scene_to_file(GameManager.previous_scene)
+	else:
+		get_tree().change_scene_to_file("res://ui/daily_summary/daily_summary.tscn")
+
+func _on_edit_shop_pressed():
+	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_editable.tscn")

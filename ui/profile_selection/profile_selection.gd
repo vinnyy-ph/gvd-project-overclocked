@@ -67,6 +67,8 @@ func _on_dev_mode_pressed():
 	SaveManager.current_day = 1
 	SaveManager.saved_scene = ""
 	SaveManager.game_state = {}
+	SaveManager.owned_decorations = []
+	SaveManager.placed_decorations = []
 	SaveManager.unlocked_upgrades = {
 		"flat_monitors": 10,
 		"mid_range_cpu": 10,

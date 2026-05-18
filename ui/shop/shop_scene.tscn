@@ -97,7 +97,8 @@ text = "P120,000"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="WallsFilterBtn" type="TextureButton" parent="ParallaxCheckeredBG" unique_id=1936072435]
+[node name="EditShopBtn" type="TextureButton" parent="ParallaxCheckeredBG" unique_id=1936072435]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(154.87, 46.88)
 layout_mode = 0
 offset_left = 735.0

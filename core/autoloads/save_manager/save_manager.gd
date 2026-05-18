@@ -18,6 +18,8 @@ var unlocked_upgrades: Dictionary = {
 	"cable_management_kit": 0,
 	"shop_space": 0
 }
+var owned_decorations: Array = [] # Array of res:// paths
+var placed_decorations: Array = [] # Array of Dictionaries {path, pos, category}
 
 func _ready():
 	pass
@@ -33,6 +35,8 @@ func save_game():
 		"max_days_survived": max_days_survived,
 		"current_day": current_day,
 		"unlocked_upgrades": unlocked_upgrades,
+		"owned_decorations": owned_decorations,
+		"placed_decorations": placed_decorations,
 		"saved_scene": saved_scene,
 		"game_state": game_state
 	}
@@ -70,6 +74,8 @@ func load_game(id: int = -1):
 				current_day = int(data.get("current_day", 1))
 				saved_scene = data.get("saved_scene", "")
 				game_state = data.get("game_state", {})
+				owned_decorations = data.get("owned_decorations", [])
+				placed_decorations = data.get("placed_decorations", [])
 				
 				var saved_upgrades = data.get("unlocked_upgrades", {})
 				if typeof(saved_upgrades) == TYPE_DICTIONARY:
@@ -108,6 +114,8 @@ func create_new_profile(id: int, p_name: String):
 	current_day = 1
 	saved_scene = ""
 	game_state = {}
+	owned_decorations = []
+	placed_decorations = []
 	for key in unlocked_upgrades:
 		unlocked_upgrades[key] = 0
 	save_game()
@@ -123,6 +131,7 @@ func reset_run_data():
 	current_day = 1
 	saved_scene = ""
 	game_state = {}
+	# Note: owned_decorations and placed_decorations are kept
 	for key in unlocked_upgrades:
 		unlocked_upgrades[key] = 0
 	save_game()

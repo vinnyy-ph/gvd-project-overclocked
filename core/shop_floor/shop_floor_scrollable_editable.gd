@@ -6,6 +6,7 @@ extends Node2D
 @onready var safe_zone: Polygon2D = $World/Background/SafeZoneShopFloor
 @onready var safe_zone_wall_left: Polygon2D = $World/Background/SafeZoneShopFloor2
 @onready var safe_zone_wall_right: Polygon2D = $World/Background/SafeZoneShopFloor3
+@onready var back_button: Button = $World/Background/Button
 
 # Constants for Camera
 const SCENE_SIZE = Vector2(3064.0, 1408.0)
@@ -38,12 +39,64 @@ func _ready() -> void:
 	safe_zone_wall_right.color = highlight_color
 	hide_all_safe_zones()
 
-	# Initial scan of all decorations
-	decorations_data = get_all_decorations()
-	populate_item_list()
+	# Initial scan of owned decorations
+	_load_owned_inventory()
+	_spawn_placed_decorations()
 	
 	# Connect ItemList signals
 	item_list.gui_input.connect(_on_item_list_gui_input)
+	
+	back_button.pressed.connect(_on_back_pressed)
+
+func _load_owned_inventory():
+	decorations_data.clear()
+	# Only items in SaveManager.owned_decorations that are NOT in SaveManager.placed_decorations
+	var placed_paths = []
+	for p in SaveManager.placed_decorations:
+		placed_paths.append(p["path"])
+		
+	for path in SaveManager.owned_decorations:
+		if path in placed_paths:
+			# If it's already placed, don't show it in inventory
+			# Find index in placed_paths and remove it so we can handle duplicates correctly
+			placed_paths.erase(path)
+			continue
+			
+		decorations_data.append({
+			"path": path,
+			"icon": path,
+			"actual": path,
+			"category": _get_category_from_path(path),
+			"name": path.get_file().replace(".png", "")
+		})
+	populate_item_list()
+
+func _spawn_placed_decorations():
+	for data in SaveManager.placed_decorations:
+		var decoration = DECORATION_SCENE.instantiate()
+		decorations_container.add_child(decoration)
+		decoration.texture = load(data["path"])
+		decoration.decoration_data = {
+			"path": data["path"],
+			"category": data["category"],
+			"name": data["path"].get_file().replace(".png", "")
+		}
+		decoration.global_position = str_to_var(data["pos"])
+		decoration.update_touch_area()
+		_setup_decoration_signals(decoration)
+		decoration.is_placed = true
+		decoration.was_placed = true
+		placed_decorations.append(decoration)
+
+func _get_category_from_path(path: String) -> String:
+	if "cashier_decos" in path: return "cashier_decos"
+	if "pc_decos" in path: return "pc_decos"
+	if "chair_decos" in path: return "chair_decos_actual"
+	if "floors" in path: return "floors"
+	if "walls" in path: return "walls"
+	if "wall_decos" in path: return "wall_decos"
+	if "misc_decos" in path: return "misc_decos"
+	return "misc_decos"
 
 func populate_item_list() -> void:
 	item_list.clear()
@@ -52,32 +105,22 @@ func populate_item_list() -> void:
 		item_list.set_item_metadata(idx, data)
 		item_list.set_item_tooltip(idx, data["name"])
 
-func get_all_decorations() -> Array:
-	var list = []
-	var base_path = "res://assets/images/shop_decorations_actual/"
-	var dir = DirAccess.open(base_path)
-	if dir:
-		dir.list_dir_begin()
-		var category = dir.get_next()
-		while category != "":
-			if dir.current_is_dir() and category != "." and category != "..":
-				var category_path = base_path + category + "/"
-				var cat_dir = DirAccess.open(category_path)
-				if cat_dir:
-					cat_dir.list_dir_begin()
-					var file_name = cat_dir.get_next()
-					while file_name != "":
-						if file_name.ends_with(".png") and not file_name.ends_with(".import"):
-							var icon_path = category_path + file_name
-							list.append({
-								"name": file_name.replace(".png", ""),
-								"icon": icon_path,
-								"actual": icon_path,
-								"category": category
-							})
-						file_name = cat_dir.get_next()
-			category = dir.get_next()
-	return list
+func _on_back_pressed():
+	_save_placements()
+	# Point back button to daily summary as requested
+	get_tree().change_scene_to_file("res://ui/daily_summary/daily_summary.tscn")
+
+func _save_placements():
+	var save_data = []
+	for deco in placed_decorations:
+		if is_instance_valid(deco):
+			save_data.append({
+				"path": deco.decoration_data["path"],
+				"pos": var_to_str(deco.global_position),
+				"category": deco.decoration_data["category"]
+			})
+	SaveManager.placed_decorations = save_data
+	SaveManager.save_game()
 
 # --- INPUT HANDLING ---
 
@@ -101,7 +144,7 @@ func start_dragging_from_list(item_idx: int) -> void:
 	
 	var decoration = DECORATION_SCENE.instantiate()
 	decorations_container.add_child(decoration)
-	decoration.texture = load(data["actual"])
+	decoration.texture = load(data["path"])
 	decoration.decoration_data = data
 	decoration.update_touch_area() # Update size based on texture
 	decoration.global_position = get_global_mouse_position()
@@ -137,6 +180,8 @@ func _on_decoration_confirmed(decoration) -> void:
 	hide_all_safe_zones()
 	if not decoration in placed_decorations:
 		placed_decorations.append(decoration)
+	
+	_save_placements()
 
 func _on_decoration_cancelled(decoration) -> void:
 	is_dragging_item = false
@@ -146,6 +191,8 @@ func _on_decoration_cancelled(decoration) -> void:
 	# If it was never placed (newly dragged from list), return to inventory
 	if not decoration.was_placed:
 		_on_decoration_returned(decoration)
+	else:
+		_save_placements()
 
 func _on_decoration_returned(decoration) -> void:
 	is_dragging_item = false
@@ -157,6 +204,7 @@ func _on_decoration_returned(decoration) -> void:
 	# Add back to available data
 	decorations_data.append(decoration.decoration_data)
 	populate_item_list()
+	_save_placements()
 
 func is_inside_safe_zone(decoration) -> bool:
 	var category = decoration.decoration_data.get("category", "")

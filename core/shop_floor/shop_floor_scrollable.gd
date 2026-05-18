@@ -6,6 +6,7 @@ extends Node2D
 @onready var satisfaction_bar = $CanvasLayer/HUD/SatisfactionBar
 @onready var time_label = $CanvasLayer/HUD/TimeLabel
 @onready var multiplier_label = $CanvasLayer/HUD/MultiplierLabel
+@onready var decorations_container = $World/Background/DecorationsContainer
 
 @onready var day_night_bg = $World/Day_NightEnvironment
 @onready var day_night_bg_next = $World/Day_NightEnvironment_Next
@@ -149,6 +150,16 @@ func _ready():
 	
 	_setup_confetti()
 	_handle_minigame_result()
+	_spawn_placed_decorations()
+
+func _spawn_placed_decorations():
+	if not decorations_container: return
+	for data in SaveManager.placed_decorations:
+		var decoration = Sprite2D.new()
+		decorations_container.add_child(decoration)
+		decoration.texture = load(data["path"])
+		decoration.global_position = str_to_var(data["pos"])
+		decoration.z_index = 3 # Match editable floor default
 
 func _setup_confetti():
 	if not confetti_particles: return
