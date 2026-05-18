@@ -66,7 +66,7 @@ func _on_continue_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://ui/profile_selection/profile_selection.tscn")
 
 func _on_hi_score_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://ui/hi_score/hi_score.tscn")
+	get_tree().change_scene_to_file("res://ui/leaderboard/leaderboard.tscn")
 
 func _on_tutorial_button_pressed():
 	GameManager.in_tutorial = true

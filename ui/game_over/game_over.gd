@@ -16,6 +16,10 @@ func _ready():
 	# Update lifetime high scores if needed
 	SaveManager.update_max_days(days)
 	
+	# Submit to global leaderboard
+	var pc_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
+	LeaderboardManager.add_entry(SaveManager.player_name, days, float(money), pc_slots)
+	
 	menu_button.pressed.connect(_on_menu_button_pressed)
 	
 	# Play game over sound if available (optional)
