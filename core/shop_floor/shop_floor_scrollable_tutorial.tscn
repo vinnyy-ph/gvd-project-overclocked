@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://yealhs7v3e2v" path="res://core/shop_floor/shop_floor_scrollable_tutorial.gd" id="1_drvdj"]
 [ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_tryt6"]
-[ext_resource type="Texture2D" uid="uid://c808q0igji7a7" path="res://assets/images/envinronment.png" id="3_owkhd"]
+[ext_resource type="Texture2D" uid="uid://ddrbiww8xi3sa" path="res://assets/images/shop_floor/main.png" id="3_rtng5"]
 [ext_resource type="Texture2D" uid="uid://dncuf4bc67nf8" path="res://assets/images/shop_floor/empty_slot.png" id="4_nxgym"]
 [ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="7_6s41h"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="8_xpdn8"]
@@ -47,7 +47,7 @@ scale = Vector2(0.7, 0.7)
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=1643221891]
 position = Vector2(-9.999999, 15.714285)
-texture = ExtResource("3_owkhd")
+texture = ExtResource("3_rtng5")
 
 [node name="Desk1" type="Sprite2D" parent="World/Background/Sprite2D" unique_id=338153913]
 position = Vector2(-467.14294, -154.28569)

@@ -376,6 +376,10 @@ func _on_node_added(node: Node):
 # ==========================================
 
 func setup_button_effect(button: BaseButton):
+	# Store the original scale to restore it later
+	if not button.has_meta("original_scale"):
+		button.set_meta("original_scale", button.scale)
+	
 	# Using call_deferred ensures the button has its final size before setting the pivot
 	button.call_deferred("set_pivot_offset", button.size / 2.0)
 	
@@ -387,12 +391,14 @@ func setup_button_effect(button: BaseButton):
 
 func _on_button_down(button: BaseButton):
 	AudioManager.play_sfx("click")
+	var original_scale = button.get_meta("original_scale", Vector2.ONE)
 	var tween = create_tween()
 	# Optional: Set pause mode to process so it animates even if the game is paused
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS) 
-	tween.tween_property(button, "scale", Vector2(0.9, 0.9), 0.05).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(button, "scale", original_scale * 0.9, 0.05).set_trans(Tween.TRANS_SINE)
 
 func _on_button_up(button: BaseButton):
+	var original_scale = button.get_meta("original_scale", Vector2.ONE)
 	var tween = create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.15).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(button, "scale", original_scale, 0.15).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)

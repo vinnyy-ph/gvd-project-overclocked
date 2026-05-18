@@ -426,13 +426,30 @@ func show_queue_warning(pos: Vector2):
 	tween.finished.connect(label.queue_free)
 
 func _on_issue_clicked(pc_index: int):
+	if pc_index < 0 or pc_index >= GameManager.active_issues.size():
+		push_error("Invalid PC index clicked: " + str(pc_index))
+		return
+		
 	var issue_path = GameManager.active_issues[pc_index]
-	if issue_path == "": return
+	if issue_path == "": 
+		push_warning("Clicked issue button but no issue path found for PC " + str(pc_index))
+		return
 	
+	print("Transitioning to minigame: ", issue_path, " for PC ", pc_index)
+	
+	# Clear the issue from the global state so it's not triggered again
 	GameManager.active_issues[pc_index] = ""
+	
+	# Save state before transition
 	_save_customers_state()
 	GameManager.save_game()
-	get_tree().change_scene_to_file(issue_path)
+	
+	# Transition to minigame
+	var err = get_tree().change_scene_to_file(issue_path)
+	if err != OK:
+		push_error("Failed to transition to minigame at " + issue_path + ". Error: " + str(err))
+		# Restore the issue so it's not lost
+		GameManager.active_issues[pc_index] = issue_path
 
 func end_day():
 	GameManager.persisted_customers.clear()
