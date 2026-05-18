@@ -137,6 +137,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	handle_camera_input(event)
 
 func _on_item_list_gui_input(event: InputEvent) -> void:
+	if is_dragging_item: return
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			var item_idx = item_list.get_item_at_position(event.position)
@@ -256,6 +258,12 @@ func _show_error_feedback(pos: Vector2, text: String) -> void:
 	tween.finished.connect(label.queue_free)
 
 func _on_decoration_drag_started(decoration) -> void:
+	if is_dragging_item and active_decoration != decoration:
+		decoration.is_dragging = false
+		if not decoration.is_placed and decoration.was_placed:
+			decoration.stop_editing()
+		return
+		
 	is_dragging_item = true
 	active_decoration = decoration
 	
