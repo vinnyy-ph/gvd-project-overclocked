@@ -4,6 +4,8 @@ extends Node2D
 @onready var item_list: ItemList = $CanvasLayer/ItemList
 @onready var decorations_container: Node2D = $World/Background/DecorationsContainer
 @onready var safe_zone: Polygon2D = $World/Background/SafeZoneShopFloor
+@onready var safe_zone_wall_left: Polygon2D = $World/Background/SafeZoneShopFloor2
+@onready var safe_zone_wall_right: Polygon2D = $World/Background/SafeZoneShopFloor3
 
 # Constants for Camera
 const SCENE_SIZE = Vector2(3064.0, 1408.0)
@@ -28,6 +30,13 @@ func _ready() -> void:
 	min_zoom = min(vs.x / SCENE_SIZE.x, vs.y / SCENE_SIZE.y)
 	camera.zoom = Vector2(max(min_zoom, 0.5), max(min_zoom, 0.5))
 	clamp_camera()
+
+	# Ensure safe zones are semi-transparent cyan
+	var highlight_color = Color(0, 1, 1, 0.25)
+	safe_zone.color = highlight_color
+	safe_zone_wall_left.color = highlight_color
+	safe_zone_wall_right.color = highlight_color
+	hide_all_safe_zones()
 
 	# Initial scan of all decorations
 	decorations_data = get_all_decorations()
@@ -63,7 +72,8 @@ func get_all_decorations() -> Array:
 							list.append({
 								"name": file_name.replace(".png", ""),
 								"icon": icon_path,
-								"actual": icon_path
+								"actual": icon_path,
+								"category": category
 							})
 						file_name = cat_dir.get_next()
 			category = dir.get_next()
@@ -115,7 +125,7 @@ func _setup_decoration_signals(decoration) -> void:
 
 func _on_decoration_confirmed(decoration) -> void:
 	# STRICT PLACEMENT CHECK
-	if not is_inside_safe_zone(decoration.global_position):
+	if not is_inside_safe_zone(decoration):
 		_show_error_feedback(decoration.global_position, "OUTSIDE SAFE ZONE!")
 		is_dragging_item = true
 		active_decoration = decoration
@@ -124,14 +134,14 @@ func _on_decoration_confirmed(decoration) -> void:
 	decoration.stop_editing()
 	is_dragging_item = false
 	active_decoration = null
-	safe_zone.hide()
+	hide_all_safe_zones()
 	if not decoration in placed_decorations:
 		placed_decorations.append(decoration)
 
 func _on_decoration_cancelled(decoration) -> void:
 	is_dragging_item = false
 	active_decoration = null
-	safe_zone.hide()
+	hide_all_safe_zones()
 	
 	# If it was never placed (newly dragged from list), return to inventory
 	if not decoration.was_placed:
@@ -140,7 +150,7 @@ func _on_decoration_cancelled(decoration) -> void:
 func _on_decoration_returned(decoration) -> void:
 	is_dragging_item = false
 	active_decoration = null
-	safe_zone.hide()
+	hide_all_safe_zones()
 	if decoration in placed_decorations:
 		placed_decorations.erase(decoration)
 	
@@ -148,11 +158,27 @@ func _on_decoration_returned(decoration) -> void:
 	decorations_data.append(decoration.decoration_data)
 	populate_item_list()
 
-func is_inside_safe_zone(global_pos: Vector2) -> bool:
-	if not safe_zone: return true
-	# Convert global position to safe_zone local position
-	var local_pos = safe_zone.to_local(global_pos)
-	return Geometry2D.is_point_in_polygon(local_pos, safe_zone.polygon)
+func is_inside_safe_zone(decoration) -> bool:
+	var category = decoration.decoration_data.get("category", "")
+	var global_pos = decoration.global_position
+	
+	if category == "wall_decos":
+		return _is_point_in_polygon_node(global_pos, safe_zone_wall_left) or \
+			   _is_point_in_polygon_node(global_pos, safe_zone_wall_right)
+	elif category == "chair_decos_actual" or category == "misc_decos":
+		return _is_point_in_polygon_node(global_pos, safe_zone)
+	
+	return _is_point_in_polygon_node(global_pos, safe_zone)
+
+func _is_point_in_polygon_node(global_pos: Vector2, polygon_node: Polygon2D) -> bool:
+	if not polygon_node: return true
+	var local_pos = polygon_node.to_local(global_pos)
+	return Geometry2D.is_point_in_polygon(local_pos, polygon_node.polygon)
+
+func hide_all_safe_zones() -> void:
+	safe_zone.hide()
+	safe_zone_wall_left.hide()
+	safe_zone_wall_right.hide()
 
 func _show_error_feedback(pos: Vector2, text: String) -> void:
 	var label = Label.new()
@@ -176,7 +202,15 @@ func _show_error_feedback(pos: Vector2, text: String) -> void:
 func _on_decoration_drag_started(decoration) -> void:
 	is_dragging_item = true
 	active_decoration = decoration
-	safe_zone.show()
+	
+	var category = decoration.decoration_data.get("category", "")
+	if category == "wall_decos":
+		safe_zone_wall_left.show()
+		safe_zone_wall_right.show()
+	elif category == "chair_decos_actual" or category == "misc_decos":
+		safe_zone.show()
+	else:
+		safe_zone.show()
 
 func _on_decoration_drag_ended(_decoration) -> void:
 	pass

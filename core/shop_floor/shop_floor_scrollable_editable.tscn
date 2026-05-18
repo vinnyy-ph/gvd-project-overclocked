@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="15_2gjwx"]
 [ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="16_uvl8u"]
 [ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="17_2y1r7"]
+[ext_resource type="Texture2D" uid="uid://osollc6nmrfx" path="res://assets/images/back.png" id="18_yweq2"]
 
 [sub_resource type="Gradient" id="Gradient_dmcqo"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -148,12 +149,18 @@ position = Vector2(-15.714285, -115.71427)
 texture = ExtResource("3_fhpww")
 
 [node name="SafeZoneShopFloor" type="Polygon2D" parent="World/Background" unique_id=1022676471]
+visible = false
+color = Color(0, 1, 1, 0.2509804)
 polygon = PackedVector2Array(-1585.7141, 152.85718, -12.857178, -629.99994, 1550, 152.85718, -15.714355, 942.85706, -1079.9999, 404.28577)
 
 [node name="SafeZoneShopFloor2" type="Polygon2D" parent="World/Background" unique_id=342876983]
+visible = false
+color = Color(0, 1, 1, 0.2509804)
 polygon = PackedVector2Array(-1587.1428, -385.71423, -14.285645, -1169.9999, -14.285645, -628.57135, -1582.857, 152.85718)
 
 [node name="SafeZoneShopFloor3" type="Polygon2D" parent="World/Background" unique_id=1372300516]
+visible = false
+color = Color(0, 1, 1, 0.2509804)
 polygon = PackedVector2Array(-12.857178, -1171.4285, 1550, -387.14276, 1551.4285, 145.71436, -12.857178, -627.14276)
 
 [node name="DecorationsContainer" type="Node2D" parent="World/Background" unique_id=1022676470]
@@ -209,29 +216,6 @@ position = Vector2(-289.50528, -484.70337)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("7_t4toi")
 
-[node name="Desk7IssueButton" type="Button" parent="World/Background/Desk7" unique_id=921647580]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk7/Desk7IssueButton" unique_id=317958110]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk7" unique_id=1831414642]
 position = Vector2(150, -140)
 emitting = false
@@ -250,29 +234,6 @@ color_ramp = SubResource("Gradient_dmcqo")
 position = Vector2(-477.58194, -389.4068)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("7_t4toi")
-
-[node name="Desk6IssueButton" type="Button" parent="World/Background/Desk6" unique_id=341757718]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk6/Desk6IssueButton" unique_id=1570668206]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
 
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk6" unique_id=1784524900]
 position = Vector2(150, -140)
@@ -293,29 +254,6 @@ position = Vector2(-666.1534, -293.6925)
 scale = Vector2(0.5115918, 0.5115918)
 texture = ExtResource("7_t4toi")
 
-[node name="Desk5IssueButton" type="Button" parent="World/Background/Desk5" unique_id=1873499116]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk5/Desk5IssueButton" unique_id=1577065751]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk5" unique_id=151391324]
 position = Vector2(150, -140)
 emitting = false
@@ -334,29 +272,6 @@ color_ramp = SubResource("Gradient_xmxb4")
 position = Vector2(-851.8676, -199.4068)
 scale = Vector2(0.5115918, 0.5115918)
 texture = ExtResource("7_t4toi")
-
-[node name="Desk4IssueButton" type="Button" parent="World/Background/Desk4" unique_id=2003987656]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk4/Desk4IssueButton" unique_id=240094076]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
 
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk4" unique_id=2064371651]
 position = Vector2(150, -140)
@@ -377,30 +292,6 @@ position = Vector2(-1040.439, -103.692505)
 scale = Vector2(0.5115918, 0.5115918)
 texture = ExtResource("7_t4toi")
 
-[node name="Desk3IssueButton" type="Button" parent="World/Background/Desk3" unique_id=341931847]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Label" type="Label" parent="World/Background/Desk3/Desk3IssueButton" unique_id=993325121]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk3" unique_id=929439642]
 position = Vector2(150, -140)
 emitting = false
@@ -420,30 +311,6 @@ position = Vector2(-1225.2195, -7.5606003)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("7_t4toi")
 
-[node name="Desk2IssueButton" type="Button" parent="World/Background/Desk2" unique_id=522174884]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Label" type="Label" parent="World/Background/Desk2/Desk2IssueButton" unique_id=1258351798]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk2" unique_id=2004395370]
 position = Vector2(150, -140)
 emitting = false
@@ -462,29 +329,6 @@ color_ramp = SubResource("Gradient_covo0")
 position = Vector2(-1413.7909, 88.15374)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("7_t4toi")
-
-[node name="Desk1IssueButton" type="Button" parent="World/Background/Desk1" unique_id=1559353774]
-offset_left = -189.8835
-offset_top = -688.90753
-offset_right = -88.8835
-offset_bottom = -461.90753
-scale = Vector2(2, 2)
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk1/Desk1IssueButton" unique_id=1634305067]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
 
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk1" unique_id=1903256591]
 position = Vector2(150, -140)
@@ -539,31 +383,6 @@ position = Vector2(-76.27882, -220.06026)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("11_5ik8x")
 
-[node name="Desk13IssueButton" type="Button" parent="World/Background/Desk13" unique_id=1812280120]
-offset_left = -50.26329
-offset_top = -608.71155
-offset_right = 50.73671
-offset_bottom = -381.71155
-scale = Vector2(2, 2)
-size_flags_horizontal = 3
-icon = ExtResource("8_ohdlm")
-flat = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Label" type="Label" parent="World/Background/Desk13/Desk13IssueButton" unique_id=2104574521]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk13" unique_id=1976377536]
 position = Vector2(150, -140)
 emitting = false
@@ -582,31 +401,6 @@ color_ramp = SubResource("Gradient_r8cg4")
 position = Vector2(-266.27905, -124.34595)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("11_5ik8x")
-
-[node name="Desk12IssueButton" type="Button" parent="World/Background/Desk12" unique_id=282233529]
-offset_left = -50.26329
-offset_top = -608.7115
-offset_right = 50.73671
-offset_bottom = -381.7115
-scale = Vector2(2, 2)
-size_flags_horizontal = 3
-icon = ExtResource("8_ohdlm")
-flat = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Label" type="Label" parent="World/Background/Desk12/Desk12IssueButton" unique_id=1418934564]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
 
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk12" unique_id=1504223942]
 position = Vector2(150, -140)
@@ -627,30 +421,6 @@ position = Vector2(-458.13943, -28.614943)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("11_5ik8x")
 
-[node name="Desk11IssueButton" type="Button" parent="World/Background/Desk11" unique_id=1632177063]
-offset_left = -50.26329
-offset_top = -608.71155
-offset_right = 50.73671
-offset_bottom = -381.71155
-scale = Vector2(2, 2)
-size_flags_horizontal = 3
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk11/Desk11IssueButton" unique_id=1723158876]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk11" unique_id=1452939356]
 position = Vector2(150, -140)
 emitting = false
@@ -669,30 +439,6 @@ color_ramp = SubResource("Gradient_ef6ol")
 position = Vector2(-648.1394, 65.67072)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("11_5ik8x")
-
-[node name="Desk10IssueButton" type="Button" parent="World/Background/Desk10" unique_id=25192469]
-offset_left = -50.26329
-offset_top = -608.71155
-offset_right = 50.73671
-offset_bottom = -381.71155
-scale = Vector2(2, 2)
-size_flags_horizontal = 3
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk10/Desk10IssueButton" unique_id=113393117]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
 
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk10" unique_id=57303431]
 position = Vector2(150, -140)
@@ -713,30 +459,6 @@ position = Vector2(-836.7109, 161.38507)
 scale = Vector2(0.51159173, 0.51159173)
 texture = ExtResource("11_5ik8x")
 
-[node name="Desk9IssueButton" type="Button" parent="World/Background/Desk9" unique_id=1897549211]
-offset_left = -50.26329
-offset_top = -608.71155
-offset_right = 50.73671
-offset_bottom = -381.71155
-scale = Vector2(2, 2)
-size_flags_horizontal = 3
-icon = ExtResource("8_ohdlm")
-flat = true
-
-[node name="Label" type="Label" parent="World/Background/Desk9/Desk9IssueButton" unique_id=1531007669]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
-
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk9" unique_id=531221218]
 position = Vector2(150, -140)
 emitting = false
@@ -755,31 +477,6 @@ color_ramp = SubResource("Gradient_3oxsq")
 position = Vector2(-1026.7109, 257.09918)
 scale = Vector2(0.51159185, 0.51159185)
 texture = ExtResource("11_5ik8x")
-
-[node name="Desk8IssueButton" type="Button" parent="World/Background/Desk8" unique_id=1167117532]
-offset_left = -50.26329
-offset_top = -608.7115
-offset_right = 50.73671
-offset_bottom = -381.7115
-scale = Vector2(2, 2)
-size_flags_horizontal = 3
-icon = ExtResource("8_ohdlm")
-flat = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Label" type="Label" parent="World/Background/Desk8/Desk8IssueButton" unique_id=1262672687]
-layout_mode = 0
-offset_left = -32.59626
-offset_top = -15.358224
-offset_right = 122.40374
-offset_bottom = 13.641776
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 2
-theme_override_fonts/font = ExtResource("9_gnybr")
-theme_override_font_sizes/font_size = 31
-text = "ISSUE LABEL"
 
 [node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Desk8" unique_id=1092749260]
 position = Vector2(150, -140)
@@ -822,6 +519,15 @@ texture = ExtResource("16_uvl8u")
 position = Vector2(-91.42862, 727.1428)
 texture = ExtResource("17_2y1r7")
 
+[node name="Button" type="Button" parent="World/Background" unique_id=1100636000]
+offset_left = -1837.143
+offset_top = -1159.9999
+offset_right = -1412.143
+offset_bottom = -1045.9999
+scale = Vector2(1.59, 1.59)
+icon = ExtResource("18_yweq2")
+flat = true
+
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 z_index = 155
 position = Vector2(640, 724)
@@ -840,7 +546,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -200.0
+offset_top = -151.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/h_separation = 120
