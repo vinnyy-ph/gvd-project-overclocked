@@ -8,6 +8,8 @@ extends Control
 var entry_scene = preload("res://ui/leaderboard/leaderboard_entry.tscn")
 
 func _ready() -> void:
+	PauseMenu.pause_button.visible = false
+	
 	# Connect buttons
 	return_button.pressed.connect(_on_return_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)

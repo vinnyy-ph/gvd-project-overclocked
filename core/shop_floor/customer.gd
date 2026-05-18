@@ -109,7 +109,8 @@ func _on_revenue_timeout():
 	if current_state == State.USING_PC and GameManager.active_issues[assigned_pc_index] == "":
 		var amount = GameManager.get_passive_income_reward()
 		GameManager.money += amount
-		GameManager.money_earned_visual.emit(amount, global_position + Vector2(0, -100))
+		# Pass Vector2.ZERO or a known flag so the main scene spawns it at the cashier
+		GameManager.money_earned_visual.emit(amount, Vector2.ZERO)
 
 func _on_session_timeout():
 	exit_shop()
@@ -139,17 +140,26 @@ func exit_shop():
 	revenue_timer.stop()
 	issue_timer.stop()
 	
-	# Show walking sprite again
-	sprite.visible = true
+	# Instead of walking, we show a popup text and free immediately
+	var label = Label.new()
+	label.text = "FINISHED!"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	label.add_theme_font_override("font", font)
+	label.add_theme_font_size_override("font_size", 35)
+	label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 8)
 	
-	var exit_pos = global_position + Vector2(1200, 200) # Default fallback
-	# Correct pathing to ExitPoint marker
-	if get_parent() and get_parent().has_node("../ExitPoint"):
-		exit_pos = get_parent().get_node("../ExitPoint").global_position
-		
-	var tween = create_tween()
-	tween.tween_property(self, "global_position", exit_pos, 2.5).set_trans(Tween.TRANS_SINE)
-	tween.finished.connect(func(): queue_free())
+	if get_parent() != null:
+		get_parent().add_child(label)
+		label.global_position = global_position + Vector2(-50, -50)
+		var tween = label.create_tween()
+		tween.tween_property(label, "position:y", label.position.y - 80, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0).set_delay(0.2)
+		tween.finished.connect(label.queue_free)
+	
+	queue_free()
 
 signal customer_selected(customer)
 

@@ -653,6 +653,14 @@ func update_hud():
 		multiplier_label.add_theme_color_override("font_color", Color.WHITE)
 
 func spawn_floating_money(amount: int, start_pos: Vector2):
+	var spawn_pos = start_pos
+	if start_pos == Vector2.ZERO:
+		var cashier = get_node_or_null("World/Background/CashierPerson")
+		if cashier:
+			spawn_pos = cashier.global_position + Vector2(0, -100)
+		else:
+			spawn_pos = camera.global_position # Fallback
+			
 	var label = Label.new()
 	label.text = "+P" + str(amount)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -664,7 +672,7 @@ func spawn_floating_money(amount: int, start_pos: Vector2):
 	label.add_theme_constant_override("outline_size", 10)
 	
 	$World/Background.add_child(label)
-	label.global_position = start_pos + Vector2(-50, -50)
+	label.global_position = spawn_pos + Vector2(-50, -50)
 	
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", label.position.y - 120, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
