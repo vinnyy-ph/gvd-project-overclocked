@@ -13,6 +13,8 @@ var sfx_library = {
 	"alert": preload("res://assets/audio/sfx/issue_spawned.wav"),
 	"success": preload("res://assets/audio/sfx/issue_complete.ogg"),
 	"fail": preload("res://assets/audio/sfx/issue_failed.ogg"),
+	"success_subtle": preload("res://assets/audio/sfx/success.wav"),
+	"fail_subtle": preload("res://assets/audio/sfx/fail.wav"),
 	"coin": preload("res://assets/audio/sfx/coin.wav"),
 	"day_start": preload("res://assets/audio/sfx/day_start.ogg"),
 	"spawn": preload("res://assets/audio/sfx/button_click.wav"),

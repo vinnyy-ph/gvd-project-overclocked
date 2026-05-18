@@ -34,6 +34,13 @@ var float_time: float = 0.0
 @onready var customer_container = $World/Background/CustomerContainer
 @onready var waiting_area = $World/Background/CustomerWaiting
 
+@onready var confetti_particles = $CanvasLayer/ConfettiParticles
+@onready var failure_overlay = $CanvasLayer/FailureOverlay
+@onready var minigame_indicator = $CanvasLayer/HUD/MiniGameIndicator
+
+const RESOLVE_TEX = preload("res://assets/images/ui/minigameindicator/issueresolve.png")
+const FAIL_TEX = preload("res://assets/images/ui/minigameindicator/isseufail.png")
+
 var selected_customer: Customer = null
 signal customer_selected(customer)
 
@@ -122,6 +129,109 @@ func _ready():
 	# Initialize spawn timer with dynamic interval
 	$SpawnTimer.wait_time = GameManager.get_spawn_interval()
 	$SpawnTimer.start()
+	
+	_setup_confetti()
+	_handle_minigame_result()
+
+func _setup_confetti():
+	if not confetti_particles: return
+	confetti_particles.emitting = false
+	confetti_particles.one_shot = true
+	confetti_particles.amount = 100
+	confetti_particles.explosiveness = 0.8
+	confetti_particles.position = Vector2(640, -50) # Top center
+	confetti_particles.direction = Vector2(0, 1)
+	confetti_particles.spread = 90
+	confetti_particles.gravity = Vector2(0, 400)
+	confetti_particles.initial_velocity_min = 400
+	confetti_particles.initial_velocity_max = 800
+	confetti_particles.scale_amount_min = 4
+	confetti_particles.scale_amount_max = 12
+	
+	# Color variations
+	var colors = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN]
+	var gradient = Gradient.new()
+	# Gradient doesn't have initial_ramp directly on CPUParticles2D via properties like this, 
+	# usually it's a Curve or ColorRamp resource.
+	# But I can set color to a random one in code or just use color_initial_ramp if it exists.
+	# Actually, for CPUParticles2D it's 'color' or 'color_ramp' (resource).
+	# I'll just use a random color for now or set it to white and use color_ramp if I can create one.
+	# Simpler: just set a few properties and let it be.
+	confetti_particles.color = Color.WHITE
+	confetti_particles.hue_variation_min = -1.0
+	confetti_particles.hue_variation_max = 1.0
+
+func _handle_minigame_result():
+	if not GameManager.minigame_just_finished:
+		return
+		
+	GameManager.minigame_just_finished = false
+	
+	# Delay slightly for the scene transition to settle
+	await get_tree().create_timer(0.3).timeout
+	
+	if GameManager.minigame_result:
+		_play_success_feedback()
+	else:
+		_play_fail_feedback()
+
+func _play_success_feedback():
+	minigame_indicator.texture = RESOLVE_TEX
+	_animate_indicator()
+	if confetti_particles:
+		confetti_particles.emitting = true
+		AudioManager.play_sfx("success_subtle")
+
+func _play_fail_feedback():
+	minigame_indicator.texture = FAIL_TEX
+	_animate_indicator()
+	_animate_failure_overlay()
+	AudioManager.play_sfx("fail_subtle")
+
+func _animate_indicator():
+	if not minigame_indicator: return
+	
+	# Reset state
+	minigame_indicator.visible = true
+	minigame_indicator.modulate.a = 0
+	minigame_indicator.scale = Vector2.ZERO
+	
+	# Update size and pivot to match texture, but keep it a reasonable size
+	if minigame_indicator.texture:
+		var tex_size = minigame_indicator.texture.get_size()
+		var target_width = 600.0
+		var ratio = tex_size.y / tex_size.x
+		minigame_indicator.size = Vector2(target_width, target_width * ratio)
+	
+	minigame_indicator.pivot_offset = minigame_indicator.size / 2.0
+	# Center horizontally and set vertical position
+	minigame_indicator.position.x = 640 - (minigame_indicator.size.x / 2.0)
+	minigame_indicator.position.y = 200
+	
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(minigame_indicator, "modulate:a", 1.0, 0.4)
+	tween.tween_property(minigame_indicator, "scale", Vector2.ONE, 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	
+	# Shine effect (subtle scale pulse)
+	tween.set_parallel(false)
+	tween.tween_property(minigame_indicator, "scale", Vector2(1.1, 1.1), 0.1)
+	tween.tween_property(minigame_indicator, "scale", Vector2.ONE, 0.1)
+	
+	tween.tween_interval(1.5)
+	
+	tween.set_parallel(true)
+	tween.tween_property(minigame_indicator, "modulate:a", 0.0, 0.5)
+	tween.tween_property(minigame_indicator, "position:y", minigame_indicator.position.y - 50, 0.5)
+	tween.finished.connect(func(): minigame_indicator.visible = false)
+
+func _animate_failure_overlay():
+	if not failure_overlay: return
+	failure_overlay.modulate.a = 0
+	failure_overlay.visible = true
+	var tween = create_tween()
+	tween.tween_property(failure_overlay, "modulate:a", 1.0, 0.1)
+	tween.tween_property(failure_overlay, "modulate:a", 0.0, 0.8).set_delay(0.2)
 
 func _update_desk_texture(slot_idx: int):
 	var desk = seat_nodes[slot_idx]

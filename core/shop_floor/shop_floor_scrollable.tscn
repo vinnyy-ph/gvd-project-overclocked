@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://6fse6yyfat1s"]
 
 [ext_resource type="Script" uid="uid://bkk6ks7wascwm" path="res://core/shop_floor/shop_floor_scrollable.gd" id="1_q7epe"]
-[ext_resource type="Texture2D" uid="uid://k7au0tijna5i" path="res://assets/images/ui/minigameindicator/issue resolved!.png" id="2_0n0nr"]
+[ext_resource type="Texture2D" uid="uid://c2cu3jxeiekdf" path="res://assets/images/ui/minigameindicator/issueresolve.png" id="2_0n0nr"]
 [ext_resource type="Texture2D" uid="uid://bqpj4a24d7vu0" path="res://assets/images/shop_floor_bg/1.png" id="2_kbbo8"]
 [ext_resource type="Texture2D" uid="uid://ddrbiww8xi3sa" path="res://assets/images/shop_floor/main.png" id="3_8jxs8"]
 [ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="3_eyiyn"]
@@ -102,16 +102,6 @@ offset_right = 3364.0
 offset_bottom = 1736.6875
 grow_horizontal = 2
 grow_vertical = 2
-expand_mode = 1
-
-[node name="MiniGameIndicator" type="TextureRect" parent="World" unique_id=1204092171]
-visible = false
-z_index = 6
-offset_left = 1080.0
-offset_top = 187.0
-offset_right = 1935.0
-offset_bottom = 260.22644
-texture = ExtResource("2_0n0nr")
 expand_mode = 1
 
 [node name="Background" type="Node2D" parent="World" unique_id=142257243]
@@ -783,6 +773,28 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 28
 text = "Tips: x1.0"
+
+[node name="MiniGameIndicator" type="TextureRect" parent="CanvasLayer/HUD" unique_id=1204092171]
+visible = false
+z_index = 6
+layout_mode = 0
+offset_left = 218.0
+offset_top = 187.0
+offset_right = 1073.0
+offset_bottom = 260.22644
+texture = ExtResource("2_0n0nr")
+expand_mode = 1
+
+[node name="ConfettiParticles" type="CPUParticles2D" parent="CanvasLayer" unique_id=810068981]
+
+[node name="FailureOverlay" type="ColorRect" parent="CanvasLayer" unique_id=660296144]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
 
 [node name="DayTimer" type="Timer" parent="." unique_id=1041295534]
 autostart = true

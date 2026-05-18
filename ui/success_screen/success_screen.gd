@@ -94,4 +94,6 @@ func _on_continue_button_pressed():
 			GameManager.tutorial_minigame_done = true
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable_tutorial.tscn")
 	else:
+		GameManager.minigame_just_finished = true
+		GameManager.minigame_result = (GameManager.last_satisfaction_change >= 0)
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")

@@ -111,6 +111,8 @@ var save_path: String = "user://savegame.json"
 var previous_scene: String = ""
 var last_money_change: int = 0
 var last_satisfaction_change: int = 0
+var minigame_just_finished: bool = false
+var minigame_result: bool = false # true = success, false = fail
 var in_tutorial: bool = false
 var time_left: int = 60
 var active_issues: Array = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
