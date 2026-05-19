@@ -13,6 +13,9 @@
 [ext_resource type="Texture2D" uid="uid://cao7mlxp4bkha" path="res://assets/story/seal1.png" id="11_ggivf"]
 [ext_resource type="Texture2D" uid="uid://bf55swy7welvq" path="res://assets/story/lineguide.png" id="12_bgq0f"]
 [ext_resource type="Texture2D" uid="uid://c28g5q8me88ge" path="res://assets/story/handguide.png" id="13_7o786"]
+[ext_resource type="Texture2D" uid="uid://nedw12jrt4wo" path="res://assets/story/letter1.png" id="14_s7eog"]
+[ext_resource type="Texture2D" uid="uid://dgnv8mbbckpdg" path="res://assets/story/nextbutton.png" id="15_fjgv4"]
+[ext_resource type="Texture2D" uid="uid://ce6a6iexik2fv" path="res://assets/story/prevbutton.png" id="16_1yw1o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggivf"]
 shader = ExtResource("8_nhp0g")
@@ -145,3 +148,36 @@ texture = ExtResource("13_7o786")
 
 [node name="LinePath" type="Path2D" parent="Seal/LineGuide" unique_id=2083430420]
 curve = SubResource("Curve2D_7o786")
+
+[node name="Letter" type="TextureRect" parent="." unique_id=505781161]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -585.0
+offset_top = -328.5
+offset_right = 585.0
+offset_bottom = 328.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_s7eog")
+
+[node name="NextButton" type="Button" parent="Letter" unique_id=1644764320]
+layout_mode = 0
+offset_left = 1074.0
+offset_top = 569.5
+offset_right = 1174.0
+offset_bottom = 653.5
+icon = ExtResource("15_fjgv4")
+flat = true
+
+[node name="PrevButton" type="Button" parent="Letter" unique_id=997483369]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 569.5
+offset_right = 97.0
+offset_bottom = 653.5
+icon = ExtResource("16_1yw1o")
+flat = true
