@@ -39,7 +39,6 @@ var original_y: float     = 0.0
 var _scramble_timer: float = 0.0
 var _scramble_tick: float  = 0.0
 var _is_scrambling: bool   = false
-var _scramble_tween: Tween = null
 
 func _ready():
 	AudioManager.play_bgm("minigame")
@@ -166,7 +165,7 @@ func apply_leet_substitution(s: String) -> String:
 	# At difficulty 2+, swap up to 2 characters
 	var swaps = get_difficulty()
 	var result = s
-	var keys = LEET_MAP.keys()
+	var _keys = LEET_MAP.keys()
 	var swapped = 0
 	# Iterate characters, probabilistically replace
 	for i in range(result.length()):

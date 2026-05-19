@@ -143,7 +143,15 @@ func _load_items_from_directory(dir_path: String) -> void:
 						})
 						
 						# Mark as owned visually using icon modulation
-						if img_path in SaveManager.owned_decorations:
+						var is_active = false
+						if category == "floors":
+							is_active = (img_path == SaveManager.current_floor)
+						elif category == "walls":
+							is_active = (img_path == SaveManager.current_wall)
+						else:
+							is_active = (img_path in SaveManager.owned_decorations)
+							
+						if is_active:
 							item_list.set_item_icon_modulate(idx, Color(0.5, 1, 0.5, 1.0)) # Green tint
 							
 			file_name = dir.get_next()
@@ -177,19 +185,34 @@ func _on_upgrade_pressed(upgrade_id: String, bar_rect: TextureRect) -> void:
 func _on_item_selected(index: int) -> void:
 	var data = item_list.get_item_metadata(index)
 	var img_path = data["path"]
+	var category = data["category"]
 	
-	if img_path in SaveManager.owned_decorations:
-		return # Already owned
+	if img_path in SaveManager.owned_decorations or img_path == SaveManager.current_floor or img_path == SaveManager.current_wall:
+		# If it's already active, just return. If it's a generic decoration already owned, return.
+		if category != "floors" and category != "walls":
+			return 
 		
 	_show_buy_prompt("p" + str(DECO_PRICE), func():
 		if GameManager.money >= DECO_PRICE or GameManager.dev_mode:
 			GameManager.money -= DECO_PRICE
-			SaveManager.owned_decorations.append(img_path)
+			
+			if category == "floors":
+				SaveManager.current_floor = img_path
+			elif category == "walls":
+				SaveManager.current_wall = img_path
+			else:
+				SaveManager.owned_decorations.append(img_path)
+				
 			SaveManager.save_game()
 			_update_balance_label()
 			
-			# Update item in list visually
-			item_list.set_item_icon_modulate(index, Color(0.5, 1, 0.5, 1.0)) # Green tint
+			# Refresh list to update "OWNED" status (modulate) for the whole category if floor/wall
+			if category == "floors" or category == "walls":
+				_on_filter_pressed(category)
+			else:
+				# Update single item in list visually
+				item_list.set_item_icon_modulate(index, Color(0.5, 1, 0.5, 1.0)) # Green tint
+				
 			AudioManager.play_sfx("coin")
 	)
 

@@ -40,6 +40,7 @@ func _ready() -> void:
 	hide_all_safe_zones()
 
 	# Initial scan of owned decorations
+	_apply_environment_customizations()
 	_load_owned_inventory()
 	_spawn_placed_decorations()
 	
@@ -47,6 +48,26 @@ func _ready() -> void:
 	item_list.gui_input.connect(_on_item_list_gui_input)
 	
 	back_button.pressed.connect(_on_back_pressed)
+
+func _apply_environment_customizations():
+	var floor_node = get_node_or_null("World/Background/Floor")
+	var wall_node = get_node_or_null("World/Background/Floor2")
+	
+	if floor_node:
+		if SaveManager.current_floor != "":
+			var tex_path = GameManager.get_actual_environment_path(SaveManager.current_floor)
+			floor_node.texture = load(tex_path)
+			floor_node.show()
+		else:
+			floor_node.hide()
+			
+	if wall_node:
+		if SaveManager.current_wall != "":
+			var tex_path = GameManager.get_actual_environment_path(SaveManager.current_wall)
+			wall_node.texture = load(tex_path)
+			wall_node.show()
+		else:
+			wall_node.hide()
 
 func _load_owned_inventory():
 	decorations_data.clear()
@@ -56,6 +77,10 @@ func _load_owned_inventory():
 		placed_paths.append(p["path"])
 		
 	for path in SaveManager.owned_decorations:
+		var current_category = _get_category_from_path(path)
+		if current_category == "floors" or current_category == "walls":
+			continue # Environment customizations are applied globally, not dragged
+			
 		if path in placed_paths:
 			# If it's already placed, don't show it in inventory
 			# Find index in placed_paths and remove it so we can handle duplicates correctly
@@ -66,7 +91,7 @@ func _load_owned_inventory():
 			"path": path,
 			"icon": path,
 			"actual": GameManager.get_actual_decoration_path(path),
-			"category": _get_category_from_path(path),
+			"category": current_category,
 			"name": path.get_file().replace(".png", "")
 		})
 	populate_item_list()

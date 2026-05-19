@@ -20,6 +20,8 @@ var unlocked_upgrades: Dictionary = {
 }
 var owned_decorations: Array = [] # Array of res:// paths
 var placed_decorations: Array = [] # Array of Dictionaries {path, pos, category}
+var current_floor: String = "" # Path to applied floor texture
+var current_wall: String = "" # Path to applied wall texture
 
 func _ready():
 	pass
@@ -37,6 +39,8 @@ func save_game():
 		"unlocked_upgrades": unlocked_upgrades,
 		"owned_decorations": owned_decorations,
 		"placed_decorations": placed_decorations,
+		"current_floor": current_floor,
+		"current_wall": current_wall,
 		"saved_scene": saved_scene,
 		"game_state": game_state
 	}
@@ -76,6 +80,8 @@ func load_game(id: int = -1):
 				game_state = data.get("game_state", {})
 				owned_decorations = data.get("owned_decorations", [])
 				placed_decorations = data.get("placed_decorations", [])
+				current_floor = data.get("current_floor", "")
+				current_wall = data.get("current_wall", "")
 				
 				var saved_upgrades = data.get("unlocked_upgrades", {})
 				if typeof(saved_upgrades) == TYPE_DICTIONARY:
@@ -116,6 +122,8 @@ func create_new_profile(id: int, p_name: String):
 	game_state = {}
 	owned_decorations = []
 	placed_decorations = []
+	current_floor = ""
+	current_wall = ""
 	for key in unlocked_upgrades:
 		unlocked_upgrades[key] = 0
 	save_game()

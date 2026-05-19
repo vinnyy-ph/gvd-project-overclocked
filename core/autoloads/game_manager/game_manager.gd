@@ -455,6 +455,12 @@ func get_actual_decoration_path(preview_path: String) -> String:
 	
 	return preview_path
 
+func get_actual_environment_path(preview_path: String) -> String:
+	if preview_path == "": return ""
+	var filename = preview_path.get_file()
+	# res://assets/images/shop_decorations/floors/floors_1.png -> res://assets/images/decorations/floors_1.png
+	return "res://assets/images/decorations/" + filename
+
 func setup_button_effect(button: BaseButton):
 	# Store the original scale to restore it later
 	if not button.has_meta("original_scale"):

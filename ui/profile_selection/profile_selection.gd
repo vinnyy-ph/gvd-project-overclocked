@@ -65,19 +65,22 @@ func _on_dev_mode_pressed():
 	GameManager.dev_mode = true
 	SaveManager.active_profile_id = 999
 	
-	if SaveManager.load_game():
+	var loaded = SaveManager.load_game()
+	if loaded and SaveManager.game_state.get("dev_reset_v2_done", false):
 		GameManager.load_game()
 	else:
-				# First time dev mode - initialize with defaults
+		# Reset dev mode profile (Day 30, Level 0 upgrades, Max Money)
 		SaveManager.player_name = "[DEV MODE]"
 		SaveManager.current_money = 9999999
 		SaveManager.lifetime_money = 9999999
 		SaveManager.max_days_survived = 0
 		SaveManager.current_day = 30
 		SaveManager.saved_scene = ""
-		SaveManager.game_state = {}
 		SaveManager.owned_decorations = []
 		SaveManager.placed_decorations = []
+		SaveManager.current_floor = ""
+		SaveManager.current_wall = ""
+		SaveManager.game_state = {"dev_reset_v2_done": true}
 		SaveManager.unlocked_upgrades = {
 			"flat_monitors": 0,
 			"mid_range_cpu": 0,
@@ -87,19 +90,8 @@ func _on_dev_mode_pressed():
 			"shop_space": 0
 		}
 		
-		GameManager.satisfaction = 100
-		GameManager.time_left = 60
-		GameManager.in_tutorial = false
-		GameManager.is_tutorial = false
-		GameManager.tutorial_minigame_index = 0
-		GameManager.tutorial_minigame_done = false
-		GameManager.last_money_change = 0
-		GameManager.last_satisfaction_change = 0
-		GameManager.active_issues = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
-		GameManager.occupied_slots = [false, false, false, false, false, false, false, false, false, false, false, false, false]
-		GameManager.persisted_customers = []
-		GameManager.minigame_deck = []
-		GameManager.last_minigame = ""
+		# Sync GameManager internal state
+		GameManager.load_game() 
 		SaveManager.save_game()
 	
 	PauseMenu.pause_button.visible = true

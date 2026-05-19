@@ -150,7 +150,28 @@ func _ready():
 	
 	_setup_confetti()
 	_handle_minigame_result()
+	_apply_environment_customizations()
 	_spawn_placed_decorations()
+
+func _apply_environment_customizations():
+	var floor_node = get_node_or_null("World/Background/Floor")
+	var wall_node = get_node_or_null("World/Background/Floor2")
+	
+	if floor_node:
+		if SaveManager.current_floor != "":
+			var tex_path = GameManager.get_actual_environment_path(SaveManager.current_floor)
+			floor_node.texture = load(tex_path)
+			floor_node.show()
+		else:
+			floor_node.hide()
+			
+	if wall_node:
+		if SaveManager.current_wall != "":
+			var tex_path = GameManager.get_actual_environment_path(SaveManager.current_wall)
+			wall_node.texture = load(tex_path)
+			wall_node.show()
+		else:
+			wall_node.hide()
 
 func _spawn_placed_decorations():
 	if not decorations_container: return
