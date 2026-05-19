@@ -31,7 +31,8 @@ var last_drag_position: Vector2 = Vector2.ZERO
 # --- MOBILE CAMERA VARIABLES ---
 var touches: Dictionary = {}
 var last_pinch_distance: float = -1.0
-const SCENE_SIZE = Vector2(3064.0, 1408.0)
+const SCENE_SIZE = Vector2(3683.0, 2071.688)
+const SCENE_OFFSET = Vector2(-319.0, -335.0)
 
 # --- ANIMATION VARIABLES ---
 var base_positions: Array = []
@@ -89,8 +90,8 @@ func _ready():
 		
 	randomize()
 	
-	# Initial camera setup
-	camera.position = Vector2(1532, 704)
+	# Initial camera setup - Center of the environment
+	camera.position = SCENE_OFFSET + (SCENE_SIZE / 2.0)
 	
 	# Calculate dynamic min zoom to show the whole scene on any screen
 	var vs = get_viewport_rect().size
@@ -888,15 +889,18 @@ func clamp_camera():
 	# Effective size of viewport in world units
 	var view_size = vs / camera.zoom
 	
+	var world_min = SCENE_OFFSET
+	var world_max = SCENE_OFFSET + SCENE_SIZE
+	
 	# Center if zoom is too far out
 	if view_size.x >= SCENE_SIZE.x:
-		camera.position.x = SCENE_SIZE.x / 2.0
+		camera.position.x = world_min.x + (SCENE_SIZE.x / 2.0)
 	else:
 		var margin_x = view_size.x / 2.0
-		camera.position.x = clamp(camera.position.x, margin_x, SCENE_SIZE.x - margin_x)
+		camera.position.x = clamp(camera.position.x, world_min.x + margin_x, world_max.x - margin_x)
 		
 	if view_size.y >= SCENE_SIZE.y:
-		camera.position.y = SCENE_SIZE.y / 2.0
+		camera.position.y = world_min.y + (SCENE_SIZE.y / 2.0)
 	else:
 		var margin_y = view_size.y / 2.0
-		camera.position.y = clamp(camera.position.y, margin_y, SCENE_SIZE.y - margin_y)
+		camera.position.y = clamp(camera.position.y, world_min.y + margin_y, world_max.y - margin_y)
