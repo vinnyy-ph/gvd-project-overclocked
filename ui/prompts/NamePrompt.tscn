@@ -59,9 +59,9 @@ stretch_mode = 0
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=705677075]
 layout_mode = 0
 offset_left = 345.0
-offset_top = 307.0
+offset_top = 339.0
 offset_right = 919.0
-offset_bottom = 360.97525
+offset_bottom = 392.97525
 texture = ExtResource("5_twvva")
 expand_mode = 1
 
@@ -73,9 +73,9 @@ anchor_top = 0.43600002
 anchor_right = 0.712
 anchor_bottom = 0.49300003
 offset_left = 0.27996826
-offset_top = 0.07998657
+offset_top = 32.079987
 offset_right = 0.64001465
-offset_bottom = 0.039978027
+offset_bottom = 32.039978
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
