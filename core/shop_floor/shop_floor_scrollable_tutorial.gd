@@ -281,7 +281,7 @@ func _restore_customers():
 		
 		if data["state"] == Customer.State.WAITING:
 			customer.global_position = pos
-		elif data["state"] == State.USING_PC:
+		elif data["state"] == Customer.State.USING_PC:
 			var idx = data["pc_index"]
 			if idx < seat_nodes.size():
 				_connect_customer_signals(customer, idx)
@@ -474,7 +474,7 @@ func _on_tutorial_next_pressed():
 		# Highlight both the first customer and the desk
 		var waiting_customers = []
 		for child in customer_container.get_children():
-			if child is Customer and child.current_state == State.WAITING and child != waiting_area:
+			if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 				waiting_customers.append(child)
 		if waiting_customers.size() > 0:
 			_highlight_node(waiting_customers[waiting_customers.size()-1], true)
@@ -519,7 +519,7 @@ func force_tutorial_issue():
 func spawn_customer():
 	var waiting_count = 0
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == State.WAITING and child != waiting_area:
+		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 			waiting_count += 1
 			
 	var customer = waiting_area.duplicate()
@@ -546,7 +546,7 @@ func spawn_customer():
 func _refresh_queue_positions():
 	var waiting_customers = []
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == State.WAITING and child != waiting_area:
+		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 			waiting_customers.append(child)
 	# Order in children list is newest to oldest due to move_child(1)
 	# So reverse gives oldest to newest
@@ -565,7 +565,7 @@ func is_first_in_line(customer: Customer) -> bool:
 		
 	var waiting_customers = []
 	for child in customer_container.get_children():
-		if child is Customer and child.current_state == State.WAITING and child != waiting_area:
+		if child is Customer and child.current_state == Customer.State.WAITING and child != waiting_area:
 			waiting_customers.append(child)
 	# Oldest (first in line) is at the end of the array due to move_child(1) logic
 	if waiting_customers.size() > 0:

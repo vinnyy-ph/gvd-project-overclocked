@@ -122,9 +122,9 @@ func _on_filter_pressed(category: String) -> void:
 	item_list.clear()
 	var directories = item_categories[category]
 	for dir_path in directories:
-		_load_items_from_directory(dir_path)
+		_load_items_from_directory(dir_path, category)
 
-func _load_items_from_directory(dir_path: String) -> void:
+func _load_items_from_directory(dir_path: String, category: String) -> void:
 	var dir = DirAccess.open(dir_path)
 	if dir:
 		dir.list_dir_begin()
