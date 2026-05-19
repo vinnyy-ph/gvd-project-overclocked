@@ -1,12 +1,9 @@
 extends Control
 
 @onready var profile_list: VBoxContainer = $ScrollContainer/ProfileList
-@onready var name_input_dialog: Control = $NameInputDialog
-@onready var name_edit: LineEdit = $NameInputDialog/Panel/VBoxContainer/NameEdit
-@onready var confirm_name_button: Button = $NameInputDialog/Panel/VBoxContainer/HBoxContainer/ConfirmButton
-@onready var cancel_name_button: Button = $NameInputDialog/Panel/VBoxContainer/HBoxContainer/CancelButton
 
 var profile_slot_scene = preload("res://ui/profile_selection/profile_slot.tscn")
+var name_prompt_scene = preload("res://ui/prompts/NamePrompt.tscn")
 var current_selecting_slot: int = -1
 
 func _ready() -> void:
@@ -16,10 +13,6 @@ func _ready() -> void:
 	$ReturnButton.pressed.connect(_on_return_pressed)
 	$SettingsButton.pressed.connect(_on_settings_pressed)
 	$ExitButton.pressed.connect(_on_exit_pressed)
-	
-	confirm_name_button.pressed.connect(_on_confirm_name_pressed)
-	cancel_name_button.pressed.connect(_on_cancel_name_pressed)
-	name_input_dialog.visible = false
 
 func update_profile_slots():
 	# Clear existing
@@ -106,9 +99,10 @@ func _on_profile_pressed(slot_index: int):
 	if profiles[slot_index] == null:
 		# Empty slot, ask for name
 		current_selecting_slot = slot_index
-		name_edit.text = ""
-		name_input_dialog.visible = true
-		name_edit.grab_focus()
+		var name_prompt = name_prompt_scene.instantiate()
+		add_child(name_prompt)
+		name_prompt.confirmed.connect(_on_name_confirmed)
+		name_prompt.grab_focus_to_edit()
 	else:
 		# Existing profile, load and start
 		SaveManager.active_profile_id = slot_index
@@ -120,22 +114,18 @@ func _on_profile_pressed(slot_index: int):
 			else:
 				get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
-func _on_confirm_name_pressed():
+func _on_name_confirmed(player_name: String):
 	GameManager.dev_mode = false
-	var player_name = name_edit.text.strip_edges()
+	player_name = player_name.strip_edges()
 	if player_name == "":
 		player_name = "Player " + str(current_selecting_slot + 1)
 	
 	SaveManager.create_new_profile(current_selecting_slot, player_name)
-	name_input_dialog.visible = false
 	
 	# Start new game
 	GameManager.new_game()
 	PauseMenu.pause_button.visible = true
 	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
-
-func _on_cancel_name_pressed():
-	name_input_dialog.visible = false
 
 func _on_return_pressed():
 	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")
