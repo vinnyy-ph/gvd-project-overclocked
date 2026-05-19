@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="12_ghd6s"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_3lx45"]
 [ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="16_dmcqo"]
+[ext_resource type="Texture2D" uid="uid://s2gvhomdhbx8" path="res://assets/story/female/3.png" id="17_xmxb4"]
 [ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="17_y4wy1"]
 
 [sub_resource type="Gradient" id="Gradient_dmcqo"]
@@ -818,9 +819,15 @@ texture = ExtResource("10_jajnr")
 script = ExtResource("11_f7hrx")
 
 [node name="CashierPerson" type="Sprite2D" parent="World/Background" unique_id=1330561175]
-position = Vector2(-177.14293, 682.8571)
-scale = Vector2(0.99999994, 0.99999994)
+position = Vector2(-177.07152, 682.8571)
+scale = Vector2(0.9986526, 0.99999994)
 texture = ExtResource("17_y4wy1")
+
+[node name="CashierPersonFemale" type="Sprite2D" parent="World/Background" unique_id=729698287]
+visible = false
+position = Vector2(-187.1428, 687.1428)
+scale = Vector2(0.36431992, 0.3643199)
+texture = ExtResource("17_xmxb4")
 
 [node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
 position = Vector2(-91.42862, 727.1428)

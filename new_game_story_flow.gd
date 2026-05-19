@@ -1,6 +1,7 @@
 extends Control
 
-@onready var character_rect: TextureRect = $CharacterMale
+@onready var character_male: TextureRect = $CharacterMale
+@onready var character_female: TextureRect = $CharacterFemale
 @onready var text_label: Label = $BluePanelBtn/TextContentLabel
 @onready var username_label: Label = $BluePanelBtn/UsernameLabel
 @onready var blue_panel_btn: TextureButton = $BluePanelBtn
@@ -24,6 +25,8 @@ extends Control
 
 @onready var last_bg: TextureRect = $lastbg
 @onready var jeepney_path_follow: PathFollow2D = $lastbg/JeepneyLinePath/PathFollow2D
+
+var active_character: TextureRect
 
 var story_steps = [
 	{
@@ -73,6 +76,19 @@ func _ready() -> void:
 	# Stop global BGM so only story BGM plays
 	if AudioManager:
 		AudioManager.stop_bgm()
+		
+	# Setup gender-specific assets
+	if SaveManager.player_gender == "female":
+		active_character = character_female
+		character_male.visible = false
+		character_female.visible = true
+		for step in story_steps:
+			if step.has("texture"):
+				step["texture"] = step["texture"].replace("res://assets/story/", "res://assets/story/female/")
+	else:
+		active_character = character_male
+		character_male.visible = true
+		character_female.visible = false
 		
 	# Inject dynamic username
 	var player_name = "Player"
@@ -165,7 +181,7 @@ func _update_ui() -> void:
 	var step = story_steps[current_step]
 	
 	if step.has("texture"):
-		character_rect.texture = load(step.texture)
+		active_character.texture = load(step.texture)
 	
 	if step.has("username"):
 		username_label.text = step.username
@@ -359,8 +375,12 @@ func _on_final_background_ready() -> void:
 	letter.visible = false
 	dimmer.visible = false
 	
-	# Update character and text
-	character_rect.texture = load("res://assets/story/3.png")
+	# Update character and text based on gender
+	if SaveManager.player_gender == "female":
+		active_character.texture = load("res://assets/story/female/3.png")
+	else:
+		active_character.texture = load("res://assets/story/3.png")
+		
 	if text_label.has_method("display_text"):
 		text_label.display_text("It’s nice to be back. Let’s start this new journey!")
 	else:
