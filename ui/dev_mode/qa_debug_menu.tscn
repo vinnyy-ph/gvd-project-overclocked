@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://cs6xaaeuipwlo"]
+
+[ext_resource type="Script" uid="uid://dc2p2nfaiu8si" path="res://ui/dev_mode/qa_debug_menu.gd" id="1_3v84x"]
+
+[node name="QADebugMenu" type="Control" unique_id=1112283849]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_3v84x")
+
+[node name="Control" type="Control" parent="." unique_id=389701723]
+anchors_preset = 0
+
+[node name="Background" type="ColorRect" parent="Control" unique_id=794144177]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.101960786, 0.10980392, 0.17254902, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1846270333]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+theme_override_constants/separation = 25
+
+[node name="StatusLabel" type="Label" parent="Control/VBoxContainer" unique_id=456307145]
+layout_mode = 2
+text = "QA DEBUG MODE ACTIVE"
+horizontal_alignment = 1
+
+[node name="ClearButton" type="Button" parent="Control/VBoxContainer" unique_id=552765039]
+layout_mode = 2
+text = "CLEAR STANDARD SAVE PROFILES"
+
+[node name="BackButton" type="Button" parent="Control/VBoxContainer" unique_id=1810929408]
+layout_mode = 2
+text = "RETURN TO MAIN MENU"
