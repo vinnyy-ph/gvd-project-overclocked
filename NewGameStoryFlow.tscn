@@ -17,18 +17,26 @@
 [ext_resource type="Texture2D" uid="uid://nedw12jrt4wo" path="res://assets/story/letter1.png" id="14_s7eog"]
 [ext_resource type="Texture2D" uid="uid://dgnv8mbbckpdg" path="res://assets/story/nextbutton.png" id="15_fjgv4"]
 [ext_resource type="Texture2D" uid="uid://ce6a6iexik2fv" path="res://assets/story/prevbutton.png" id="16_1yw1o"]
+[ext_resource type="Texture2D" uid="uid://uhuide27r5yk" path="res://assets/story/phone.png" id="16_iojql"]
 [ext_resource type="Texture2D" uid="uid://cbu64qqs0biye" path="res://assets/story/start.png" id="16_r1wdc"]
 [ext_resource type="Texture2D" uid="uid://cdvr54ve260b4" path="res://assets/story/lastscene.png" id="18_2r4kn"]
+[ext_resource type="AudioStream" uid="uid://mkgkfdnm0ds4" path="res://assets/story/storybgm.mp3" id="20_febl6"]
 
-[sub_resource type="Curve2D" id="Curve2D_7o786"]
+[sub_resource type="Curve2D" id="Curve2D_v5kxf"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 3, 117, 0, 0, 0, 0, 670, 495)
+"points": PackedVector2Array(0, 0, 0, 0, -60, 96, 0, 0, 0, 0, 340, 305)
 }
 point_count = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggivf"]
 shader = ExtResource("8_nhp0g")
 shader_parameter/scroll_speed = Vector2(0.05, -0.05)
+
+[sub_resource type="Curve2D" id="Curve2D_7o786"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 3, 117, 0, 0, 0, 0, 791, 3)
+}
+point_count = 2
 
 [node name="Control" type="Control" unique_id=1414732613]
 layout_mode = 3
@@ -40,6 +48,7 @@ grow_vertical = 2
 script = ExtResource("1_56uh5")
 
 [node name="lastbg" type="TextureRect" parent="." unique_id=967556427]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,16 +57,21 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("18_2r4kn")
 
-[node name="Jeepney" type="TextureRect" parent="lastbg" unique_id=101294659]
-layout_mode = 0
-offset_left = 262.0
-offset_top = 182.0
-offset_right = 699.0
-offset_bottom = 527.0
-texture = ExtResource("3_v5kxf")
+[node name="JeepneyLinePath" type="Path2D" parent="lastbg" unique_id=824754349]
+curve = SubResource("Curve2D_v5kxf")
 
-[node name="JeepneyLinePath" type="Path2D" parent="lastbg" unique_id=1889577227]
-curve = SubResource("Curve2D_7o786")
+[node name="PathFollow2D" type="PathFollow2D" parent="lastbg/JeepneyLinePath" unique_id=479850731]
+position = Vector2(337.05994, 303.4638)
+rotation = 0.4814852
+progress = 447.92554
+
+[node name="Jeepney" type="TextureRect" parent="lastbg/JeepneyLinePath/PathFollow2D" unique_id=101294659]
+offset_left = -253.55704
+offset_top = -57.590065
+offset_right = 183.443
+offset_bottom = 287.40994
+rotation = -0.5061455
+texture = ExtResource("3_v5kxf")
 
 [node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=810010209]
 z_index = -1
@@ -178,8 +192,24 @@ offset_right = 85.0
 offset_bottom = 218.0
 texture = ExtResource("13_7o786")
 
-[node name="LinePath" type="Path2D" parent="Seal/LineGuide" unique_id=2083430420]
+[node name="HandLinePath" type="Path2D" parent="Seal/LineGuide" unique_id=2083430420]
 curve = SubResource("Curve2D_7o786")
+
+[node name="Phone" type="TextureRect" parent="." unique_id=4390857]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.0
+offset_top = -295.0
+offset_right = 146.0
+offset_bottom = 124.857635
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_iojql")
+expand_mode = 1
 
 [node name="Letter" type="TextureRect" parent="." unique_id=505781161]
 visible = false
@@ -224,3 +254,7 @@ offset_right = 97.0
 offset_bottom = 653.5
 icon = ExtResource("16_1yw1o")
 flat = true
+
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=2917095]
+stream = ExtResource("20_febl6")
+autoplay = true
