@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://0er6vei2ej1g" path="res://assets/story/guide.png" id="2_q0hsn"]
 [ext_resource type="FontFile" uid="uid://togge04gtbi6" path="res://assets/fonts/PixelifySans-Medium.ttf" id="3_jsuex"]
 [ext_resource type="Texture2D" uid="uid://cv73218rc4ti5" path="res://assets/story/1.png" id="3_rlnru"]
+[ext_resource type="Texture2D" uid="uid://dl03ejdjuwd13" path="res://assets/story/redejep.png" id="3_v5kxf"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="4_hep52"]
 [ext_resource type="Script" uid="uid://dwnkveuq501np" path="res://story_text_animator.gd" id="4_l1gxy"]
 [ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="8_nhp0g"]
@@ -16,16 +17,18 @@
 [ext_resource type="Texture2D" uid="uid://nedw12jrt4wo" path="res://assets/story/letter1.png" id="14_s7eog"]
 [ext_resource type="Texture2D" uid="uid://dgnv8mbbckpdg" path="res://assets/story/nextbutton.png" id="15_fjgv4"]
 [ext_resource type="Texture2D" uid="uid://ce6a6iexik2fv" path="res://assets/story/prevbutton.png" id="16_1yw1o"]
+[ext_resource type="Texture2D" uid="uid://cbu64qqs0biye" path="res://assets/story/start.png" id="16_r1wdc"]
+[ext_resource type="Texture2D" uid="uid://cdvr54ve260b4" path="res://assets/story/lastscene.png" id="18_2r4kn"]
+
+[sub_resource type="Curve2D" id="Curve2D_7o786"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 3, 117, 0, 0, 0, 0, 670, 495)
+}
+point_count = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggivf"]
 shader = ExtResource("8_nhp0g")
 shader_parameter/scroll_speed = Vector2(0.05, -0.05)
-
-[sub_resource type="Curve2D" id="Curve2D_7o786"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 3, 117, 0, 0, 0, 0, 780, 6)
-}
-point_count = 2
 
 [node name="Control" type="Control" unique_id=1414732613]
 layout_mode = 3
@@ -35,6 +38,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_56uh5")
+
+[node name="lastbg" type="TextureRect" parent="." unique_id=967556427]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_2r4kn")
+
+[node name="Jeepney" type="TextureRect" parent="lastbg" unique_id=101294659]
+layout_mode = 0
+offset_left = 262.0
+offset_top = 182.0
+offset_right = 699.0
+offset_bottom = 527.0
+texture = ExtResource("3_v5kxf")
+
+[node name="JeepneyLinePath" type="Path2D" parent="lastbg" unique_id=1889577227]
+curve = SubResource("Curve2D_7o786")
 
 [node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=810010209]
 z_index = -1
@@ -107,7 +130,16 @@ texture = ExtResource("2_q0hsn")
 expand_mode = 1
 metadata/_edit_lock_ = true
 
+[node name="Dimmer" type="ColorRect" parent="." unique_id=392971275]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
 [node name="Seal" type="TextureRect" parent="." unique_id=1247249299]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -150,6 +182,7 @@ texture = ExtResource("13_7o786")
 curve = SubResource("Curve2D_7o786")
 
 [node name="Letter" type="TextureRect" parent="." unique_id=505781161]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -171,6 +204,16 @@ offset_top = 569.5
 offset_right = 1174.0
 offset_bottom = 653.5
 icon = ExtResource("15_fjgv4")
+flat = true
+
+[node name="StartButton" type="Button" parent="Letter" unique_id=316098194]
+layout_mode = 0
+offset_left = 926.0
+offset_top = 574.5
+offset_right = 1284.0
+offset_bottom = 670.5
+scale = Vector2(0.79, 0.79)
+icon = ExtResource("16_r1wdc")
 flat = true
 
 [node name="PrevButton" type="Button" parent="Letter" unique_id=997483369]
