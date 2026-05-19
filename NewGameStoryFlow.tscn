@@ -1,10 +1,18 @@
 [gd_scene format=3 uid="uid://cidwq2rablokd"]
 
 [ext_resource type="Texture2D" uid="uid://fekdgpo8445v" path="res://assets/story/panelblue.png" id="1_07duo"]
+[ext_resource type="Script" uid="uid://cnm58aojodn26" path="res://new_game_story_flow.gd" id="1_56uh5"]
 [ext_resource type="Texture2D" uid="uid://0er6vei2ej1g" path="res://assets/story/guide.png" id="2_q0hsn"]
 [ext_resource type="FontFile" uid="uid://togge04gtbi6" path="res://assets/fonts/PixelifySans-Medium.ttf" id="3_jsuex"]
 [ext_resource type="Texture2D" uid="uid://cv73218rc4ti5" path="res://assets/story/1.png" id="3_rlnru"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="4_hep52"]
+[ext_resource type="Script" uid="uid://dwnkveuq501np" path="res://story_text_animator.gd" id="4_l1gxy"]
+[ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="8_nhp0g"]
+[ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="9_w3b8m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggivf"]
+shader = ExtResource("8_nhp0g")
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
 
 [node name="Control" type="Control" unique_id=1414732613]
 layout_mode = 3
@@ -13,6 +21,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_56uh5")
+
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="." unique_id=810010209]
+z_index = -1
+material = SubResource("ShaderMaterial_ggivf")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_w3b8m")
 
 [node name="BluePanelBtn" type="TextureButton" parent="." unique_id=867215645]
 layout_mode = 1
@@ -40,7 +60,19 @@ text = "USERNAME"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1434525199]
+[node name="TextContentLabel" type="Label" parent="BluePanelBtn" unique_id=1880147696]
+layout_mode = 0
+offset_left = 198.57141
+offset_top = 54.166687
+offset_right = 777.5714
+offset_bottom = 86.16669
+theme_override_fonts/font = ExtResource("3_jsuex")
+theme_override_font_sizes/font_size = 26
+text = "Ugh... College is so tiring..."
+vertical_alignment = 1
+script = ExtResource("4_l1gxy")
+
+[node name="Character" type="TextureRect" parent="." unique_id=1434525199]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 230.0
@@ -61,14 +93,3 @@ grow_vertical = 2
 texture = ExtResource("2_q0hsn")
 expand_mode = 1
 metadata/_edit_lock_ = true
-
-[node name="UsernameLabel2" type="Label" parent="." unique_id=1880147696]
-layout_mode = 0
-offset_left = 239.0
-offset_top = 569.0
-offset_right = 818.0
-offset_bottom = 601.0
-theme_override_fonts/font = ExtResource("3_jsuex")
-theme_override_font_sizes/font_size = 26
-text = "Ugh... College is so tiring..."
-vertical_alignment = 1
