@@ -314,7 +314,7 @@ func _update_letter_ui() -> void:
 	
 	if current_letter_page == 0:
 		var player_name = SaveManager.player_name if SaveManager.player_name != "" else "Player"
-		letter_label.text = "Dear " + player_name + ",\n\nIf you're reading this, it means I've finally decided to pass on the shop to you. I know you've been working hard at college, but maybe a change of pace is what you need..."
+		letter_label.text = "Dear " + player_name
 		letter_label.show()
 	else:
 		letter_label.hide()
