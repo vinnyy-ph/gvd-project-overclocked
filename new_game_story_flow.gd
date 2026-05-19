@@ -138,9 +138,14 @@ func _on_tap_received() -> void:
 	if "is_animating" in text_label and text_label.is_animating:
 		text_label.skip_animation()
 	else:
-		_advance_story()
+		if not is_final_sequence and not seal.visible and not letter.visible:
+			_advance_story()
 
 func _advance_story() -> void:
+	# Safety check: Don't advance if we're in a special state
+	if is_final_sequence or seal.visible or letter.visible:
+		return
+		
 	# Hide phone if it was showing
 	if phone.visible:
 		_hide_phone()
@@ -275,6 +280,7 @@ func _check_swipe(end_pos: Vector2) -> void:
 
 func _complete_swipe() -> void:
 	is_swipe_phase = false
+	seal_tap_count = 0
 	if hand_tween: hand_tween.kill()
 	
 	var tween = create_tween().set_parallel(true)
