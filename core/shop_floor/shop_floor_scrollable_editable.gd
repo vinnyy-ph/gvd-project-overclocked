@@ -50,8 +50,8 @@ func _ready() -> void:
 	back_button.pressed.connect(_on_back_pressed)
 
 func _apply_environment_customizations():
-	var floor_node = get_node_or_null("World/Background/Floor")
-	var wall_node = get_node_or_null("World/Background/Floor2")
+	var floor_node = get_node_or_null("World/Background/FloorDeco")
+	var wall_node = get_node_or_null("World/Background/WallsDeco")
 	
 	if floor_node:
 		if SaveManager.current_floor != "":
