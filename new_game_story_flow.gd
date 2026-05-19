@@ -99,7 +99,7 @@ func _input(event: InputEvent) -> void:
 			if is_swipe_phase:
 				is_swiping = true
 				swipe_start_pos = event.position
-			elif not letter.visible and not is_final_sequence:
+			elif not letter.visible and not seal.visible and not is_final_sequence:
 				_on_tap_received()
 		else:
 			if is_swiping:
@@ -129,9 +129,8 @@ func _advance_story() -> void:
 		var step = story_steps[current_step]
 		if step.get("show_phone", false):
 			_show_phone()
-		
-		# If we just reached the last step, show the seal
-		if current_step == story_steps.size() - 1:
+	else:
+		if not seal.visible:
 			_show_seal()
 
 func _update_ui() -> void:
