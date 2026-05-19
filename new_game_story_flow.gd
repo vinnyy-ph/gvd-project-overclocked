@@ -1,6 +1,6 @@
 extends Control
 
-@onready var character_rect: TextureRect = $Character
+@onready var character_rect: TextureRect = $CharacterMale
 @onready var text_label: Label = $BluePanelBtn/TextContentLabel
 @onready var username_label: Label = $BluePanelBtn/UsernameLabel
 @onready var blue_panel_btn: TextureButton = $BluePanelBtn
@@ -374,10 +374,6 @@ func _on_final_background_ready() -> void:
 	jeepney_tween.tween_property(jeepney_path_follow, "progress_ratio", 1.0, 4.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
 	jeepney_tween.tween_callback(func(): 
-		if text_label.has_method("display_text"):
-			text_label.display_text("Click to start your journey at the shop!")
-		else:
-			text_label.text = "Click to start your journey at the shop!"
 		is_final_sequence_ready = true
 	)
 

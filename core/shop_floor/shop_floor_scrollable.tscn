@@ -852,9 +852,9 @@ mouse_filter = 2
 custom_minimum_size = Vector2(300, 24)
 layout_mode = 0
 offset_left = 25.0
-offset_top = 690.0
+offset_top = 652.0
 offset_right = 326.0
-offset_bottom = 725.0
+offset_bottom = 687.0
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 22
 value = 97.55
@@ -862,9 +862,9 @@ value = 97.55
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD" unique_id=966002861]
 layout_mode = 0
 offset_left = 13.0
-offset_top = 652.0
+offset_top = 614.0
 offset_right = 338.122
-offset_bottom = 738.0
+offset_bottom = 700.0
 texture = ExtResource("9_i6wj4")
 expand_mode = 1
 

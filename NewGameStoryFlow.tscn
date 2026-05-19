@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="9_w3b8m"]
 [ext_resource type="Texture2D" uid="uid://dfhuoqrlq5ruy" path="res://assets/story/letterseal.png" id="10_w3b8m"]
 [ext_resource type="Texture2D" uid="uid://cao7mlxp4bkha" path="res://assets/story/seal1.png" id="11_ggivf"]
+[ext_resource type="Texture2D" uid="uid://db31xrg06qyq4" path="res://assets/story/female/1.png" id="11_phbxe"]
 [ext_resource type="Texture2D" uid="uid://bf55swy7welvq" path="res://assets/story/lineguide.png" id="12_bgq0f"]
 [ext_resource type="Texture2D" uid="uid://c28g5q8me88ge" path="res://assets/story/handguide.png" id="13_7o786"]
 [ext_resource type="Texture2D" uid="uid://nedw12jrt4wo" path="res://assets/story/letter1.png" id="14_s7eog"]
@@ -56,6 +57,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("18_2r4kn")
+metadata/_edit_lock_ = true
 
 [node name="JeepneyLinePath" type="Path2D" parent="lastbg" unique_id=824754349]
 curve = SubResource("Curve2D_v5kxf")
@@ -83,6 +85,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_w3b8m")
+metadata/_edit_lock_ = true
 
 [node name="BluePanelBtn" type="TextureButton" parent="." unique_id=867215645]
 layout_mode = 1
@@ -97,6 +100,7 @@ offset_bottom = -30.166687
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("1_07duo")
+metadata/_edit_lock_ = true
 
 [node name="UsernameLabel" type="Label" parent="BluePanelBtn" unique_id=813477387]
 layout_mode = 0
@@ -121,7 +125,7 @@ text = "Ugh... College is so tiring..."
 vertical_alignment = 1
 script = ExtResource("4_l1gxy")
 
-[node name="Character" type="TextureRect" parent="." unique_id=1434525199]
+[node name="CharacterMale" type="TextureRect" parent="." unique_id=1434525199]
 layout_mode = 0
 offset_left = 1.0
 offset_top = 230.0
@@ -129,7 +133,16 @@ offset_right = 977.0
 offset_bottom = 722.0
 texture = ExtResource("3_rlnru")
 stretch_mode = 2
-metadata/_edit_lock_ = true
+
+[node name="CharacterFemale" type="TextureRect" parent="." unique_id=856505549]
+visible = false
+layout_mode = 0
+offset_left = -304.0
+offset_top = 368.0
+offset_right = 542.0
+offset_bottom = 1032.7144
+texture = ExtResource("11_phbxe")
+expand_mode = 1
 
 [node name="Panel2" type="TextureRect" parent="." unique_id=1575671600]
 visible = false
@@ -225,6 +238,7 @@ texture = ExtResource("16_iojql")
 expand_mode = 1
 
 [node name="Letter" type="TextureRect" parent="." unique_id=505781161]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
