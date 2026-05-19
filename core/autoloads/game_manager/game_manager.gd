@@ -402,6 +402,10 @@ func _notification(what):
 func load_game():
 	SaveManager.load_game()
 	
+	# Reset tutorial flags when loading a standard game
+	in_tutorial = false
+	is_tutorial = false
+	
 	var state = SaveManager.game_state
 	if not state.is_empty():
 		time_left = state.get("time_left", 60)

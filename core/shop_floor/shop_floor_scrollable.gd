@@ -71,6 +71,11 @@ func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
 	
+	# Ensure background and full-screen UI don't block camera dragging
+	if day_night_bg: day_night_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if day_night_bg_next: day_night_bg_next.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if has_node("CanvasLayer/HUD"): $CanvasLayer/HUD.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
 	# Fade-in from black
 	if has_node("CanvasLayer"):
 		var fade_rect = ColorRect.new()

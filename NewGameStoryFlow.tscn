@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://cbu64qqs0biye" path="res://assets/story/start.png" id="16_r1wdc"]
 [ext_resource type="Texture2D" uid="uid://cdvr54ve260b4" path="res://assets/story/lastscene.png" id="18_2r4kn"]
 [ext_resource type="AudioStream" uid="uid://mkgkfdnm0ds4" path="res://assets/story/storybgm.mp3" id="20_febl6"]
+[ext_resource type="Texture2D" uid="uid://buklsmnrrqboe" path="res://assets/story/skipbutton.png" id="22_o5s54"]
 
 [sub_resource type="Curve2D" id="Curve2D_v5kxf"]
 _data = {
@@ -267,6 +268,28 @@ offset_bottom = 653.5
 icon = ExtResource("16_1yw1o")
 flat = true
 
+[node name="LetterLabel" type="Label" parent="Letter" unique_id=578010594]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 100.0
+offset_right = 1070.0
+offset_bottom = 550.0
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("3_jsuex")
+theme_override_font_sizes/font_size = 30
+autowrap_mode = 3
+
 [node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=2917095]
 stream = ExtResource("20_febl6")
 autoplay = true
+
+[node name="SkipButton" type="TextureButton" parent="." unique_id=1126077869]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 23.0
+offset_right = 84.51843
+offset_bottom = 70.33334
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("22_o5s54")
+ignore_texture_size = true
+stretch_mode = 0

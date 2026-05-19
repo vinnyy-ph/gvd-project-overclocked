@@ -129,6 +129,7 @@ offset_right = 3364.0
 offset_bottom = 1736.6875
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_kbbo8")
 expand_mode = 1
 metadata/_edit_lock_ = true
@@ -145,6 +146,7 @@ offset_right = 3364.0
 offset_bottom = 1738.6875
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 expand_mode = 1
 metadata/_edit_lock_ = true
 
@@ -830,7 +832,7 @@ position = Vector2(640, 724)
 zoom = Vector2(0.5, 0.5)
 limit_left = 0
 limit_top = 0
-limit_right = 3064
+limit_right = 3356
 limit_bottom = 1408
 limit_smoothed = true
 
@@ -839,17 +841,20 @@ process_mode = 3
 
 [node name="HUD" type="Control" parent="CanvasLayer" unique_id=1197349872]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD" unique_id=1555646873]
 custom_minimum_size = Vector2(300, 24)
 layout_mode = 0
 offset_left = 25.0
-offset_top = 661.0
+offset_top = 690.0
 offset_right = 326.0
-offset_bottom = 696.0
+offset_bottom = 725.0
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 22
 value = 97.55
@@ -857,9 +862,9 @@ value = 97.55
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD" unique_id=966002861]
 layout_mode = 0
 offset_left = 13.0
-offset_top = 623.0
+offset_top = 652.0
 offset_right = 338.122
-offset_bottom = 709.0
+offset_bottom = 738.0
 texture = ExtResource("9_i6wj4")
 expand_mode = 1
 
@@ -884,9 +889,10 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_right = 240.0
-offset_bottom = 100.0
+offset_right = -921.0
+offset_bottom = 103.0
 grow_horizontal = 2
+color = Color(0, 0, 0, 0.5)
 
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HUD/TopBar" unique_id=2094469326]
 position = Vector2(182.5, 54)
@@ -899,10 +905,10 @@ texture = ExtResource("9_u2yt3")
 
 [node name="TimeLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1512595669]
 layout_mode = 0
-offset_left = 48.0
-offset_top = 9.0
-offset_right = 88.0
-offset_bottom = 37.0
+offset_left = 40.0
+offset_top = 10.0
+offset_right = 89.0
+offset_bottom = 38.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 30
@@ -911,7 +917,7 @@ vertical_alignment = 1
 
 [node name="DayLabel" type="Label" parent="CanvasLayer/HUD" unique_id=50256704]
 layout_mode = 0
-offset_left = 48.0
+offset_left = 43.0
 offset_top = 39.0
 offset_right = 88.0
 offset_bottom = 67.0
@@ -923,10 +929,10 @@ vertical_alignment = 1
 
 [node name="MoneyLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2032604772]
 layout_mode = 0
-offset_left = 48.0
-offset_top = 68.0
-offset_right = 88.0
-offset_bottom = 96.0
+offset_left = 43.0
+offset_top = 69.0
+offset_right = 118.0
+offset_bottom = 97.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_ll02x")
 theme_override_font_sizes/font_size = 30
@@ -1003,10 +1009,10 @@ flat = true
 
 [node name="MultiplierLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2147239335]
 layout_mode = 0
-offset_left = 247.0
-offset_top = 67.0
-offset_right = 351.0
-offset_bottom = 93.0
+offset_left = 251.0
+offset_top = 73.0
+offset_right = 355.0
+offset_bottom = 99.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_ll02x")
@@ -1025,8 +1031,10 @@ texture = ExtResource("2_0n0nr")
 expand_mode = 1
 
 [node name="ConfettiParticles" type="CPUParticles2D" parent="CanvasLayer" unique_id=810068981]
+visible = false
 
 [node name="FailureOverlay" type="ColorRect" parent="CanvasLayer" unique_id=660296144]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

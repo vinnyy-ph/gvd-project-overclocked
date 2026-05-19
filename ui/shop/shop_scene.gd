@@ -37,20 +37,20 @@ var buy_prompt_scene = preload("res://ui/prompts/BuyPrompt.tscn")
 
 var item_categories = {
 	"all": [
-		"res://assets/images/shop_decorations/cashier_decos/",
-		"res://assets/images/shop_decorations/pc_decos/",
-		"res://assets/images/shop_decorations/chair_decos/",
-		"res://assets/images/shop_decorations/floors/",
-		"res://assets/images/shop_decorations/walls/",
-		"res://assets/images/shop_decorations/wall_decos/",
-		"res://assets/images/shop_decorations/misc_decos/"
+		"res://assets/images/shop_decorations/cashier_decos",
+		"res://assets/images/shop_decorations/pc_decos",
+		"res://assets/images/shop_decorations/chair_decos",
+		"res://assets/images/shop_decorations/floors",
+		"res://assets/images/shop_decorations/walls",
+		"res://assets/images/shop_decorations/wall_decos",
+		"res://assets/images/shop_decorations/misc_decos"
 	],
-	"cashier": ["res://assets/images/shop_decorations/cashier_decos/"],
-	"pc_units": ["res://assets/images/shop_decorations/pc_decos/", "res://assets/images/shop_decorations/chair_decos/"],
-	"floors": ["res://assets/images/shop_decorations/floors/"],
-	"walls": ["res://assets/images/shop_decorations/walls/"],
-	"hanging": ["res://assets/images/shop_decorations/wall_decos/"],
-	"misc": ["res://assets/images/shop_decorations/misc_decos/"]
+	"cashier": ["res://assets/images/shop_decorations/cashier_decos"],
+	"pc_units": ["res://assets/images/shop_decorations/pc_decos", "res://assets/images/shop_decorations/chair_decos"],
+	"floors": ["res://assets/images/shop_decorations/floors"],
+	"walls": ["res://assets/images/shop_decorations/walls"],
+	"hanging": ["res://assets/images/shop_decorations/wall_decos"],
+	"misc": ["res://assets/images/shop_decorations/misc_decos"]
 }
 
 const UPGRADE_MAPPING = {
@@ -76,6 +76,11 @@ const DECO_PRICE = 500
 func _ready() -> void:
 	# Enable mobile-friendly scrolling behavior for ItemList
 	item_list.allow_search = false
+	item_list.auto_width = false
+	item_list.auto_height = false
+	item_list.max_columns = 0 # Let it auto-flow based on width
+	item_list.same_column_width = true
+	item_list.fixed_icon_size = Vector2i(160, 160) # Standardize icon size
 	
 	# Hide global pause button in the shop
 	if has_node("/root/PauseMenu"):
@@ -120,6 +125,9 @@ func _update_balance_label():
 
 func _on_filter_pressed(category: String) -> void:
 	item_list.clear()
+	if not item_categories.has(category):
+		return
+		
 	var directories = item_categories[category]
 	for dir_path in directories:
 		_load_items_from_directory(dir_path, category)
@@ -127,34 +135,38 @@ func _on_filter_pressed(category: String) -> void:
 func _load_items_from_directory(dir_path: String, category: String) -> void:
 	var dir = DirAccess.open(dir_path)
 	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if not dir.current_is_dir():
-				if file_name.ends_with(".png") and not file_name.ends_with(".import"):
-					var img_path = dir_path + file_name
-					var tex = load(img_path)
-					if tex:
-						var idx = item_list.add_icon_item(tex)
-						item_list.set_item_metadata(idx, {
-							"path": img_path,
-							"category": _get_category_from_path(dir_path),
-							"name": file_name.replace(".png", "")
-						})
+		var files = dir.get_files()
+		var added_files = [] # Track added files to avoid duplicates (e.g. file.png and file.png.import)
+		
+		for file_name in files:
+			# In exported builds, original files might not exist, but .import or .remap files do
+			if file_name.ends_with(".png") or file_name.ends_with(".png.import") or file_name.ends_with(".png.remap"):
+				var clean_name = file_name.replace(".import", "").replace(".remap", "")
+				if clean_name in added_files:
+					continue
+					
+				var img_path = dir_path.path_join(clean_name)
+				var tex = load(img_path)
+				if tex:
+					added_files.append(clean_name)
+					var idx = item_list.add_icon_item(tex)
+					item_list.set_item_metadata(idx, {
+						"path": img_path,
+						"category": _get_category_from_path(dir_path),
+						"name": clean_name.replace(".png", "")
+					})
+					
+					# Mark as owned visually using icon modulation
+					var is_active = false
+					if category == "floors":
+						is_active = (img_path == SaveManager.current_floor)
+					elif category == "walls":
+						is_active = (img_path == SaveManager.current_wall)
+					else:
+						is_active = (img_path in SaveManager.owned_decorations)
 						
-						# Mark as owned visually using icon modulation
-						var is_active = false
-						if category == "floors":
-							is_active = (img_path == SaveManager.current_floor)
-						elif category == "walls":
-							is_active = (img_path == SaveManager.current_wall)
-						else:
-							is_active = (img_path in SaveManager.owned_decorations)
-							
-						if is_active:
-							item_list.set_item_icon_modulate(idx, Color(0.5, 1, 0.5, 1.0)) # Green tint
-							
-			file_name = dir.get_next()
+					if is_active:
+						item_list.set_item_icon_modulate(idx, Color(0.5, 1, 0.5, 1.0)) # Green tint
 
 func _get_category_from_path(path: String) -> String:
 	if "cashier_decos" in path: return "cashier_decos"

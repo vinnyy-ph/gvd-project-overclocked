@@ -16,9 +16,11 @@ extends Control
 @onready var next_button: Button = $Letter/NextButton
 @onready var prev_button: Button = $Letter/PrevButton
 @onready var start_button: Button = $Letter/StartButton
+@onready var letter_label: Label = $Letter/LetterLabel
 @onready var dimmer: ColorRect = $Dimmer
 
 @onready var phone: TextureRect = $Phone
+@onready var skip_button: TextureButton = $SkipButton
 
 @onready var last_bg: TextureRect = $lastbg
 @onready var jeepney_path_follow: PathFollow2D = $lastbg/JeepneyLinePath/PathFollow2D
@@ -86,6 +88,7 @@ func _ready() -> void:
 	next_button.pressed.connect(_on_next_letter)
 	prev_button.pressed.connect(_on_prev_letter)
 	start_button.pressed.connect(_start_game)
+	skip_button.pressed.connect(_on_skip_button_pressed)
 	
 	# Initial state
 	seal.visible = false
@@ -104,6 +107,8 @@ func _ready() -> void:
 	# Fix Jeepney jump
 	jeepney_path_follow.progress_ratio = 0.0
 	
+	skip_button.visible = true
+	
 	_update_ui()
 
 func _input(event: InputEvent) -> void:
@@ -112,8 +117,9 @@ func _input(event: InputEvent) -> void:
 			if is_swipe_phase:
 				is_swiping = true
 				swipe_start_pos = event.position
-			elif not letter.visible and not seal.visible and not is_final_sequence:
-				_on_tap_received()
+			elif not letter.visible and not seal.visible:
+				if not is_final_sequence or is_final_sequence_ready:
+					_on_tap_received()
 		else:
 			if is_swiping:
 				is_swiping = false
@@ -125,6 +131,10 @@ func _on_tap_received() -> void:
 		return
 	last_tap_time = now
 	
+	if is_final_sequence_ready:
+		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+		return
+		
 	if "is_animating" in text_label and text_label.is_animating:
 		text_label.skip_animation()
 	else:
@@ -296,8 +306,18 @@ func _show_letter() -> void:
 	tween.tween_property(letter, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(letter, "scale", Vector2(1.0, 1.0), 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
+func _on_skip_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+
 func _update_letter_ui() -> void:
 	letter.texture = load(letter_textures[current_letter_page])
+	
+	if current_letter_page == 0:
+		var player_name = SaveManager.player_name if SaveManager.player_name != "" else "Player"
+		letter_label.text = "Dear " + player_name + ",\n\nIf you're reading this, it means I've finally decided to pass on the shop to you. I know you've been working hard at college, but maybe a change of pace is what you need..."
+		letter_label.show()
+	else:
+		letter_label.hide()
 	
 	prev_button.visible = current_letter_page > 0
 	
@@ -347,4 +367,12 @@ func _on_final_background_ready() -> void:
 	var jeepney_tween = create_tween()
 	jeepney_tween.tween_property(jeepney_path_follow, "progress_ratio", 1.0, 4.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
-	jeepney_tween.tween_callback(func(): get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn"))
+	jeepney_tween.tween_callback(func(): 
+		if text_label.has_method("display_text"):
+			text_label.display_text("Click to start your journey at the shop!")
+		else:
+			text_label.text = "Click to start your journey at the shop!"
+		is_final_sequence_ready = true
+	)
+
+var is_final_sequence_ready = false
