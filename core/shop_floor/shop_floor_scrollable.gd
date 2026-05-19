@@ -70,6 +70,18 @@ const HAPPY_TEX = preload("res://assets/images/shop_floor/emotions/happy.png")
 func _ready():
 	AudioManager.play_bgm("shop")
 	PauseMenu.pause_button.visible = true
+	
+	# Fade-in from black
+	if has_node("CanvasLayer"):
+		var fade_rect = ColorRect.new()
+		fade_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		fade_rect.color = Color.BLACK
+		fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		$CanvasLayer.add_child(fade_rect)
+		var tween = create_tween()
+		tween.tween_property(fade_rect, "modulate:a", 0.0, 1.0).set_trans(Tween.TRANS_SINE)
+		tween.finished.connect(fade_rect.queue_free)
+		
 	randomize()
 	
 	# Initial camera setup

@@ -68,6 +68,10 @@ var last_tap_time: int = 0
 const TAP_THRESHOLD_MS: int = 300
 
 func _ready() -> void:
+	# Stop global BGM so only story BGM plays
+	if AudioManager:
+		AudioManager.stop_bgm()
+		
 	# Inject dynamic username
 	var player_name = "Player"
 	if SaveManager.player_name and SaveManager.player_name != "":
