@@ -2,6 +2,8 @@ extends Sprite2D
 
 class_name Customer
 
+const FONT_THALEAH = preload("res://assets/fonts/ThaleahFat.ttf")
+
 enum State { WAITING, MOVING_TO_PC, USING_PC, EXITING }
 
 var current_state: State = State.WAITING
@@ -45,17 +47,18 @@ func _ready():
 	
 	if not issue_timer.get_parent():
 		add_child(issue_timer)
-		issue_timer.wait_time = randf_range(10.0, 20.0)
+		# Balancing: issues appear at least every few random seconds
+		issue_timer.wait_time = randf_range(3.0, 6.0)
 		issue_timer.timeout.connect(_on_issue_timeout)
 
-	# Randomize session duration (15 to 40 seconds)
-	session_timer.wait_time = randf_range(15.0, 40.0)
+	# Balancing: Randomize session duration (25 to 50 seconds)
+	session_timer.wait_time = randf_range(25.0, 50.0)
 
 func return_to_waiting_position():
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", original_waiting_position, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-func assign_to_pc(pc_index: int, pos, chair: Node, resume_data: Dictionary = {}):
+func assign_to_pc(pc_index: int, pos: Vector2, chair: Node, resume_data: Dictionary = {}):
 	if pos == null:
 		pos = global_position # Stay where we are if no valid pos
 		
@@ -114,6 +117,11 @@ func _on_revenue_timeout():
 			GameManager.emit_money_change(amount, Vector2.ZERO)
 
 func _on_session_timeout():
+	# Balancing: customers will not leave when they have active issues
+	if current_state == State.USING_PC and GameManager.active_issues[assigned_pc_index] != "":
+		# Wait a bit and check again. Don't leave while broken.
+		session_timer.start(2.0)
+		return
 	exit_shop()
 
 func _on_issue_timeout():
@@ -127,7 +135,8 @@ func _on_issue_timeout():
 			AudioManager.play_sfx("alert")
 		else:
 			# Reset check timer if no issue spawned
-			issue_timer.start(randf_range(8.0, 15.0))
+			# Balancing: check every few random seconds
+			issue_timer.start(randf_range(3.0, 6.0))
 
 func exit_shop():
 	if current_state == State.EXITING: return
@@ -145,8 +154,7 @@ func exit_shop():
 	var label = Label.new()
 	label.text = "FINISHED!"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var font = load("res://assets/fonts/ThaleahFat.ttf")
-	label.add_theme_font_override("font", font)
+	label.add_theme_font_override("font", FONT_THALEAH)
 	label.add_theme_font_size_override("font_size", 35)
 	label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3))
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
@@ -162,7 +170,7 @@ func exit_shop():
 	
 	queue_free()
 
-signal customer_selected_signal(customer)
+signal customer_selected(customer)
 
 # Handle selection
 var is_selected = false
@@ -190,7 +198,7 @@ func _input(event):
 						_set_drag_visual(true)
 						drag_offset = get_global_mouse_position() - global_position
 						original_waiting_position = global_position
-						customer_selected_signal.emit(self)
+						customer_selected.emit(self)
 						drag_started.emit(self)
 						get_viewport().set_input_as_handled()
 			elif is_dragging:
@@ -221,7 +229,7 @@ func _input(event):
 					_set_drag_visual(true)
 					drag_offset = mouse_pos - global_position
 					original_waiting_position = global_position
-					customer_selected_signal.emit(self)
+					customer_selected.emit(self)
 					drag_started.emit(self)
 					get_viewport().set_input_as_handled()
 		elif is_dragging:

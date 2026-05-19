@@ -350,7 +350,7 @@ func _restore_customers():
 		customer.process_mode = PROCESS_MODE_INHERIT
 		customer.visible = true
 		
-		customer.customer_selected_signal.connect(_on_customer_selected)
+		customer.customer_selected.connect(_on_customer_selected)
 		customer.drag_started.connect(_on_customer_drag_started)
 		customer.drag_ended.connect(_on_customer_drag_ended)
 		
@@ -589,7 +589,7 @@ func spawn_customer():
 	customer.process_mode = PROCESS_MODE_INHERIT
 	customer.visible = true
 	
-	customer.customer_selected_signal.connect(_on_customer_selected)
+	customer.customer_selected.connect(_on_customer_selected)
 	customer.drag_started.connect(_on_customer_drag_started)
 	customer.drag_ended.connect(_on_customer_drag_ended)
 	
