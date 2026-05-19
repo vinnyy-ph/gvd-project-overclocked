@@ -17,14 +17,14 @@ var story_steps = [
 		"username": "USERNAME"
 	},
 	{
-		"text": "Wait... what was that sound?",
-		"texture": "res://assets/story/2.png",
-		"username": "USERNAME"
+		"text": "LBC: Dear Customer! You just received a package!",
+		"texture": "res://assets/story/3.png",
+		"username": "NOTIFICATION:"
 	},
 	{
-		"text": "LBC: Dear Customer! You just received a package!",
-		"texture": "res://assets/story/2.png",
-		"username": "NOTIFICATION:"
+		"text": "Huh? Is this a letter from Grandpa?",
+		"texture": "res://assets/story/4.png",
+		"username": "USERNAME"
 	}
 ]
 
@@ -32,22 +32,27 @@ var current_step = 0
 
 func _ready() -> void:
 	blue_panel_btn.pressed.connect(_on_next_step)
+	# Set initial state
+	_update_ui()
 
 func _on_next_step() -> void:
-	current_step += 1
-	if current_step < story_steps.size():
-		var step = story_steps[current_step]
-		
-		if step.has("texture"):
-			character_rect.texture = load(step.texture)
-		
-		if step.has("username"):
-			username_label.text = step.username
-			
-		if text_label.has_method("display_text"):
-			text_label.display_text(step.text)
-		else:
-			text_label.text = step.text
+	if current_step < story_steps.size() - 1:
+		current_step += 1
+		_update_ui()
 	else:
 		# Final step or next scene logic
 		print("Story finished")
+
+func _update_ui() -> void:
+	var step = story_steps[current_step]
+	
+	if step.has("texture"):
+		character_rect.texture = load(step.texture)
+	
+	if step.has("username"):
+		username_label.text = step.username
+		
+	if text_label.has_method("display_text"):
+		text_label.display_text(step.text)
+	else:
+		text_label.text = step.text

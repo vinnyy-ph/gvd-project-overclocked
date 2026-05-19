@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://dwnkveuq501np" path="res://story_text_animator.gd" id="4_l1gxy"]
 [ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="8_nhp0g"]
 [ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="9_w3b8m"]
+[ext_resource type="Texture2D" uid="uid://dfhuoqrlq5ruy" path="res://assets/story/letterseal.png" id="10_w3b8m"]
+[ext_resource type="Texture2D" uid="uid://cao7mlxp4bkha" path="res://assets/story/seal1.png" id="11_ggivf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggivf"]
 shader = ExtResource("8_nhp0g")
@@ -93,3 +95,26 @@ grow_vertical = 2
 texture = ExtResource("2_q0hsn")
 expand_mode = 1
 metadata/_edit_lock_ = true
+
+[node name="Seal" type="TextureRect" parent="." unique_id=1247249299]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -552.0
+offset_top = -360.0
+offset_right = 552.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_w3b8m")
+
+[node name="SealButton" type="TextureButton" parent="Seal" unique_id=440656378]
+layout_mode = 0
+offset_left = 469.0
+offset_top = 287.0
+offset_right = 634.0
+offset_bottom = 447.0
+texture_normal = ExtResource("11_ggivf")
