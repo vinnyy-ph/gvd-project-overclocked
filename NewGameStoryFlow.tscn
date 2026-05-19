@@ -11,10 +11,18 @@
 [ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="9_w3b8m"]
 [ext_resource type="Texture2D" uid="uid://dfhuoqrlq5ruy" path="res://assets/story/letterseal.png" id="10_w3b8m"]
 [ext_resource type="Texture2D" uid="uid://cao7mlxp4bkha" path="res://assets/story/seal1.png" id="11_ggivf"]
+[ext_resource type="Texture2D" uid="uid://bf55swy7welvq" path="res://assets/story/lineguide.png" id="12_bgq0f"]
+[ext_resource type="Texture2D" uid="uid://c28g5q8me88ge" path="res://assets/story/handguide.png" id="13_7o786"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ggivf"]
 shader = ExtResource("8_nhp0g")
 shader_parameter/scroll_speed = Vector2(0.05, -0.05)
+
+[sub_resource type="Curve2D" id="Curve2D_7o786"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 3, 117, 0, 0, 0, 0, 780, 6)
+}
+point_count = 2
 
 [node name="Control" type="Control" unique_id=1414732613]
 layout_mode = 3
@@ -118,3 +126,22 @@ offset_top = 287.0
 offset_right = 634.0
 offset_bottom = 447.0
 texture_normal = ExtResource("11_ggivf")
+
+[node name="LineGuide" type="TextureRect" parent="." unique_id=24670675]
+layout_mode = 0
+offset_left = 266.0
+offset_top = 289.0
+offset_right = 1044.0
+offset_bottom = 407.0
+texture = ExtResource("12_bgq0f")
+
+[node name="HandGuide" type="TextureRect" parent="LineGuide" unique_id=657784620]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 108.0
+offset_right = 85.0
+offset_bottom = 218.0
+texture = ExtResource("13_7o786")
+
+[node name="LinePath" type="Path2D" parent="LineGuide" unique_id=2083430420]
+curve = SubResource("Curve2D_7o786")
