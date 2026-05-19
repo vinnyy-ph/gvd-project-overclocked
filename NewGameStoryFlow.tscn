@@ -127,15 +127,15 @@ offset_right = 634.0
 offset_bottom = 447.0
 texture_normal = ExtResource("11_ggivf")
 
-[node name="LineGuide" type="TextureRect" parent="." unique_id=24670675]
+[node name="LineGuide" type="TextureRect" parent="Seal" unique_id=24670675]
 layout_mode = 0
-offset_left = 266.0
+offset_left = 178.0
 offset_top = 289.0
-offset_right = 1044.0
+offset_right = 956.0
 offset_bottom = 407.0
 texture = ExtResource("12_bgq0f")
 
-[node name="HandGuide" type="TextureRect" parent="LineGuide" unique_id=657784620]
+[node name="HandGuide" type="TextureRect" parent="Seal/LineGuide" unique_id=657784620]
 layout_mode = 0
 offset_left = -3.0
 offset_top = 108.0
@@ -143,5 +143,5 @@ offset_right = 85.0
 offset_bottom = 218.0
 texture = ExtResource("13_7o786")
 
-[node name="LinePath" type="Path2D" parent="LineGuide" unique_id=2083430420]
+[node name="LinePath" type="Path2D" parent="Seal/LineGuide" unique_id=2083430420]
 curve = SubResource("Curve2D_7o786")
