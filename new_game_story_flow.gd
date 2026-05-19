@@ -10,12 +10,15 @@ extends Control
 @onready var line_guide: TextureRect = $Seal/LineGuide
 @onready var hand_guide: TextureRect = $Seal/LineGuide/HandGuide
 @onready var line_path: Path2D = $Seal/LineGuide/HandLinePath
+@onready var seal_particles: CPUParticles2D = $Seal/SealParticles
 
 @onready var letter: TextureRect = $Letter
 @onready var next_button: Button = $Letter/NextButton
 @onready var prev_button: Button = $Letter/PrevButton
 @onready var start_button: Button = $Letter/StartButton
 @onready var dimmer: ColorRect = $Dimmer
+
+@onready var phone: TextureRect = $Phone
 
 @onready var last_bg: TextureRect = $lastbg
 @onready var jeepney_path_follow: PathFollow2D = $lastbg/JeepneyLinePath/PathFollow2D
@@ -34,7 +37,8 @@ var story_steps = [
 	{
 		"text": "LBC: Dear Customer! You just received a package!",
 		"texture": "res://assets/story/3.png",
-		"username": "NOTIFICATION:"
+		"username": "NOTIFICATION:",
+		"show_phone": true
 	},
 	{
 		"text": "Huh? Is this a letter from Grandpa?",
@@ -55,6 +59,7 @@ var is_swipe_phase = false
 var is_swiping = false
 var swipe_start_pos = Vector2.ZERO
 var hand_tween: Tween
+var phone_vibrate_tween: Tween
 var current_letter_page = 0
 var is_final_sequence = false
 
@@ -80,6 +85,8 @@ func _ready() -> void:
 	dimmer.modulate.a = 0.0
 	last_bg.visible = false
 	last_bg.modulate.a = 0.0
+	phone.visible = false
+	phone.modulate.a = 0.0
 	
 	# Fix Jeepney jump
 	jeepney_path_follow.progress_ratio = 0.0
@@ -98,10 +105,6 @@ func _input(event: InputEvent) -> void:
 			if is_swiping:
 				is_swiping = false
 				_check_swipe(event.position)
-				
-	elif event is InputEventMouseMotion and is_swiping:
-		# Optional: verify if they are moving in the right direction here
-		pass
 
 func _on_tap_received() -> void:
 	var now = Time.get_ticks_msec()
@@ -115,9 +118,17 @@ func _on_tap_received() -> void:
 		_advance_story()
 
 func _advance_story() -> void:
+	# Hide phone if it was showing
+	if phone.visible:
+		_hide_phone()
+		
 	if current_step < story_steps.size() - 1:
 		current_step += 1
 		_update_ui()
+		
+		var step = story_steps[current_step]
+		if step.get("show_phone", false):
+			_show_phone()
 		
 		# If we just reached the last step, show the seal
 		if current_step == story_steps.size() - 1:
@@ -137,6 +148,44 @@ func _update_ui() -> void:
 	else:
 		text_label.text = step.text
 
+func _show_phone() -> void:
+	phone.visible = true
+	phone.pivot_offset = phone.size / 2
+	phone.scale = Vector2(0.8, 0.8)
+	phone.modulate.a = 0.0
+	
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(phone, "modulate:a", 1.0, 0.3)
+	tween.tween_property(phone, "scale", Vector2(1.0, 1.0), 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	
+	tween.chain().tween_callback(_start_phone_vibration)
+
+func _start_phone_vibration() -> void:
+	if phone_vibrate_tween: phone_vibrate_tween.kill()
+	
+	phone_vibrate_tween = create_tween().set_loops()
+	var original_pos = phone.position
+	
+	# Suble pixel-aesthetic vibration (snapping to small offsets)
+	phone_vibrate_tween.tween_callback(func(): 
+		if OS.has_feature("mobile"):
+			Input.vibrate_handheld(150)
+	)
+	phone_vibrate_tween.tween_property(phone, "position", original_pos + Vector2(2, 0), 0.05)
+	phone_vibrate_tween.tween_property(phone, "position", original_pos + Vector2(-2, 0), 0.05)
+	phone_vibrate_tween.tween_property(phone, "position", original_pos + Vector2(0, 2), 0.05)
+	phone_vibrate_tween.tween_property(phone, "position", original_pos + Vector2(0, -2), 0.05)
+	phone_vibrate_tween.tween_property(phone, "position", original_pos, 0.05)
+	phone_vibrate_tween.tween_interval(0.2) # Short pause between vibration bursts
+
+func _hide_phone() -> void:
+	if phone_vibrate_tween: phone_vibrate_tween.kill()
+	
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(phone, "modulate:a", 0.0, 0.2)
+	tween.tween_property(phone, "scale", Vector2(0.8, 0.8), 0.2)
+	tween.chain().tween_callback(func(): phone.visible = false)
+
 func _show_seal() -> void:
 	dimmer.visible = true
 	seal.visible = true
@@ -154,6 +203,18 @@ func _on_seal_pressed() -> void:
 	if is_swipe_phase: return
 	
 	seal_tap_count += 1
+	
+	# Stronger Haptic for Seal
+	if OS.has_feature("mobile"):
+		Input.vibrate_handheld(80)
+	
+	# Trigger particles
+	if seal_particles:
+		seal_particles.position = seal_button.position + (seal_button.size / 2)
+		seal_particles.restart()
+		seal_particles.emitting = true
+	
+	# Feedback on tap
 	var pulse = create_tween()
 	pulse.tween_property(seal_button, "scale", Vector2(1.1, 1.1), 0.05)
 	pulse.tween_property(seal_button, "scale", Vector2(1.0, 1.0), 0.05)
@@ -187,7 +248,6 @@ func _animate_hand_guide() -> void:
 
 func _check_swipe(end_pos: Vector2) -> void:
 	var swipe_vec = end_pos - swipe_start_pos
-	# Increased sensitivity for swipe
 	if swipe_vec.length() > 80:
 		_complete_swipe()
 

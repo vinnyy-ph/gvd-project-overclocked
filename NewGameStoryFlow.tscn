@@ -48,7 +48,6 @@ grow_vertical = 2
 script = ExtResource("1_56uh5")
 
 [node name="lastbg" type="TextureRect" parent="." unique_id=967556427]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -195,7 +194,21 @@ texture = ExtResource("13_7o786")
 [node name="HandLinePath" type="Path2D" parent="Seal/LineGuide" unique_id=2083430420]
 curve = SubResource("Curve2D_7o786")
 
+[node name="SealParticles" type="CPUParticles2D" parent="Seal" unique_id=1447961779]
+emitting = false
+amount = 25
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+spread = 180.0
+initial_velocity_min = 150.0
+initial_velocity_max = 250.0
+scale_amount_min = 6.0
+scale_amount_max = 10.0
+color = Color(0.69803923, 0.13333334, 0.13333334, 1)
+
 [node name="Phone" type="TextureRect" parent="." unique_id=4390857]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
