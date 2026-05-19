@@ -408,6 +408,21 @@ func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 	else:
 		customer.return_to_waiting_position()
 
+func _setup_cashier():
+	var male = get_node_or_null("World/Background/CashierPerson")
+	var female = get_node_or_null("World/Background/CashierPersonFemale")
+	
+	if SaveManager.player_gender == "female":
+		if male: male.hide()
+		if female: 
+			female.show()
+			active_cashier = female
+	else:
+		if female: female.hide()
+		if male: 
+			male.show()
+			active_cashier = male
+
 # --- TUTORIAL LOGIC ---
 
 func start_tutorial():
@@ -633,12 +648,12 @@ func _apply_bar_style():
 	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
 	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
-func spawn_floating_money(amount: int, start_pos: Vector2):
+func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
 	var spawn_pos = start_pos
 	if start_pos == Vector2.ZERO:
-		var cashier = get_node_or_null("World/Background/CashierPerson")
-		if cashier:
-			spawn_pos = cashier.global_position + Vector2(0, -100)
+		if active_cashier:
+			spawn_pos = active_cashier.global_position + Vector2(0, -150)
+
 		else:
 			spawn_pos = camera.global_position # Fallback
 			
@@ -666,9 +681,8 @@ func spawn_floating_money(amount: int, start_pos: Vector2):
 func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
 	var spawn_pos = start_pos
 	if start_pos == Vector2.ZERO:
-		var cashier = get_node_or_null("World/Background/CashierPerson")
-		if cashier:
-			spawn_pos = cashier.global_position + Vector2(0, -150)
+		if active_cashier:
+			spawn_pos = active_cashier.global_position + Vector2(0, -150)
 		else:
 			spawn_pos = camera.global_position # Fallback
 			

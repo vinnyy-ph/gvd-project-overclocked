@@ -23,6 +23,7 @@ var decorations_data: Array = []
 var active_decoration: Sprite2D = null
 var is_dragging_item: bool = false
 var placed_decorations: Array = []
+var active_cashier: Sprite2D = null
 
 func _ready() -> void:
 	# Initial camera setup
@@ -382,6 +383,15 @@ func clamp_camera() -> void:
 	var view_size = vs / camera.zoom
 	if view_size.x >= SCENE_SIZE.x:
 		camera.position.x = SCENE_SIZE.x / 2.0
+	else:
+		var margin_x = view_size.x / 2.0
+		camera.position.x = clamp(camera.position.x, margin_x, SCENE_SIZE.x - margin_x)
+	if view_size.y >= SCENE_SIZE.y:
+		camera.position.y = SCENE_SIZE.y / 2.0
+	else:
+		var margin_y = view_size.y / 2.0
+		camera.position.y = clamp(camera.position.y, margin_y, SCENE_SIZE.y - margin_y)
+IZE.x / 2.0
 	else:
 		var margin_x = view_size.x / 2.0
 		camera.position.x = clamp(camera.position.x, margin_x, SCENE_SIZE.x - margin_x)

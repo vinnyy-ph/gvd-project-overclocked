@@ -52,6 +52,7 @@ var selected_customer: Customer = null
 signal customer_selected(customer)
 
 var is_customer_dragging: bool = false
+var active_cashier: Sprite2D = null
 
 # Map slots to their desk nodes and positions
 var seat_nodes: Array = []
@@ -170,6 +171,22 @@ func _ready():
 	_handle_minigame_result()
 	_apply_environment_customizations()
 	_spawn_placed_decorations()
+	_setup_cashier()
+
+func _setup_cashier():
+	var male = get_node_or_null("World/Background/CashierPerson")
+	var female = get_node_or_null("World/Background/CashierPersonFemale")
+	
+	if SaveManager.player_gender == "female":
+		if male: male.hide()
+		if female: 
+			female.show()
+			active_cashier = female
+	else:
+		if female: female.hide()
+		if male: 
+			male.show()
+			active_cashier = male
 
 func _apply_environment_customizations():
 	var floor_node = get_node_or_null("World/Background/Floor")
@@ -707,9 +724,8 @@ func update_hud():
 func spawn_floating_money(amount: int, start_pos: Vector2):
 	var spawn_pos = start_pos
 	if start_pos == Vector2.ZERO:
-		var cashier = get_node_or_null("World/Background/CashierPerson")
-		if cashier:
-			spawn_pos = cashier.global_position + Vector2(0, -100)
+		if active_cashier:
+			spawn_pos = active_cashier.global_position + Vector2(0, -100)
 		else:
 			spawn_pos = camera.global_position # Fallback
 			
@@ -737,9 +753,8 @@ func spawn_floating_money(amount: int, start_pos: Vector2):
 func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
 	var spawn_pos = start_pos
 	if start_pos == Vector2.ZERO:
-		var cashier = get_node_or_null("World/Background/CashierPerson")
-		if cashier:
-			spawn_pos = cashier.global_position + Vector2(0, -150)
+		if active_cashier:
+			spawn_pos = active_cashier.global_position + Vector2(0, -150)
 		else:
 			spawn_pos = camera.global_position # Fallback
 			

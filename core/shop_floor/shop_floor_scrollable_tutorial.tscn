@@ -16,7 +16,10 @@
 [ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="11_uniu6"]
 [ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_bdcp2"]
 [ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_s65hm"]
-[ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="16_04kbf"]
+[ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="14_04kbf"]
+[ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="15_04kbf"]
+[ext_resource type="Texture2D" uid="uid://s2gvhomdhbx8" path="res://assets/story/female/3.png" id="16_04kbf"]
+[ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="17_04kbf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j1p5v"]
 shader = ExtResource("8_a5a7q")
@@ -91,6 +94,21 @@ position = Vector2(-182.85715, 805.7143)
 scale = Vector2(0.42743346, 0.42743346)
 texture = ExtResource("10_j1p5v")
 script = ExtResource("11_uniu6")
+
+[node name="CashierPerson" type="Sprite2D" parent="World/Background" unique_id=1330561175]
+position = Vector2(-177.07152, 682.8571)
+scale = Vector2(0.9986526, 0.99999994)
+texture = ExtResource("15_04kbf")
+
+[node name="CashierPersonFemale" type="Sprite2D" parent="World/Background" unique_id=729698287]
+visible = false
+position = Vector2(-187.1428, 687.1428)
+scale = Vector2(0.36431992, 0.3643199)
+texture = ExtResource("16_04kbf")
+
+[node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
+position = Vector2(-91.42862, 727.1428)
+texture = ExtResource("14_04kbf")
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 position = Vector2(640, 724)
@@ -248,7 +266,7 @@ offset_left = 13.0
 offset_top = 623.0
 offset_right = 338.122
 offset_bottom = 709.0
-texture = ExtResource("16_04kbf")
+texture = ExtResource("17_04kbf")
 expand_mode = 1
 
 [node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1252429816]
