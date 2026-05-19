@@ -86,4 +86,23 @@ func _show_exit_confirmation() -> void:
 	add_child(exit_prompt)
 
 func _on_new_game_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://ui/profile_selection/profile_selection.tscn")
+	var name_prompt_scene = load("res://ui/prompts/NamePrompt.tscn")
+	var name_prompt = name_prompt_scene.instantiate()
+	add_child(name_prompt)
+	name_prompt.confirmed.connect(_on_name_prompt_confirmed)
+
+func _on_name_prompt_confirmed(p_name: String, p_gender: String) -> void:
+	# Find the first available save slot (0-9)
+	var all_profiles = SaveManager.get_all_profiles()
+	var target_id = 0
+	for i in range(all_profiles.size()):
+		if all_profiles[i] == null:
+			target_id = i
+			break
+	
+	# Create new profile and initialize game state
+	SaveManager.create_new_profile(target_id, p_name, p_gender)
+	GameManager.new_game()
+	
+	# Transition to story flow
+	get_tree().change_scene_to_file("res://NewGameStoryFlow.tscn")

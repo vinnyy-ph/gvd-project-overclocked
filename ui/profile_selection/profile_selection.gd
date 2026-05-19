@@ -4,7 +4,6 @@ extends Control
 
 var profile_slot_scene = preload("res://ui/profile_selection/profile_slot.tscn")
 var name_prompt_scene = preload("res://ui/prompts/NamePrompt.tscn")
-var current_selecting_slot: int = -1
 
 func _ready() -> void:
 	PauseMenu.pause_button.visible = false
@@ -42,17 +41,19 @@ func update_profile_slots():
 	dev_slot.pressed.connect(_on_dev_mode_pressed)
 		
 	var profiles = SaveManager.get_all_profiles()
+	var has_profiles = false
 	for i in range(10):
-		var slot = profile_slot_scene.instantiate()
-		profile_list.add_child(slot)
-		
 		var data = profiles[i]
 		if data:
+			has_profiles = true
+			var slot = profile_slot_scene.instantiate()
+			profile_list.add_child(slot)
 			slot.set_data(data)
-		else:
-			slot.set_empty()
-			
-		slot.pressed.connect(_on_profile_pressed.bind(i))
+			slot.pressed.connect(_on_profile_pressed.bind(i))
+	
+	if not has_profiles and not dev_data:
+		# No profiles to continue
+		pass
 
 func _on_dev_mode_pressed():
 	GameManager.dev_mode = true
@@ -96,15 +97,8 @@ func _on_dev_mode_pressed():
 func _on_profile_pressed(slot_index: int):
 	GameManager.dev_mode = false
 	var profiles = SaveManager.get_all_profiles()
-	if profiles[slot_index] == null:
-		# Empty slot, ask for name
-		current_selecting_slot = slot_index
-		var name_prompt = name_prompt_scene.instantiate()
-		add_child(name_prompt)
-		name_prompt.confirmed.connect(_on_name_confirmed)
-		name_prompt.grab_focus_to_edit()
-	else:
-		# Existing profile, load and start
+	# Only handle existing profiles (should be the only ones connected now)
+	if profiles[slot_index] != null:
 		SaveManager.active_profile_id = slot_index
 		if SaveManager.load_game():
 			GameManager.load_game()
@@ -113,19 +107,6 @@ func _on_profile_pressed(slot_index: int):
 				get_tree().change_scene_to_file(SaveManager.saved_scene)
 			else:
 				get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
-
-func _on_name_confirmed(player_name: String, player_gender: String):
-	GameManager.dev_mode = false
-	player_name = player_name.strip_edges()
-	if player_name == "":
-		player_name = "Player " + str(current_selecting_slot + 1)
-	
-	SaveManager.create_new_profile(current_selecting_slot, player_name, player_gender)
-	
-	# Start new game
-	GameManager.new_game()
-	PauseMenu.pause_button.visible = true
-	get_tree().change_scene_to_file("res://NewGameStoryFlow.tscn")
 
 func _on_return_pressed():
 	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")
