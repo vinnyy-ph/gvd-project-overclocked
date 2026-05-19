@@ -105,14 +105,44 @@ func get_profile_data(id: int):
 		file.close()
 		var json = JSON.new()
 		if json.parse(json_string) == OK:
-			return json.data
+			var data = json.data
+			if typeof(data) == TYPE_DICTIONARY:
+				data["slot_id"] = id # Inject ID for reference
+				return data
 	return null
+
+func get_all_save_ids() -> Array:
+	var ids = []
+	var dir = DirAccess.open("user://")
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if not dir.current_is_dir() and file_name.begins_with("save_slot_") and file_name.ends_with(".json"):
+				var id_str = file_name.replace("save_slot_", "").replace(".json", "")
+				if id_str.is_valid_int():
+					ids.append(id_str.to_int())
+			file_name = dir.get_next()
+	ids.sort()
+	return ids
 
 func get_all_profiles() -> Array:
 	var profiles = []
-	for i in range(10):
-		profiles.append(get_profile_data(i))
+	var ids = get_all_save_ids()
+	for id in ids:
+		if id == 999: continue # Skip dev profile in the standard list
+		var data = get_profile_data(id)
+		if data:
+			profiles.append(data)
 	return profiles
+
+func get_next_available_id() -> int:
+	var ids = get_all_save_ids()
+	var max_id = -1
+	for id in ids:
+		if id != 999 and id > max_id:
+			max_id = id
+	return max_id + 1
 
 func create_new_profile(id: int, p_name: String, p_gender: String = "male"):
 	active_profile_id = id
@@ -138,10 +168,13 @@ func delete_profile(id: int):
 		DirAccess.remove_absolute(path)
 
 func clear_all_standard_profiles():
-	for i in range(10):
-		delete_profile(i)
+	var ids = get_all_save_ids()
+	for id in ids:
+		if id != 999:
+			delete_profile(id)
+			
 	# Reset active profile if it was one of the deleted ones
-	if active_profile_id < 10:
+	if active_profile_id != 999:
 		active_profile_id = 0
 		player_name = "Player"
 		current_money = 0

@@ -42,16 +42,14 @@ func update_profile_slots():
 		
 	var profiles = SaveManager.get_all_profiles()
 	var has_profiles = false
-	for i in range(10):
-		var data = profiles[i]
-		if data:
-			has_profiles = true
-			var slot = profile_slot_scene.instantiate()
-			profile_list.add_child(slot)
-			slot.set_data(data)
-			slot.pressed.connect(_on_profile_pressed.bind(i))
+	for data in profiles:
+		has_profiles = true
+		var slot = profile_slot_scene.instantiate()
+		profile_list.add_child(slot)
+		slot.set_data(data)
+		slot.pressed.connect(_on_profile_pressed.bind(data["slot_id"]))
 	
-	if not has_profiles and not dev_data:
+	if not has_profiles:
 		# No profiles to continue
 		pass
 
@@ -94,19 +92,17 @@ func _on_dev_mode_pressed():
 	else:
 		get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
-func _on_profile_pressed(slot_index: int):
+func _on_profile_pressed(slot_id: int):
 	GameManager.dev_mode = false
-	var profiles = SaveManager.get_all_profiles()
-	# Only handle existing profiles (should be the only ones connected now)
-	if profiles[slot_index] != null:
-		SaveManager.active_profile_id = slot_index
-		if SaveManager.load_game():
-			GameManager.load_game()
-			PauseMenu.pause_button.visible = true
-			if SaveManager.saved_scene != "":
-				get_tree().change_scene_to_file(SaveManager.saved_scene)
-			else:
-				get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	# Existing profile, load and start
+	SaveManager.active_profile_id = slot_id
+	if SaveManager.load_game():
+		GameManager.load_game()
+		PauseMenu.pause_button.visible = true
+		if SaveManager.saved_scene != "":
+			get_tree().change_scene_to_file(SaveManager.saved_scene)
+		else:
+			get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
 func _on_return_pressed():
 	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")

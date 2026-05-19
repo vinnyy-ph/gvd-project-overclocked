@@ -92,13 +92,8 @@ func _on_new_game_button_pressed() -> void:
 	name_prompt.confirmed.connect(_on_name_prompt_confirmed)
 
 func _on_name_prompt_confirmed(p_name: String, p_gender: String) -> void:
-	# Find the first available save slot (0-9)
-	var all_profiles = SaveManager.get_all_profiles()
-	var target_id = 0
-	for i in range(all_profiles.size()):
-		if all_profiles[i] == null:
-			target_id = i
-			break
+	# Use the next available ID for unlimited profile creation
+	var target_id = SaveManager.get_next_available_id()
 	
 	# Create new profile and initialize game state
 	SaveManager.create_new_profile(target_id, p_name, p_gender)

@@ -8,7 +8,7 @@ func _ready() -> void:
 
 func _on_clear_button_pressed() -> void:
 	SaveManager.clear_all_standard_profiles()
-	status_label.text = "SUCCESS: All standard profiles (0-9) cleared."
+	status_label.text = "SUCCESS: All standard profiles cleared."
 	status_label.modulate = Color(0.5, 1.0, 0.5) # Greenish
 	print("QA: Standard profiles cleared.")
 
