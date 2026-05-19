@@ -26,6 +26,13 @@
 [ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="16_dmcqo"]
 [ext_resource type="Texture2D" uid="uid://s2gvhomdhbx8" path="res://assets/story/female/3.png" id="17_xmxb4"]
 [ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="17_y4wy1"]
+[ext_resource type="Texture2D" uid="uid://dl03ejdjuwd13" path="res://assets/story/redejep.png" id="19_gdtld"]
+
+[sub_resource type="Curve2D" id="Curve2D_vke2i"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -60, 96, 0, 0, 0, 0, 1780, 1075)
+}
+point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_dmcqo"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -150,6 +157,24 @@ grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
 metadata/_edit_lock_ = true
+
+[node name="JeepneyLinePath" type="Path2D" parent="World" unique_id=1611548565]
+z_index = 1
+position = Vector2(-307, 698)
+curve = SubResource("Curve2D_vke2i")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="World/JeepneyLinePath" unique_id=1610548140]
+position = Vector2(-60, 96)
+rotation = 0.48896953
+
+[node name="Jeepney" type="TextureRect" parent="World/JeepneyLinePath/PathFollow2D" unique_id=2069674841]
+offset_left = -253.55704
+offset_top = -57.590065
+offset_right = 183.443
+offset_bottom = 287.40994
+rotation = -0.5061455
+texture = ExtResource("19_gdtld")
+metadata/_edit_use_anchors_ = true
 
 [node name="Background" type="Node2D" parent="World" unique_id=142257243]
 z_index = 2

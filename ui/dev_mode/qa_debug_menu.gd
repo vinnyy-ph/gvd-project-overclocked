@@ -3,8 +3,11 @@ extends Control
 @onready var status_label: Label = $VBoxContainer/StatusLabel
 
 func _ready() -> void:
+	# Hide pause menu in debug mode
+	if PauseMenu:
+		PauseMenu.pause_button.visible = false
 	status_label.text = "QA DEBUG MODE ACTIVE"
-	print("QA: Debug menu loaded. Scene run directly.")
+	print("QA: Debug menu loaded.")
 
 func _on_clear_button_pressed() -> void:
 	SaveManager.clear_all_standard_profiles()
