@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://c11uvhe5nbcvr"]
+
+[ext_resource type="Texture2D" uid="uid://bmmsaqd16b2a8" path="res://assets/sprites/purple jeep.png" id="1_qjlcn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsgiy"]
+atlas = ExtResource("1_qjlcn")
+region = Rect2(354, 0, 354, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xuxp7"]
+atlas = ExtResource("1_qjlcn")
+region = Rect2(0, 0, 354, 240)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8kwni"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsgiy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xuxp7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="JeepneyAnimation" type="Control" unique_id=1026183853]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=201549835]
+position = Vector2(417, 296)
+sprite_frames = SubResource("SpriteFrames_8kwni")
+frame_progress = 0.8523596

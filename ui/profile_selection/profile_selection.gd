@@ -114,13 +114,13 @@ func _on_profile_pressed(slot_index: int):
 			else:
 				get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
 
-func _on_name_confirmed(player_name: String):
+func _on_name_confirmed(player_name: String, player_gender: String):
 	GameManager.dev_mode = false
 	player_name = player_name.strip_edges()
 	if player_name == "":
 		player_name = "Player " + str(current_selecting_slot + 1)
 	
-	SaveManager.create_new_profile(current_selecting_slot, player_name)
+	SaveManager.create_new_profile(current_selecting_slot, player_name, player_gender)
 	
 	# Start new game
 	GameManager.new_game()

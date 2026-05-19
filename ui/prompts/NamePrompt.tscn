@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://chge4p78hsaxs" path="res://assets/images/cancel.png" id="4_hmws4"]
 [ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="5_ejvb3"]
 [ext_resource type="Texture2D" uid="uid://btcawlc0pdxle" path="res://assets/images/ui/name/input.png" id="5_twvva"]
+[ext_resource type="Texture2D" uid="uid://cehyut1k3d5el" path="res://assets/images/ui/name/male.png" id="7_d60ci"]
+[ext_resource type="Texture2D" uid="uid://bpvpi5y78demi" path="res://assets/images/ui/name/female.png" id="8_4t8jx"]
 
 [node name="BuyPrompt" type="Control" unique_id=430958818]
 layout_mode = 3
@@ -60,7 +62,7 @@ stretch_mode = 0
 layout_mode = 0
 offset_left = 345.0
 offset_top = 339.0
-offset_right = 919.0
+offset_right = 793.0
 offset_bottom = 392.97525
 texture = ExtResource("5_twvva")
 expand_mode = 1
@@ -74,7 +76,7 @@ anchor_right = 0.712
 anchor_bottom = 0.49300003
 offset_left = 0.27996826
 offset_top = 32.079987
-offset_right = 0.64001465
+offset_right = -125.359985
 offset_bottom = 32.039978
 grow_horizontal = 2
 grow_vertical = 2
@@ -91,3 +93,23 @@ theme_override_fonts/font = ExtResource("5_ejvb3")
 theme_override_font_sizes/font_size = 33
 placeholder_text = "Input your name"
 flat = true
+
+[node name="MaleBtn" type="TextureButton" parent="." unique_id=1525437427]
+layout_mode = 0
+offset_left = 812.0
+offset_top = 338.0
+offset_right = 870.58655
+offset_bottom = 394.0
+texture_normal = ExtResource("7_d60ci")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="FemaleBtn" type="TextureButton" parent="." unique_id=20782065]
+layout_mode = 0
+offset_left = 880.0
+offset_top = 338.0
+offset_right = 938.58655
+offset_bottom = 394.0
+texture_normal = ExtResource("8_4t8jx")
+ignore_texture_size = true
+stretch_mode = 0

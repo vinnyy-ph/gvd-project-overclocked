@@ -4,6 +4,7 @@ const SAVE_PATH_TEMPLATE = "user://save_slot_{id}.json"
 
 var active_profile_id: int = 0
 var player_name: String = "Player"
+var player_gender: String = "male"
 var current_money: int = 0
 var lifetime_money: int = 0
 var max_days_survived: int = 0
@@ -32,6 +33,7 @@ func get_save_path(id: int) -> String:
 func save_game():
 	var data = {
 		"player_name": player_name,
+		"player_gender": player_gender,
 		"current_money": current_money,
 		"lifetime_money": lifetime_money,
 		"max_days_survived": max_days_survived,
@@ -72,6 +74,7 @@ func load_game(id: int = -1):
 			var data = json.data
 			if typeof(data) == TYPE_DICTIONARY:
 				player_name = data.get("player_name", "Player")
+				player_gender = data.get("player_gender", "male")
 				current_money = int(data.get("current_money", 0))
 				lifetime_money = int(data.get("lifetime_money", 0))
 				max_days_survived = int(data.get("max_days_survived", 0))
@@ -111,9 +114,10 @@ func get_all_profiles() -> Array:
 		profiles.append(get_profile_data(i))
 	return profiles
 
-func create_new_profile(id: int, p_name: String):
+func create_new_profile(id: int, p_name: String, p_gender: String = "male"):
 	active_profile_id = id
 	player_name = p_name
+	player_gender = p_gender
 	current_money = 100 # Starting money
 	lifetime_money = 0
 	max_days_survived = 0
