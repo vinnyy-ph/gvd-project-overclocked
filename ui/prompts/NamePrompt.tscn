@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://da4b854g3serf"]
+
+[ext_resource type="Script" uid="uid://bjx1ra8xg6h0b" path="res://ui/prompts/name_prompt.gd" id="1_twvva"]
+[ext_resource type="Texture2D" uid="uid://dsarq1ee5nd6y" path="res://assets/images/ui/name/name.png" id="2_twvva"]
+[ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="3_hmws4"]
+[ext_resource type="Texture2D" uid="uid://chge4p78hsaxs" path="res://assets/images/cancel.png" id="4_hmws4"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="5_ejvb3"]
+[ext_resource type="Texture2D" uid="uid://btcawlc0pdxle" path="res://assets/images/ui/name/input.png" id="5_twvva"]
+
+[node name="BuyPrompt" type="Control" unique_id=430958818]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_twvva")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=697863718]
+layout_mode = 0
+color = Color(0, 0, 0, 0.8)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=437763948]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -341.25
+offset_top = -161.25
+offset_right = 341.25
+offset_bottom = 161.25
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_twvva")
+expand_mode = 2
+
+[node name="Yes" type="TextureButton" parent="TextureRect" unique_id=2013176418]
+layout_mode = 0
+offset_left = 42.25
+offset_top = 221.25
+offset_right = 340.25
+offset_bottom = 296.00836
+texture_normal = ExtResource("3_hmws4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="No" type="TextureButton" parent="TextureRect" unique_id=389888256]
+layout_mode = 0
+offset_left = 341.25
+offset_top = 225.25
+offset_right = 639.25
+offset_bottom = 300.00836
+texture_normal = ExtResource("4_hmws4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=705677075]
+layout_mode = 0
+offset_left = 345.0
+offset_top = 307.0
+offset_right = 919.0
+offset_bottom = 360.97525
+texture = ExtResource("5_twvva")
+expand_mode = 1
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=255487458]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.27400002
+anchor_top = 0.43600002
+anchor_right = 0.712
+anchor_bottom = 0.49300003
+offset_left = 0.27996826
+offset_top = 0.07998657
+offset_right = 0.64001465
+offset_bottom = 0.039978027
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_uneditable_color = Color(0.875, 0.875, 0.875, 0.5)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 0.6)
+theme_override_colors/caret_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/selection_color = Color(0, 0, 0, 1)
+theme_override_colors/clear_button_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_colors/clear_button_color_pressed = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_ejvb3")
+theme_override_font_sizes/font_size = 33
+placeholder_text = "Input your name"
+flat = true

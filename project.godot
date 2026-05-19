@@ -24,8 +24,8 @@ PauseMenu="*res://ui/pause_menu/pause_menu.tscn"
 AudioManager="*res://core/autoloads/audio_manager/audio_manager.tscn"
 SaveManager="*res://core/autoloads/save_manager/save_manager.gd"
 SettingsManager="*res://core/autoloads/settings_manager.gd"
-_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 LeaderboardManager="*res://core/autoloads/leaderboard_manager.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 
