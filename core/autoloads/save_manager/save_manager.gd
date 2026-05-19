@@ -137,7 +137,25 @@ func delete_profile(id: int):
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(path)
 
+func clear_all_standard_profiles():
+	for i in range(10):
+		delete_profile(i)
+	# Reset active profile if it was one of the deleted ones
+	if active_profile_id < 10:
+		active_profile_id = 0
+		player_name = "Player"
+		current_money = 0
+		current_day = 1
+
 func reset_run_data():
+	# DEV MODE PROTECTION: Do not reset if we are on the dev profile
+	if active_profile_id == 999:
+		# Ensure dev profile always stays at Day 30 / Max Money
+		current_money = 9999999
+		current_day = 30
+		save_game()
+		return
+
 	# Keep lifetime stats but reset current run and upgrades
 	current_money = 100
 	current_day = 1

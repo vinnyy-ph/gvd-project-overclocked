@@ -68,6 +68,15 @@ var last_tap_time: int = 0
 const TAP_THRESHOLD_MS: int = 300
 
 func _ready() -> void:
+	# Inject dynamic username
+	var player_name = "Player"
+	if SaveManager.player_name and SaveManager.player_name != "":
+		player_name = SaveManager.player_name
+		
+	for step in story_steps:
+		if step.get("username") == "USERNAME":
+			step["username"] = player_name
+
 	blue_panel_btn.pressed.connect(_on_tap_received)
 	seal_button.pressed.connect(_on_seal_pressed)
 	next_button.pressed.connect(_on_next_letter)
@@ -334,4 +343,4 @@ func _on_final_background_ready() -> void:
 	var jeepney_tween = create_tween()
 	jeepney_tween.tween_property(jeepney_path_follow, "progress_ratio", 1.0, 4.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
-	jeepney_tween.tween_callback(func(): print("Final sequence complete"))
+	jeepney_tween.tween_callback(func(): get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn"))

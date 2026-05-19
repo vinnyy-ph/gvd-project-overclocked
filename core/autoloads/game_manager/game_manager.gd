@@ -340,7 +340,14 @@ func get_next_minigame() -> String:
 
 func new_game():
 	SaveManager.reset_run_data()
-	SaveManager.current_day = 1
+	
+	# Only reset day to 1 if NOT in dev profile
+	if SaveManager.active_profile_id != 999:
+		SaveManager.current_day = 1
+	else:
+		SaveManager.current_day = 30
+		SaveManager.current_money = 9999999
+		
 	satisfaction = 100
 	time_left = 60
 	in_tutorial = false
@@ -425,6 +432,7 @@ func _ready():
 	# DEV MODE: Inject a million dollars so you can afford anything instantly
 	if dev_mode:
 		SaveManager.current_money = 9999999
+		SaveManager.current_day = 30
 
 func _on_node_added(node: Node):
 	# Check if the newly added node is a button

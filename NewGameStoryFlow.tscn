@@ -106,7 +106,6 @@ offset_bottom = 55.166687
 theme_override_fonts/font = ExtResource("4_hep52")
 theme_override_font_sizes/font_size = 43
 text = "USERNAME"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TextContentLabel" type="Label" parent="BluePanelBtn" unique_id=1880147696]

@@ -125,7 +125,7 @@ func _on_name_confirmed(player_name: String, player_gender: String):
 	# Start new game
 	GameManager.new_game()
 	PauseMenu.pause_button.visible = true
-	get_tree().change_scene_to_file("res://core/shop_floor/shop_floor_scrollable.tscn")
+	get_tree().change_scene_to_file("res://NewGameStoryFlow.tscn")
 
 func _on_return_pressed():
 	get_tree().change_scene_to_file("res://ui/main_menu_v2/MainMenuV2.tscn")
