@@ -326,6 +326,7 @@ func _on_keyboard_closed():
 
 # ── Win / Loss ────────────────────────────────────────────────────────────────
 func win_game():
+	if not game_active: return
 	game_active = false
 	game_timer.stop()
 	status_label.text = "> ALL AUTHENTICATIONS VERIFIED. WELL DONE."

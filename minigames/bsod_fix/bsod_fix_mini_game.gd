@@ -264,6 +264,7 @@ func _on_game_timer_timeout():
 		update_timer()
 
 func win_game():
+	if not game_active: return
 	game_active = false
 	game_timer.stop()
 	status_label.text = "ALL BUGS SQUASHED! SYSTEM STABLE."
@@ -285,6 +286,7 @@ func win_game():
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
 
 func fail_game():
+	if not game_active: return
 	game_active = false
 	game_timer.stop()
 	status_label.text = "CODE COLLAPSE. REPAIR FAILED."

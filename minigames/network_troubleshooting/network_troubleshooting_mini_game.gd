@@ -298,7 +298,6 @@ func _ready():
 	AudioManager.play_bgm("minigame")
 	
 	game_timer.wait_time = 1.0
-	game_timer.timeout.connect(_on_timer_timeout)
 	
 	btn_diagnostic.pressed.connect(_on_diagnostic_pressed)
 	btn_hint.pressed.connect(_on_hint_pressed)
@@ -519,6 +518,7 @@ func _on_timer_timeout():
 		game_over()
 
 func win_game():
+	if not game_active: return
 	game_active = false
 	game_timer.stop()
 	AudioManager.play_sfx("coin")
@@ -537,6 +537,7 @@ func win_game():
 	get_tree().change_scene_to_file("res://ui/success_screen/success_screen.tscn")
 
 func game_over():
+	if not game_active: return
 	game_active = false
 	game_timer.stop()
 	link_status_label.text = "[color=#ff4444][b]>>> CRITICAL FAILURE: PACKET COLLAPSE[/b][/color]"

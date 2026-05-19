@@ -23,11 +23,9 @@ var satisfaction_tips = [
 func _ready():
 	# 1. Capture data
 	var days = GameManager.day - 1
-	var money = SaveManager.current_money
 	var lifetime = SaveManager.lifetime_money
 	var player_name = SaveManager.player_name
 	var pc_slots = 2 + SaveManager.unlocked_upgrades.get("shop_space", 0)
-	var active_slot = SaveManager.active_profile_id
 	
 	# 2. Populate Labels
 	day_label.text = "DAY " + str(days + 1)

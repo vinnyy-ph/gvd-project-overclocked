@@ -246,6 +246,7 @@ func is_point_inside_rect(point: Vector2, rect_pos: Vector2, rect_size: Vector2)
 	return Rect2(rect_pos, rect_size).has_point(point)
 
 func check_win():
+	if not game_active: return
 	var all_done = true
 	for key in cable_data.keys():
 		if not cable_data[key]["connected"]:
