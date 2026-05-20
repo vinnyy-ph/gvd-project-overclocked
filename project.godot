@@ -15,7 +15,7 @@ config/description="Overclocked"
 config/version="1"
 run/main_scene="uid://px01bxewowry"
 config/features=PackedStringArray("4.6", "Mobile")
-config/icon="res://icon.svg"
+config/icon="uid://by43wk5ttxuh7"
 
 [autoload]
 
