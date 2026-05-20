@@ -57,46 +57,45 @@ var initial_cam_pos: Vector2
 @onready var waiting_area = $World/Background/CustomerWaiting
 
 var highlighted_node: CanvasItem = null
+var _pulse_tween: Tween
+var original_highlight_scale: Vector2
 
 func _highlight_node(node: CanvasItem, enabled: bool):
+	if _pulse_tween:
+		_pulse_tween.kill()
+		_pulse_tween = null
+	
+	if highlighted_node:
+		highlighted_node.modulate = Color.WHITE
+		highlighted_node.scale = original_highlight_scale
+		
 	if enabled:
 		highlighted_node = node
-		tutorial_dim.show()
-		_update_highlight_shader()
+		
+		if node in issue_buttons:
+			var idx = issue_buttons.find(node)
+			if idx != -1:
+				original_highlight_scale = original_issue_scales[idx]
+			else:
+				original_highlight_scale = node.scale
+				
+			node.modulate = Color(1.5, 1.5, 1.5, 1.0)
+			tutorial_dim.hide()
+			return
+			
+		original_highlight_scale = node.scale
+		# Pulsate the node
+		_pulse_tween = create_tween().set_loops()
+		_pulse_tween.tween_property(node, "modulate", Color(1.5, 1.5, 1.5, 1.0), 0.6).set_trans(Tween.TRANS_SINE)
+		_pulse_tween.parallel().tween_property(node, "scale", original_highlight_scale * 1.05, 0.6).set_trans(Tween.TRANS_SINE)
+		_pulse_tween.tween_property(node, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.6).set_trans(Tween.TRANS_SINE)
+		_pulse_tween.parallel().tween_property(node, "scale", original_highlight_scale, 0.6).set_trans(Tween.TRANS_SINE)
+		
+		# No more dimming with mask as it's inaccurate on mobile
+		tutorial_dim.hide()
 	else:
 		highlighted_node = null
 		tutorial_dim.hide()
-
-func _get_node_screen_rect(node: CanvasItem) -> Rect2:
-	if not node: return Rect2()
-	var rect = Rect2()
-	var canvas_transform = node.get_global_transform_with_canvas()
-	if node is Control:
-		rect.position = canvas_transform.get_origin()
-		rect.size = node.size * canvas_transform.get_scale()
-	elif node is Sprite2D:
-		if node.texture:
-			var tex_size = node.texture.get_size()
-			rect.size = tex_size * canvas_transform.get_scale()
-			if node.centered:
-				rect.position = canvas_transform.get_origin() - (rect.size / 2.0)
-			else:
-				rect.position = canvas_transform.get_origin()
-	elif node is Button: # Sometimes identified as Button even if also Control
-		rect.position = canvas_transform.get_origin()
-		rect.size = node.size * canvas_transform.get_scale()
-	return rect
-
-func _update_highlight_shader():
-	if not highlighted_node or not tutorial_dim.material: return
-	
-	var rect = _get_node_screen_rect(highlighted_node)
-	# Add a small margin
-	rect = rect.grow(10.0)
-	
-	var mat = tutorial_dim.material as ShaderMaterial
-	mat.set_shader_parameter("hole_center", rect.get_center())
-	mat.set_shader_parameter("hole_size", rect.size)
 
 var selected_customer: Customer = null
 signal customer_selected(customer)
@@ -142,13 +141,7 @@ func _ready():
 	
 	GameManager.money_changed_visual.connect(spawn_floating_money)
 	GameManager.satisfaction_changed_visual.connect(spawn_floating_satisfaction)
-	
-	# Setup highlight shader
-	var shader = load("res://core/shop_floor/tutorial_mask.gdshader")
-	if shader:
-		var mat = ShaderMaterial.new()
-		mat.shader = shader
-		tutorial_dim.material = mat
+	# --- HIDE TEMPLATE ---
 
 	var unlocked_slots = 1 # Force only one for the tutorial
 	
@@ -408,21 +401,6 @@ func _on_customer_drag_ended(customer: Customer, _global_pos: Vector2):
 	else:
 		customer.return_to_waiting_position()
 
-func _setup_cashier():
-	var male = get_node_or_null("World/Background/CashierPerson")
-	var female = get_node_or_null("World/Background/CashierPersonFemale")
-	
-	if SaveManager.player_gender == "female":
-		if male: male.hide()
-		if female: 
-			female.show()
-			active_cashier = female
-	else:
-		if female: female.hide()
-		if male: 
-			male.show()
-			active_cashier = male
-
 # --- TUTORIAL LOGIC ---
 
 func start_tutorial():
@@ -648,14 +626,10 @@ func _apply_bar_style():
 	satisfaction_bar.add_theme_stylebox_override("background", bg_style)
 	satisfaction_bar.add_theme_color_override("font_color", Color.WHITE)
 
-func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
+func spawn_floating_money(amount: int, start_pos: Vector2):
 	var spawn_pos = start_pos
 	if start_pos == Vector2.ZERO:
-		if active_cashier:
-			spawn_pos = active_cashier.global_position + Vector2(0, -150)
-
-		else:
-			spawn_pos = camera.global_position # Fallback
+		spawn_pos = camera.global_position # Fallback
 			
 	var label = Label.new()
 	var text_prefix = "+" if amount > 0 else ""
@@ -681,10 +655,7 @@ func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
 func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
 	var spawn_pos = start_pos
 	if start_pos == Vector2.ZERO:
-		if active_cashier:
-			spawn_pos = active_cashier.global_position + Vector2(0, -150)
-		else:
-			spawn_pos = camera.global_position # Fallback
+		spawn_pos = camera.global_position # Fallback
 			
 	var label = Label.new()
 	var text_prefix = "+" if amount > 0 else ""
@@ -708,10 +679,6 @@ func spawn_floating_satisfaction(amount: int, start_pos: Vector2):
 	tween.finished.connect(label.queue_free)
 
 func _process(delta):
-	# Keep highlight tracking the node
-	if highlighted_node:
-		_update_highlight_shader()
-
 	float_time += delta
 	for i in range(issue_buttons.size()):
 		var btn = issue_buttons[i]

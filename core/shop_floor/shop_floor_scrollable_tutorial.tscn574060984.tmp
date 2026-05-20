@@ -1,0 +1,380 @@
+[gd_scene format=3 uid="uid://bgpfn8x11mwvp"]
+
+[ext_resource type="Script" uid="uid://yealhs7v3e2v" path="res://core/shop_floor/shop_floor_scrollable_tutorial.gd" id="1_drvdj"]
+[ext_resource type="Texture2D" uid="uid://b1lcbhywrvugn" path="res://assets/images/bg.png" id="2_tryt6"]
+[ext_resource type="Texture2D" uid="uid://ddrbiww8xi3sa" path="res://assets/images/shop_floor/main.png" id="3_rtng5"]
+[ext_resource type="Texture2D" uid="uid://dncuf4bc67nf8" path="res://assets/images/shop_floor/empty_slot.png" id="4_nxgym"]
+[ext_resource type="Texture2D" uid="uid://471gktlsd0dc" path="res://assets/images/shop_floor/emotions/happy.png" id="6_nxgym"]
+[ext_resource type="Texture2D" uid="uid://gjcbhw4gcrqt" path="res://assets/images/issue.png" id="7_6s41h"]
+[ext_resource type="Shader" uid="uid://bvlnophccpwe4" path="res://ui/main_menu_v2/MainMenuV2.gdshader" id="8_a5a7q"]
+[ext_resource type="FontFile" uid="uid://ysv7bka211fd" path="res://assets/fonts/ThaleahFat.ttf" id="8_xpdn8"]
+[ext_resource type="Texture2D" uid="uid://d0ax5bxdt15np" path="res://assets/images/Group 20.png" id="9_6j3qw"]
+[ext_resource type="Texture2D" uid="uid://hpkr7d6r1dyh" path="res://assets/images/main_menu/checkered_bg.png" id="9_7leac"]
+[ext_resource type="Texture2D" uid="uid://cw07bd74n6wfj" path="res://assets/images/shop_floor/waitingcustomer.png" id="10_j1p5v"]
+[ext_resource type="Texture2D" uid="uid://dhfcdmvxc2y6q" path="res://assets/images/statsicon.png" id="10_nskys"]
+[ext_resource type="Texture2D" uid="uid://d4be7unxpmdlh" path="res://assets/images/pausepanel.png" id="11_lb4gu"]
+[ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="11_uniu6"]
+[ext_resource type="Texture2D" uid="uid://cqjnxbqwb1xsn" path="res://assets/images/continue.png" id="12_bdcp2"]
+[ext_resource type="Texture2D" uid="uid://brf7ju6xse0gb" path="res://assets/images/exit.png" id="13_s65hm"]
+[ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="14_04kbf"]
+[ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="15_04kbf"]
+[ext_resource type="Texture2D" uid="uid://s2gvhomdhbx8" path="res://assets/story/female/3.png" id="16_04kbf"]
+[ext_resource type="Texture2D" uid="uid://da0kr3y1u7k6f" path="res://assets/images/satisfaction_bar.png" id="17_04kbf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1p5v"]
+shader = ExtResource("8_a5a7q")
+shader_parameter/scroll_speed = Vector2(0.05, -0.05)
+
+[sub_resource type="Gradient" id="Gradient_04kbf"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghd6s"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tryt6"]
+font_size = 31
+
+[node name="ShopFloorScrollable" type="Node2D" unique_id=104881244]
+script = ExtResource("1_drvdj")
+
+[node name="World" type="Node2D" parent="." unique_id=495853787]
+
+[node name="ParallaxCheckeredBG" type="TextureRect" parent="World" unique_id=1064387490]
+z_index = -1
+material = SubResource("ShaderMaterial_j1p5v")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -58.0
+offset_top = -150.0
+offset_right = 3099.3333
+offset_bottom = 1626.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_7leac")
+
+[node name="Background" type="Node2D" parent="World" unique_id=142257243]
+position = Vector2(1532, 704)
+scale = Vector2(0.7, 0.7)
+
+[node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=1643221891]
+position = Vector2(-9.999999, 15.714285)
+texture = ExtResource("3_rtng5")
+
+[node name="Desk1" type="Sprite2D" parent="World/Background/Sprite2D" unique_id=338153913]
+position = Vector2(-467.14294, -154.28569)
+scale = Vector2(0.51159185, 0.51159185)
+texture = ExtResource("4_nxgym")
+
+[node name="Desk1IssueButton" type="Button" parent="World/Background/Sprite2D/Desk1" unique_id=90065309]
+offset_left = -189.8835
+offset_top = -688.90753
+offset_right = -88.8835
+offset_bottom = -461.90753
+scale = Vector2(2, 2)
+icon = ExtResource("7_6s41h")
+flat = true
+
+[node name="EmotionParticles" type="CPUParticles2D" parent="World/Background/Sprite2D/Desk1" unique_id=11131754]
+position = Vector2(150, -140)
+emitting = false
+amount = 3
+texture = ExtResource("6_nxgym")
+lifetime = 1.5
+local_coords = true
+direction = Vector2(0, -1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 120.0
+color_ramp = SubResource("Gradient_04kbf")
+
+[node name="CustomerWaiting" type="Sprite2D" parent="World/Background" unique_id=927695421]
+z_index = 37
+position = Vector2(-182.85715, 805.7143)
+scale = Vector2(0.42743346, 0.42743346)
+texture = ExtResource("10_j1p5v")
+script = ExtResource("11_uniu6")
+
+[node name="CashierPerson" type="Sprite2D" parent="World/Background" unique_id=1330561175]
+position = Vector2(-177.07152, 682.8571)
+scale = Vector2(0.9986526, 0.99999994)
+texture = ExtResource("15_04kbf")
+
+[node name="CashierPersonFemale" type="Sprite2D" parent="World/Background" unique_id=729698287]
+visible = false
+position = Vector2(-187.1428, 687.1428)
+scale = Vector2(0.36431992, 0.3643199)
+texture = ExtResource("16_04kbf")
+
+[node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
+position = Vector2(-91.42862, 727.1428)
+texture = ExtResource("14_04kbf")
+
+[node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
+position = Vector2(640, 724)
+zoom = Vector2(0.65, 0.65)
+limit_left = 0
+limit_top = 0
+limit_right = 3064
+limit_bottom = 1408
+limit_smoothed = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1805051003]
+process_mode = 3
+
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=1197349872]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TopBar" type="ColorRect" parent="CanvasLayer/HUD" unique_id=58088674]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 240.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HUD/TopBar" unique_id=2094469326]
+position = Vector2(182.5, 54)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_6j3qw")
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/HUD/TopBar/Sprite2D" unique_id=2068315622]
+position = Vector2(-321.0198, -5.247525)
+texture = ExtResource("10_nskys")
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1512595669]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 9.0
+offset_right = 88.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 30
+text = "a"
+vertical_alignment = 1
+
+[node name="DayLabel" type="Label" parent="CanvasLayer/HUD" unique_id=50256704]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 37.0
+offset_right = 88.0
+offset_bottom = 65.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 30
+text = "a"
+vertical_alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="CanvasLayer/HUD" unique_id=2032604772]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 68.0
+offset_right = 88.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 30
+text = "A"
+vertical_alignment = 1
+
+[node name="DimOverlay" type="ColorRect" parent="CanvasLayer/HUD" unique_id=1635064106]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1240.0
+offset_bottom = 680.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.38431373)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD/DimOverlay" unique_id=1888847035]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -221.0
+offset_right = 190.0
+offset_bottom = 154.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_lb4gu")
+
+[node name="PausePanel" type="PanelContainer" parent="CanvasLayer/HUD/DimOverlay" unique_id=106819600]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 169.5
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ghd6s")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/DimOverlay/PausePanel" unique_id=2056414442]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="PauseLabel" type="Label" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=2139130539]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 103
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ContinueButtonPause" type="Button" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=83546641]
+process_mode = 3
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+icon = ExtResource("12_bdcp2")
+flat = true
+
+[node name="QuitButtonPause" type="Button" parent="CanvasLayer/HUD/DimOverlay/PausePanel/VBoxContainer" unique_id=300283106]
+process_mode = 3
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+icon = ExtResource("13_s65hm")
+flat = true
+
+[node name="SatisfactionBar" type="ProgressBar" parent="CanvasLayer/HUD" unique_id=266484055]
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 661.0
+offset_right = 326.0
+offset_bottom = 696.0
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 22
+value = 97.55
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD" unique_id=2135874085]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 623.0
+offset_right = 338.122
+offset_bottom = 709.0
+texture = ExtResource("17_04kbf")
+expand_mode = 1
+
+[node name="SatisfactionBarLabel" type="Label" parent="CanvasLayer/HUD" unique_id=1252429816]
+visible = false
+layout_mode = 0
+offset_left = 324.0
+offset_top = 664.0
+offset_right = 959.0
+offset_bottom = 707.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 13
+theme_override_fonts/font = ExtResource("8_xpdn8")
+theme_override_font_sizes/font_size = 46
+text = "Satisfaction"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TutorialUI" type="Control" parent="CanvasLayer" unique_id=2010978555]
+visible = false
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TutorialDim" type="ColorRect" parent="CanvasLayer/TutorialUI" unique_id=214000000]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.470588)
+
+[node name="TutorialBox" type="TextureRect" parent="CanvasLayer/TutorialUI" unique_id=417796571]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 103.0
+offset_top = -121.0
+offset_right = 580.0
+offset_bottom = 231.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("11_lb4gu")
+
+[node name="TutorialLabel" type="Label" parent="CanvasLayer/TutorialUI/TutorialBox" unique_id=1957571333]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 38.0
+offset_top = 19.0
+offset_right = -32.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("8_xpdn8")
+text = "Welcome"
+label_settings = SubResource("LabelSettings_tryt6")
+autowrap_mode = 2
+
+[node name="NextButton" type="TextureButton" parent="CanvasLayer/TutorialUI/TutorialBox" unique_id=1596875908]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -176.00003
+offset_top = -69.0
+offset_right = -37.891113
+offset_bottom = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("12_bdcp2")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="DayTimer" type="Timer" parent="." unique_id=1041295534]
+autostart = true
+
+[node name="SpawnTimer" type="Timer" parent="." unique_id=894530770]
+wait_time = 4.0
+autostart = true
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=609604915]
+visible = false
+repeat_size = Vector2(1843, 0)
+autoscroll = Vector2(50, 0)
+repeat_times = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=1753274053]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_tryt6")
+centered = false
+
+[connection signal="timeout" from="DayTimer" to="." method="_on_day_timer_timeout"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
