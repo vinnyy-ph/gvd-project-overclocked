@@ -3,6 +3,9 @@ extends Node
 # SET TO TRUE FOR TESTING (Unlimited money, max satisfaction)
 var dev_mode: bool = false 
 
+# SET TO TRUE FOR PRESENTATION (Jumps days by 10, enables skip button)
+var presentation_mode: bool = false
+
 var day: int:
 	get:
 		return SaveManager.current_day
@@ -29,7 +32,18 @@ var money: int:
 		SaveManager.save_game()
 
 func start_next_day():
-	day += 1
+	if presentation_mode:
+		if day < 10:
+			day = 10
+		elif day < 20:
+			day = 20
+		elif day < 30:
+			day = 30
+		else:
+			day += 1
+	else:
+		day += 1
+		
 	time_left = 60
 	last_day_revenue = 0
 	for i in range(active_issues.size()):

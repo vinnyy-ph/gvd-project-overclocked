@@ -36,6 +36,44 @@ func _ready() -> void:
 	item_list.gui_input.connect(_on_item_list_gui_input)
 	
 	back_button.pressed.connect(_on_back_pressed)
+	
+	if GameManager.presentation_mode:
+		_setup_presentation_skip_button()
+
+func _setup_presentation_skip_button():
+	var btn = Button.new()
+	btn.text = "SKIP DAY\n(Presentation)"
+	btn.name = "SkipDayButton"
+	
+	var font = load("res://assets/fonts/ThaleahFat.ttf")
+	if font: btn.add_theme_font_override("font", font)
+	btn.add_theme_font_size_override("font_size", 30)
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.8, 0.2, 0.2, 0.9)
+	style.set_corner_radius_all(8)
+	style.content_margin_left = 15
+	style.content_margin_right = 15
+	style.content_margin_top = 10
+	style.content_margin_bottom = 10
+	btn.add_theme_stylebox_override("normal", style)
+	
+	var hover_style = style.duplicate()
+	hover_style.bg_color = Color(1.0, 0.3, 0.3, 1.0)
+	btn.add_theme_stylebox_override("hover", hover_style)
+	
+	$CanvasLayer.add_child(btn)
+	
+	# Position at bottom right, above the item list
+	btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	btn.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	btn.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	btn.position = Vector2(-20, -180)
+	
+	btn.pressed.connect(func():
+		GameManager.time_left = 0
+		GameManager.end_day()
+	)
 
 func _apply_environment_customizations():
 	var floor_node = get_node_or_null("World/Background/FloorDeco")
