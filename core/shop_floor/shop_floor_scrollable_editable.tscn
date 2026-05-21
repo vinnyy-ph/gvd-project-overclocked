@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ci4umqw4a337p"]
 
-[ext_resource type="Script" uid="uid://bwpa6sphwy38v" path="res://core/shop_floor/shop_floor_scrollable_editable.gd" id="1_fkw5l"]
+[ext_resource type="Script" uid="uid://cljyrfy838iki" path="res://core/shop_floor/shop_floor_scrollable_editable.gd" id="1_fkw5l"]
 [ext_resource type="Texture2D" uid="uid://bqpj4a24d7vu0" path="res://assets/images/shop_floor_bg/1.png" id="2_agj3d"]
 [ext_resource type="Texture2D" uid="uid://ddrbiww8xi3sa" path="res://assets/images/shop_floor/main.png" id="3_fhpww"]
 [ext_resource type="Texture2D" uid="uid://be45atrp4ta6" path="res://assets/images/decorations/floors_1.png" id="4_jflc3"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://dxcwquqxg4aq4" path="res://core/shop_floor/customer.gd" id="15_2gjwx"]
 [ext_resource type="Texture2D" uid="uid://dam7o0i1ayh1h" path="res://assets/images/art_assets/cashier_person.png" id="16_uvl8u"]
 [ext_resource type="Texture2D" uid="uid://csmtmcw83258u" path="res://assets/images/art_assets/cashier_default.png" id="17_2y1r7"]
+[ext_resource type="Script" uid="uid://ww4il3sm5yts" path="res://core/shop_floor/editable_camera_2d.gd" id="18_d7jdq"]
 [ext_resource type="Texture2D" uid="uid://osollc6nmrfx" path="res://assets/images/back.png" id="18_yweq2"]
 
 [sub_resource type="Gradient" id="Gradient_dmcqo"]
@@ -516,18 +517,11 @@ texture = ExtResource("16_uvl8u")
 visible = false
 position = Vector2(-187.1428, 687.1428)
 scale = Vector2(0.36431992, 0.3643199)
-<<<<<<< Updated upstream
-texture = ExtResource("17_xmxb4")
-
-[node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
-position = Vector2(-91.42862, 727.1428)
-texture = ExtResource("18_2y1r7")
-=======
+texture = ExtResource("17_2y1r7")
 
 [node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
 position = Vector2(-91.42862, 727.1428)
 texture = ExtResource("17_2y1r7")
->>>>>>> Stashed changes
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 z_index = 155
@@ -538,6 +532,7 @@ limit_top = 0
 limit_right = 3064
 limit_bottom = 1408
 limit_smoothed = true
+script = ExtResource("18_d7jdq")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1805051003]
 process_mode = 3
@@ -556,17 +551,10 @@ icon_mode = 0
 icon_scale = 0.5
 
 [node name="Button" type="Button" parent="CanvasLayer" unique_id=1100636000]
-<<<<<<< Updated upstream
-offset_left = -93.0
-offset_top = -14.0
-offset_right = 332.0
-offset_bottom = 100.0
-=======
 offset_left = 21.0
 offset_top = 24.0
 offset_right = 446.0
 offset_bottom = 138.0
->>>>>>> Stashed changes
 scale = Vector2(0.555, 0.555)
 icon = ExtResource("18_yweq2")
 flat = true
