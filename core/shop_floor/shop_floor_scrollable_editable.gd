@@ -391,6 +391,7 @@ func clamp_camera() -> void:
 	else:
 		var margin_y = view_size.y / 2.0
 		camera.position.y = clamp(camera.position.y, margin_y, SCENE_SIZE.y - margin_y)
+<<<<<<< Updated upstream
 IZE.x / 2.0
 	else:
 		var margin_x = view_size.x / 2.0
@@ -400,3 +401,5 @@ IZE.x / 2.0
 	else:
 		var margin_y = view_size.y / 2.0
 		camera.position.y = clamp(camera.position.y, margin_y, SCENE_SIZE.y - margin_y)
+=======
+>>>>>>> Stashed changes

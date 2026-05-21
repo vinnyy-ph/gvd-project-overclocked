@@ -516,11 +516,18 @@ texture = ExtResource("16_uvl8u")
 visible = false
 position = Vector2(-187.1428, 687.1428)
 scale = Vector2(0.36431992, 0.3643199)
+<<<<<<< Updated upstream
 texture = ExtResource("17_xmxb4")
 
 [node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
 position = Vector2(-91.42862, 727.1428)
 texture = ExtResource("18_2y1r7")
+=======
+
+[node name="CashierItem" type="Sprite2D" parent="World/Background" unique_id=1725671253]
+position = Vector2(-91.42862, 727.1428)
+texture = ExtResource("17_2y1r7")
+>>>>>>> Stashed changes
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=743193101]
 z_index = 155
@@ -549,10 +556,17 @@ icon_mode = 0
 icon_scale = 0.5
 
 [node name="Button" type="Button" parent="CanvasLayer" unique_id=1100636000]
+<<<<<<< Updated upstream
 offset_left = -93.0
 offset_top = -14.0
 offset_right = 332.0
 offset_bottom = 100.0
+=======
+offset_left = 21.0
+offset_top = 24.0
+offset_right = 446.0
+offset_bottom = 138.0
+>>>>>>> Stashed changes
 scale = Vector2(0.555, 0.555)
 icon = ExtResource("18_yweq2")
 flat = true
